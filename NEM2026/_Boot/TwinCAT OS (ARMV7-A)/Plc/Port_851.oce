@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<TcEventSources Version="2">
+	<Source>
+		<GUID>{070F8201-0007-47D5-8921-581FB1F9F458}</GUID>
+		<Name LcId="1033">XtsCoreEventClass</Name>
+		<Event>
+			<Id>0</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>1</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>2</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>3</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>4</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>20</Id>
+			<Message LcId="1033">System initialization started.</Message>
+		</Event>
+		<Event>
+			<Id>21</Id>
+			<Message LcId="1033">System initialization finished.</Message>
+		</Event>
+		<Event>
+			<Id>22</Id>
+			<Message LcId="1033">System initialization error: Axes group not linked.</Message>
+		</Event>
+		<Event>
+			<Id>23</Id>
+			<Message LcId="1033">System initialization error: Axes group length mismatch.</Message>
+		</Event>
+		<Event>
+			<Id>24</Id>
+			<Message LcId="1033">System initialization error: XPU name not found.</Message>
+		</Event>
+		<Event>
+			<Id>25</Id>
+			<Message LcId="1033">System initialization error: Axes group not found.</Message>
+		</Event>
+		<Event>
+			<Id>30</Id>
+			<Message LcId="1033">Track Initialization finished. {0} tracks created.</Message>
+		</Event>
+		<Event>
+			<Id>31</Id>
+			<Message LcId="1033">Mover initialization started.</Message>
+		</Event>
+		<Event>
+			<Id>32</Id>
+			<Message LcId="1033">Mover initialization finished. {0} movers created.</Message>
+		</Event>
+		<Event>
+			<Id>33</Id>
+			<Message LcId="1033">Part initialization started.</Message>
+		</Event>
+		<Event>
+			<Id>34</Id>
+			<Message LcId="1033">XtsParts finished creation. {0} Parts created.</Message>
+		</Event>
+		<Event>
+			<Id>35</Id>
+			<Message LcId="1033">Part modules initialization started for {0}.</Message>
+		</Event>
+		<Event>
+			<Id>36</Id>
+			<Message LcId="1033">XtsPart {0} XtsModules Creation finished. {1} XtsModules created.</Message>
+		</Event>
+		<Event>
+			<Id>40</Id>
+			<Message LcId="1033">System enable failed: Activate track failed.</Message>
+		</Event>
+		<Event>
+			<Id>100</Id>
+			<Message LcId="1033">Commanded to Enable.</Message>
+		</Event>
+		<Event>
+			<Id>101</Id>
+			<Message LcId="1033">Commanded to Disable.</Message>
+		</Event>
+		<Event>
+			<Id>102</Id>
+			<Message LcId="1033">Commanded to move to {0} station.</Message>
+		</Event>
+		<Event>
+			<Id>103</Id>
+			<Message LcId="1033">Commanded to move to {0} position.</Message>
+		</Event>
+		<Event>
+			<Id>104</Id>
+			<Message LcId="1033">Commanded to move velocity.</Message>
+		</Event>
+		<Event>
+			<Id>105</Id>
+			<Message LcId="1033">Commanded to add to group.</Message>
+		</Event>
+		<Event>
+			<Id>106</Id>
+			<Message LcId="1033">Commanded to remove from group.</Message>
+		</Event>
+		<Event>
+			<Id>107</Id>
+			<Message LcId="1033">Commanded to activate to track {1}.</Message>
+		</Event>
+		<Event>
+			<Id>108</Id>
+			<Message LcId="1033">Commanded to halt.</Message>
+		</Event>
+		<Event>
+			<Id>109</Id>
+			<Message LcId="1033">Commanded to reset.</Message>
+		</Event>
+		<Event>
+			<Id>110</Id>
+			<Message LcId="1033">Commanded to sync to axis.</Message>
+		</Event>
+		<Event>
+			<Id>111</Id>
+			<Message LcId="1033">Commanded to Sync to Mover {1}</Message>
+		</Event>
+		<Event>
+			<Id>120</Id>
+			<Message LcId="1033">Mover command error: Invalid parameter.</Message>
+		</Event>
+		<Event>
+			<Id>121</Id>
+			<Message LcId="1033">Mover Error: {}</Message>
+		</Event>
+		<Event>
+			<Id>201</Id>
+			<Message LcId="1033">Station Disabled</Message>
+		</Event>
+		<Event>
+			<Id>200</Id>
+			<Message LcId="1033">Station Enabled</Message>
+		</Event>
+		<Event>
+			<Id>202</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>203</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>204</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>205</Id>
+			<Message LcId="1033">Station GetMover called. {0}</Message>
+		</Event>
+		<Event>
+			<Id>206</Id>
+			<Message LcId="1033">Station GetMover called but no mover available.</Message>
+		</Event>
+		<Event>
+			<Id>130</Id>
+			<Message LcId="1033">Mover initialization error: Axis not linked.</Message>
+		</Event>
+		<Event>
+			<Id>250</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>251</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>252</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>253</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>254</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>255</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>256</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>300</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>301</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>302</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>303</Id>
+			<Message LcId="1033">{0}</Message>
+		</Event>
+		<Event>
+			<Id>131</Id>
+			<Message LcId="1033">Invalid XPU Id provided to RefreshMoverId</Message>
+		</Event>
+		<Event>
+			<Id>132</Id>
+			<Message LcId="1033">No Matching  AxisObjectId found, MoverId set to 0.</Message>
+		</Event>
+	</Source>
+	<Source>
+		<GUID>{53984316-BF60-4C28-8DED-3ECE762FB218}</GUID>
+		<Name LcId="1033">Trace Log</Name>
+		<Event>
+			<Id>1</Id>
+			<Message LcId="1033">{0}|{1}|{2}|{3}|{4}|{5}</Message>
+			<Detail>
+				<Name>Comment</Name>
+				<Text LcId="1033">Arguments:
+0 - Textual message
+1 - DC Timestamp
+2 - Instance (FB name)
+3 - Context (Calling task)
+4 - ScanCount
+5 - Flags</Text>
+			</Detail>
+		</Event>
+	</Source>
+</TcEventSources>
