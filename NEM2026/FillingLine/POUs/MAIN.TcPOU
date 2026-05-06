@@ -1,13 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}">
+  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+    // shared HMI inputs
+    bExecute        : BOOL;
+    bReset          : BOOL;
+    bModeAuto       : BOOL;
+    bModeManual     : BOOL;
+    bAlarmAck       : BOOL;
+
+    // station instances
+    StationFill     : FB_StationFill;
+    StationCap      : FB_StationCap;
+    StationLabel    : FB_StationLabel;
+    StationInspect  : FB_StationInspect;
+
+    // process inputs (wire to real I/O when integrated)
+    bPartFill       : BOOL;
+    rFlowRate       : LREAL := 1.0;
+    rTargetVolume   : LREAL := 250.0;
+
+    bPartCap        : BOOL;
+    bCapFeederReady : BOOL;
+    rTorqueLimit    : LREAL := 5.0;
+
+    bPartLabel      : BOOL;
+    bLabelReady     : BOOL;
+    rApplyPressure  : LREAL := 2.0;
+
+    bPartInspect    : BOOL;
+    bCameraReady    : BOOL;
+    bInspectResult  : BOOL;
 END_VAR
-]]>
-    </Declaration>
+]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[StationFill(
+    Execute      := bExecute,
+    Reset        := bReset,
+    ModeAuto     := bModeAuto,
+    ModeManual   := bModeManual,
+    PartPresent  := bPartFill,
+    AlarmAck     := bAlarmAck,
+    FlowRate     := rFlowRate,
+    TargetVolume := rTargetVolume);
+
+StationCap(
+    Execute        := bExecute,
+    Reset          := bReset,
+    ModeAuto       := bModeAuto,
+    ModeManual     := bModeManual,
+    PartPresent    := bPartCap,
+    AlarmAck       := bAlarmAck,
+    CapFeederReady := bCapFeederReady,
+    TorqueLimit    := rTorqueLimit);
+
+StationLabel(
+    Execute       := bExecute,
+    Reset         := bReset,
+    ModeAuto      := bModeAuto,
+    ModeManual    := bModeManual,
+    PartPresent   := bPartLabel,
+    AlarmAck      := bAlarmAck,
+    LabelReady    := bLabelReady,
+    ApplyPressure := rApplyPressure);
+
+StationInspect(
+    Execute       := bExecute,
+    Reset         := bReset,
+    ModeAuto      := bModeAuto,
+    ModeManual    := bModeManual,
+    PartPresent   := bPartInspect,
+    AlarmAck      := bAlarmAck,
+    CameraReady   := bCameraReady,
+    InspectResult := bInspectResult);
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
