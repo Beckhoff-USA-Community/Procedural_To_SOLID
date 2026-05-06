@@ -4,11 +4,11 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // shared HMI inputs
-    bExecute        : BOOL;
-    bReset          : BOOL;
-    bModeAuto       : BOOL;
-    bModeManual     : BOOL;
-    bAlarmAck       : BOOL;
+    Execute         : BOOL;
+    Reset           : BOOL;
+    ModeAuto        : BOOL;
+    ModeManual      : BOOL;
+    AlarmAck        : BOOL;
 
     // station instances
     StationFill     : FB_StationFill;
@@ -17,63 +17,63 @@ VAR
     StationInspect  : FB_StationInspect;
 
     // process inputs (wire to real I/O when integrated)
-    bPartFill       : BOOL;
-    rFlowRate       : LREAL := 1.0;
-    rTargetVolume   : LREAL := 250.0;
+    PartFill        : BOOL;
+    FlowRate        : LREAL := 1.0;
+    TargetVolume    : LREAL := 250.0;
 
-    bPartCap        : BOOL;
-    bCapFeederReady : BOOL;
-    rTorqueLimit    : LREAL := 5.0;
+    PartCap         : BOOL;
+    CapFeederReady  : BOOL;
+    TorqueLimit     : LREAL := 5.0;
 
-    bPartLabel      : BOOL;
-    bLabelReady     : BOOL;
-    rApplyPressure  : LREAL := 2.0;
+    PartLabel       : BOOL;
+    LabelReady      : BOOL;
+    ApplyPressure   : LREAL := 2.0;
 
-    bPartInspect    : BOOL;
-    bCameraReady    : BOOL;
-    bInspectResult  : BOOL;
+    PartInspect     : BOOL;
+    CameraReady     : BOOL;
+    InspectResult   : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[StationFill(
-    Execute      := bExecute,
-    Reset        := bReset,
-    ModeAuto     := bModeAuto,
-    ModeManual   := bModeManual,
-    PartPresent  := bPartFill,
-    AlarmAck     := bAlarmAck,
-    FlowRate     := rFlowRate,
-    TargetVolume := rTargetVolume);
+    Execute      := Execute,
+    Reset        := Reset,
+    ModeAuto     := ModeAuto,
+    ModeManual   := ModeManual,
+    PartPresent  := PartFill,
+    AlarmAck     := AlarmAck,
+    FlowRate     := FlowRate,
+    TargetVolume := TargetVolume);
 
 StationCap(
-    Execute        := bExecute,
-    Reset          := bReset,
-    ModeAuto       := bModeAuto,
-    ModeManual     := bModeManual,
-    PartPresent    := bPartCap,
-    AlarmAck       := bAlarmAck,
-    CapFeederReady := bCapFeederReady,
-    TorqueLimit    := rTorqueLimit);
+    Execute        := Execute,
+    Reset          := Reset,
+    ModeAuto       := ModeAuto,
+    ModeManual     := ModeManual,
+    PartPresent    := PartCap,
+    AlarmAck       := AlarmAck,
+    CapFeederReady := CapFeederReady,
+    TorqueLimit    := TorqueLimit);
 
 StationLabel(
-    Execute       := bExecute,
-    Reset         := bReset,
-    ModeAuto      := bModeAuto,
-    ModeManual    := bModeManual,
-    PartPresent   := bPartLabel,
-    AlarmAck      := bAlarmAck,
-    LabelReady    := bLabelReady,
-    ApplyPressure := rApplyPressure);
+    Execute       := Execute,
+    Reset         := Reset,
+    ModeAuto      := ModeAuto,
+    ModeManual    := ModeManual,
+    PartPresent   := PartLabel,
+    AlarmAck      := AlarmAck,
+    LabelReady    := LabelReady,
+    ApplyPressure := ApplyPressure);
 
 StationInspect(
-    Execute       := bExecute,
-    Reset         := bReset,
-    ModeAuto      := bModeAuto,
-    ModeManual    := bModeManual,
-    PartPresent   := bPartInspect,
-    AlarmAck      := bAlarmAck,
-    CameraReady   := bCameraReady,
-    InspectResult := bInspectResult);
+    Execute       := Execute,
+    Reset         := Reset,
+    ModeAuto      := ModeAuto,
+    ModeManual    := ModeManual,
+    PartPresent   := PartInspect,
+    AlarmAck      := AlarmAck,
+    CameraReady   := CameraReady,
+    InspectResult := InspectResult);
 ]]></ST>
     </Implementation>
   </POU>
