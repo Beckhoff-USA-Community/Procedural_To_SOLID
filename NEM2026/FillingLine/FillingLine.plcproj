@@ -8,7 +8,7 @@
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
-    <Name>Machine3Ways</Name>
+    <Name>FillingLine</Name>
     <ProgramVersion>3.1.4026.22</ProgramVersion>
     <Application>{7296cc47-455c-4ba0-8f4d-727df8245047}</Application>
     <TypeSystem>{960b0746-5c04-488f-88f2-23988c759776}</TypeSystem>
@@ -32,58 +32,6 @@
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
-    <PlaceholderReference Include="Core">
-      <DefaultResolution>Core, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>Core</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="CoreComponents">
-      <DefaultResolution>CoreComponents, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>CoreComponents</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="CoreMotionMc3">
-      <DefaultResolution>CoreMotionMc3, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>CoreMotionMc3</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="CoreMotionNc2">
-      <DefaultResolution>CoreMotionNc2, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>CoreMotionNc2</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="MechatronicsCore">
-      <DefaultResolution>MechatronicsCore, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>MechatronicsCore</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT Base Types">
-      <DefaultResolution>SPT Base Types, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_BaseTypes</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT Components">
-      <DefaultResolution>SPT Components, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_Components</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT Diagnostic">
-      <DefaultResolution>SPT Diagnostic, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_Diagnostic</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT EtherCat">
-      <DefaultResolution>SPT EtherCat, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_EtherCat</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT Event Logger">
-      <DefaultResolution>SPT Event Logger, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_EventLogger</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT Kinematics">
-      <DefaultResolution>SPT Kinematics, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_Kinematics</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT Motion Control">
-      <DefaultResolution>SPT Motion Control, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_Motion_Control</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="SPT Utilities">
-      <DefaultResolution>SPT Utilities, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>SPT_Utilities</Namespace>
-    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
@@ -97,36 +45,6 @@
       <Namespace>Tc3_Module</Namespace>
       <SystemLibrary>true</SystemLibrary>
     </PlaceholderReference>
-    <PlaceholderReference Include="XtsCore">
-      <DefaultResolution>XtsCore, * (Beckhoff Automation LLC)</DefaultResolution>
-      <Namespace>XtsCore</Namespace>
-    </PlaceholderReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PlaceholderResolution Include="System_VisuElemBase">
-      <Resolution>VisuElemBase, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="System_VisuElemMeter">
-      <Resolution>VisuElemMeter, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="System_VisuElems">
-      <Resolution>VisuElems, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="System_VisuElemsSpecialControls">
-      <Resolution>VisuElemsSpecialControls, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="System_VisuElemsWinControls">
-      <Resolution>VisuElemsWinControls, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="System_VisuElemTextEditor">
-      <Resolution>VisuElemTextEditor, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="System_VisuInputs">
-      <Resolution>VisuInputs, * (System)</Resolution>
-    </PlaceholderResolution>
-    <PlaceholderResolution Include="System_VisuNativeControl">
-      <Resolution>VisuNativeControl, * (System)</Resolution>
-    </PlaceholderResolution>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

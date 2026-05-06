@@ -1307,7 +1307,7 @@
 	</DataTypes>
 	<Project ProjectGUID="{FD2259D3-1973-4D60-E755-4C4B3916F94F}" ShowHideConfigurations="#x6">
 		<Plc>
-			<Project GUID="{64827A5F-3A2D-4879-934C-C9ADE5CB19FC}" Name="Machine3Ways" PrjFilePath="Machine3Ways\Machine3Ways.plcproj" TmcFilePath="Machine3Ways\Machine3Ways.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e"/>
+			<Project GUID="{64827A5F-3A2D-4879-934C-C9ADE5CB19FC}" Name="FillingLine" PrjFilePath="FillingLine\FillingLine.plcproj" TmcFilePath="FillingLine\FillingLine.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e"/>
 		</Plc>
 	</Project>
 </TcSmProject>
