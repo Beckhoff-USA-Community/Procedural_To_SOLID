@@ -14,6 +14,7 @@ VAR
     // injected dependencies (set in FB_Init)
     Mode      : REFERENCE TO FB_ModeManager;
     Alarm     : I_AlarmHandler;
+    Logger    : I_DataLogger;            // CR-3: optional cycle data sink
 
     // composed building blocks
     Sequencer : FB_StepSequencer;
@@ -33,11 +34,13 @@ VAR_INPUT
     bInCopyCode   : BOOL;
     ModeRef       : REFERENCE TO FB_ModeManager;
     AlarmHandler  : I_AlarmHandler;
+    DataLogger    : I_DataLogger;        // CR-3
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Mode  REF= ModeRef;
-Alarm := AlarmHandler;
+        <ST><![CDATA[Mode   REF= ModeRef;
+Alarm  := AlarmHandler;
+Logger := DataLogger;
 
 Sequencer.SetStepName(0,  'Idle');
 Sequencer.SetStepName(10, 'Filling');
@@ -83,6 +86,11 @@ CASE Sequencer.CurrentStep OF
     20:
         OpenFillValve := FALSE;
         Watchdog.Enable := FALSE;
+        // CR-3: log cycle on completion. CycleTimeMs left at 0 here —
+        // production code measures via Tc2_Utilities.F_GetCurDcTaskTime64.
+        Logger.LogCycleData(StationName := 'Fill',
+                            StepNumber  := Sequencer.CurrentStep,
+                            CycleTimeMs := 0);
         Sequencer.MarkComplete();
 END_CASE
 
