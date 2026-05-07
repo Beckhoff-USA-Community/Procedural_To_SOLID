@@ -5,16 +5,16 @@
 VAR
     // shared HMI inputs
     Execute         : BOOL;
-    Reset           : BOOL;
     ModeAuto        : BOOL;
     ModeManual      : BOOL;
     AlarmAck        : BOOL;
 
-    // station instances
-    StationFill     : FB_StationFill;
-    StationCap      : FB_StationCap;
-    StationLabel    : FB_StationLabel;
-    StationInspect  : FB_StationInspect;
+    // station instances — Name init is the SPT idiom; FB_ComponentBase
+    // uses Name for diagnostic prefixes and event-logger string params.
+    StationFill     : FB_StationFill    := (Name := 'Fill');
+    StationCap      : FB_StationCap     := (Name := 'Cap');
+    StationLabel    : FB_StationLabel   := (Name := 'Label');
+    StationInspect  : FB_StationInspect := (Name := 'Inspect');
 
     // process inputs (wire to real I/O when integrated)
     PartFill        : BOOL;
@@ -24,6 +24,7 @@ VAR
     PartCap         : BOOL;
     CapFeederReady  : BOOL;
     TorqueLimit     : LREAL := 5.0;
+    TorqueActual    : LREAL;
 
     PartLabel       : BOOL;
     LabelReady      : BOOL;
@@ -37,43 +38,44 @@ END_VAR
     <Implementation>
       <ST><![CDATA[StationFill(
     Execute      := Execute,
-    Reset        := Reset,
     ModeAuto     := ModeAuto,
     ModeManual   := ModeManual,
     PartPresent  := PartFill,
     AlarmAck     := AlarmAck,
     FlowRate     := FlowRate,
     TargetVolume := TargetVolume);
+StationFill.CyclicLogic();
 
 StationCap(
     Execute        := Execute,
-    Reset          := Reset,
     ModeAuto       := ModeAuto,
     ModeManual     := ModeManual,
     PartPresent    := PartCap,
     AlarmAck       := AlarmAck,
     CapFeederReady := CapFeederReady,
-    TorqueLimit    := TorqueLimit);
+    TorqueLimit    := TorqueLimit,
+    TorqueActual   := TorqueActual);
+StationCap.CyclicLogic();
 
 StationLabel(
     Execute       := Execute,
-    Reset         := Reset,
     ModeAuto      := ModeAuto,
     ModeManual    := ModeManual,
     PartPresent   := PartLabel,
     AlarmAck      := AlarmAck,
     LabelReady    := LabelReady,
     ApplyPressure := ApplyPressure);
+StationLabel.CyclicLogic();
 
 StationInspect(
     Execute       := Execute,
-    Reset         := Reset,
     ModeAuto      := ModeAuto,
     ModeManual    := ModeManual,
     PartPresent   := PartInspect,
     AlarmAck      := AlarmAck,
     CameraReady   := CameraReady,
     InspectResult := InspectResult);
+StationInspect.CyclicLogic();
 ]]></ST>
     </Implementation>
   </POU>

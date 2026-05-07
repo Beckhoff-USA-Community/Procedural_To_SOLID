@@ -1,100 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
-    Execute          : BOOL;
-    Reset            : BOOL;
-    ModeAuto         : BOOL;
-    ModeManual       : BOOL;
-    JogForward       : BOOL;
-    JogReverse       : BOOL;
-    PartPresent      : BOOL;
-    AlarmAck         : BOOL;
     CameraReady      : BOOL;
     InspectResult    : BOOL;
 END_VAR
 VAR_OUTPUT
-    Busy             : BOOL;
-    Done             : BOOL;
-    Error            : BOOL;
-    ErrorID          : UDINT;
-    StatusText       : STRING(80);
-    StateDisplay     : INT;
-    AlarmActive      : BOOL;
-    AlarmText        : STRING(255);
     TriggerCamera    : BOOL;
     RejectPusher     : BOOL;
     PassResult       : BOOL;
 END_VAR
 VAR
-    State            : INT;
-    Timeout          : TON;
     CameraDelay      : TON;
-    AlarmLatched     : BOOL;
-    AlarmCode        : UDINT;
-    ActiveMode       : INT;
-    ManualStep       : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
-IF ModeAuto THEN
-    ActiveMode := 1;
-ELSIF ModeManual THEN
-    ActiveMode := 2;
-ELSE
-    ActiveMode := 0;
-END_IF
-
-// alarm ack — Inspect uses LEVEL (drift from Fill/Label)
-IF AlarmLatched AND AlarmAck THEN
-    AlarmLatched := FALSE;
-    AlarmCode    := 0;
-    AlarmText    := '';
-END_IF
-
-IF Reset THEN
-    State        := 0;
-    AlarmLatched := FALSE;
-    AlarmCode    := 0;
-    AlarmText    := '';
-    Timeout(IN := FALSE);
-    CameraDelay(IN := FALSE);
-    Done         := FALSE;
-END_IF
-
-CASE State OF
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ExecuteSequence" Id="{d00a3e14-4b2f-42bf-a4c1-feb0f38b05ee}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
     0:
         TriggerCamera := FALSE;
         RejectPusher  := FALSE;
         PassResult    := FALSE;
         Done          := FALSE;
         IF Execute AND PartPresent AND CameraReady AND ActiveMode = 1 THEN
-            State := 10;
+            THIS^.TransitionTo(10);
         END_IF
     10:
         TriggerCamera := TRUE;
         CameraDelay(IN := TRUE, PT := T#200MS);
         Timeout(IN := TRUE, PT := T#2S);
         IF Timeout.Q THEN
-            AlarmLatched := TRUE;
-            AlarmCode    := 4001;
-            AlarmText    := 'Inspect: Camera timeout';
+            THIS^.RaiseStationAlarm(4001, 'Inspect: Camera timeout');
         END_IF
         IF CameraDelay.Q THEN
             CameraDelay(IN := FALSE);
             Timeout(IN := FALSE);
             TriggerCamera := FALSE;
-            State := 20;
+            THIS^.TransitionTo(20);
         END_IF
     20:
         IF InspectResult THEN
             PassResult := TRUE;
-            State      := 30;
+            THIS^.TransitionTo(30);
         ELSE
             PassResult := FALSE;
-            State      := 25;
+            THIS^.TransitionTo(25);
         END_IF
     25:
         RejectPusher := TRUE;
@@ -102,27 +58,29 @@ CASE State OF
         IF CameraDelay.Q THEN
             CameraDelay(IN := FALSE);
             RejectPusher := FALSE;
-            State := 30;
+            THIS^.TransitionTo(30);
         END_IF
     30:
         Done := TRUE;
 END_CASE
-
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Inspecting';
-    20: StatusText := 'Evaluate';
-    25: StatusText := 'Rejecting';
-    30: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
 ]]></ST>
-    </Implementation>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{c454da0d-d011-4bab-8a4c-dd23d88ef93c}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:  GetStepName := 'Idle';
+    10: GetStepName := 'Inspecting';
+    20: GetStepName := 'Evaluate';
+    25: GetStepName := 'Rejecting';
+    30: GetStepName := 'Complete';
+ELSE
+    GetStepName := 'Unknown';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

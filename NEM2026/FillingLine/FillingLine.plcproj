@@ -24,6 +24,9 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\FB_StationBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\FB_StationFill.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -44,6 +47,26 @@
     <Folder Include="POUs" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="SPT Base Types">
+      <DefaultResolution>SPT Base Types, * (Beckhoff Automation LLC)</DefaultResolution>
+      <Namespace>SPT_BaseTypes</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="SPT Components">
+      <DefaultResolution>SPT Components, * (Beckhoff Automation LLC)</DefaultResolution>
+      <Namespace>SPT_Components</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="SPT Diagnostic">
+      <DefaultResolution>SPT Diagnostic, * (Beckhoff Automation LLC)</DefaultResolution>
+      <Namespace>SPT_Diagnostic</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="SPT Event Logger">
+      <DefaultResolution>SPT Event Logger, * (Beckhoff Automation LLC)</DefaultResolution>
+      <Namespace>SPT_EventLogger</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="SPT Utilities">
+      <DefaultResolution>SPT Utilities, * (Beckhoff Automation LLC)</DefaultResolution>
+      <Namespace>SPT_Utilities</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
@@ -52,10 +75,18 @@
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_EventLogger">
+      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_EventLogger</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
       <SystemLibrary>true</SystemLibrary>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_PackML_V3">
+      <DefaultResolution>Tc3_PackML_V3, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_PackML_V3</Namespace>
     </PlaceholderReference>
   </ItemGroup>
   <ProjectExtensions>

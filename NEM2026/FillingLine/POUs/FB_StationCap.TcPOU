@@ -1,115 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationCap" Id="{995aa1f9-2aab-436e-9cda-670bc81baac1}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap EXTENDS FB_StationBase
 VAR_INPUT
-    Execute          : BOOL;
-    Reset            : BOOL;
-    ModeAuto         : BOOL;
-    ModeManual       : BOOL;
-    JogForward       : BOOL;
-    JogReverse       : BOOL;
-    PartPresent      : BOOL;
-    AlarmAck         : BOOL;
     CapFeederReady   : BOOL;
     TorqueLimit      : LREAL;
+    TorqueActual     : LREAL;
 END_VAR
 VAR_OUTPUT
-    Busy             : BOOL;
-    Done             : BOOL;
-    Error            : BOOL;
-    ErrorID          : UDINT;
-    StatusText       : STRING(80);
-    StateDisplay     : INT;
-    AlarmActive      : BOOL;
-    AlarmText        : STRING(255);
     RunCapMotor      : BOOL;
     CapPickCylinder  : BOOL;
 END_VAR
 VAR
-    State            : INT;
-    Timeout          : TON;
     CapSettle        : TON;
-    AlarmLatched     : BOOL;
-    AlarmCode        : UDINT;
-    ActiveMode       : INT;
-    TorqueActual     : LREAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
-IF ModeAuto THEN
-    ActiveMode := 1;
-ELSIF ModeManual THEN
-    ActiveMode := 2;
-ELSE
-    ActiveMode := 0;
-END_IF
-
-// alarm ack — Cap uses LEVEL (no edge detection — drift from Fill)
-IF AlarmLatched AND AlarmAck THEN
-    AlarmLatched := FALSE;
-    AlarmCode    := 0;
-    AlarmText    := '';
-END_IF
-
-IF Reset THEN
-    State        := 0;
-    AlarmLatched := FALSE;
-    AlarmCode    := 0;
-    AlarmText    := '';
-    Timeout(IN := FALSE);
-    CapSettle(IN := FALSE);
-    Done         := FALSE;
-END_IF
-
-CASE State OF
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ExecuteSequence" Id="{97774c85-7365-4ba1-a61f-c6f0e3be2e81}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
     0:
         RunCapMotor     := FALSE;
         CapPickCylinder := FALSE;
         Done            := FALSE;
         IF Execute AND PartPresent AND CapFeederReady AND ActiveMode = 1 THEN
-            State := 10;
+            THIS^.TransitionTo(10);
         END_IF
     10:
         CapPickCylinder := TRUE;
         CapSettle(IN := TRUE, PT := T#500MS);
         IF CapSettle.Q THEN
             CapSettle(IN := FALSE);
-            State := 20;
+            THIS^.TransitionTo(20);
         END_IF
     20:
         RunCapMotor := TRUE;
         Timeout(IN := TRUE, PT := T#5S);
         IF Timeout.Q THEN
-            AlarmLatched := TRUE;
-            AlarmCode    := 2001;
-            AlarmText    := 'Cap: Torque timeout';
+            THIS^.RaiseStationAlarm(2001, 'Cap: Torque timeout');
         END_IF
         IF TorqueActual >= TorqueLimit THEN
             RunCapMotor := FALSE;
             Timeout(IN := FALSE);
-            State := 30;
+            THIS^.TransitionTo(30);
         END_IF
     30:
         CapPickCylinder := FALSE;
         Done := TRUE;
 END_CASE
-
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Pick Cap';
-    20: StatusText := 'Torquing';
-    30: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
 ]]></ST>
-    </Implementation>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{cd840df6-775a-44ea-892d-ec56f396d9c0}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:  GetStepName := 'Idle';
+    10: GetStepName := 'Pick Cap';
+    20: GetStepName := 'Torquing';
+    30: GetStepName := 'Complete';
+ELSE
+    GetStepName := 'Unknown';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

@@ -1,112 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationFill" Id="{c8b56ccb-9e54-404c-b28c-9e8f9a838929}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill EXTENDS FB_StationBase
 VAR_INPUT
-    Execute          : BOOL;
-    Reset            : BOOL;
-    ModeAuto         : BOOL;
-    ModeManual       : BOOL;
-    JogForward       : BOOL;
-    JogReverse       : BOOL;
-    PartPresent      : BOOL;
-    AlarmAck         : BOOL;
     FlowRate         : LREAL;
     TargetVolume     : LREAL;
 END_VAR
 VAR_OUTPUT
-    Busy             : BOOL;
-    Done             : BOOL;
-    Error            : BOOL;
-    ErrorID          : UDINT;
-    StatusText       : STRING(80);
-    StateDisplay     : INT;
-    AlarmActive      : BOOL;
-    AlarmText        : STRING(255);
     OpenFillValve    : BOOL;
 END_VAR
 VAR
-    State            : INT;
-    Timeout          : TON;
-    AlarmLatched     : BOOL;
-    AlarmAckEdge     : R_TRIG;
-    AlarmCode        : UDINT;
-    ActiveMode       : INT;
     Accumulated      : LREAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
-IF ModeAuto THEN
-    ActiveMode := 1;
-ELSIF ModeManual THEN
-    ActiveMode := 2;
-ELSE
-    ActiveMode := 0;
-END_IF
-
-// alarm ack — Fill uses RISING EDGE
-AlarmAckEdge(CLK := AlarmAck);
-IF AlarmLatched AND AlarmAckEdge.Q THEN
-    AlarmLatched := FALSE;
-    AlarmCode    := 0;
-    AlarmText    := '';
-END_IF
-
-IF Reset THEN
-    State        := 0;
-    AlarmLatched := FALSE;
-    AlarmCode    := 0;
-    AlarmText    := '';
-    Timeout(IN := FALSE);
-    Accumulated  := 0.0;
-    Done         := FALSE;
-END_IF
-
-CASE State OF
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ExecuteSequence" Id="{7012b869-cba7-4451-a462-d26725a9ae47}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
     0:
         OpenFillValve := FALSE;
         Done          := FALSE;
         Accumulated   := 0.0;
         IF Execute AND PartPresent AND ActiveMode = 1 THEN
-            State := 10;
+            THIS^.TransitionTo(10);
         END_IF
     10:
         OpenFillValve := TRUE;
         Timeout(IN := TRUE, PT := T#10S);
         IF Timeout.Q THEN
-            AlarmLatched := TRUE;
-            AlarmCode    := 1000;
-            AlarmText    := 'Fill: Timeout';
+            THIS^.RaiseStationAlarm(1000, 'Fill: Timeout');
         END_IF
         IF FlowRate < 0.1 THEN
-            AlarmLatched := TRUE;
-            AlarmCode    := 1001;
-            AlarmText    := 'Fill: No flow detected';
+            THIS^.RaiseStationAlarm(1001, 'Fill: No flow detected');
         END_IF
         Accumulated := Accumulated + (FlowRate * 0.001);
         IF Accumulated >= TargetVolume THEN
-            State := 20;
+            THIS^.TransitionTo(20);
         END_IF
     20:
         OpenFillValve := FALSE;
         Timeout(IN := FALSE);
         Done := TRUE;
 END_CASE
-
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Filling';
-    20: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
 ]]></ST>
-    </Implementation>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{263d6cd9-6cc0-4b5d-93a1-b87fa2ae9031}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:  GetStepName := 'Idle';
+    10: GetStepName := 'Filling';
+    20: GetStepName := 'Complete';
+ELSE
+    GetStepName := 'Unknown';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

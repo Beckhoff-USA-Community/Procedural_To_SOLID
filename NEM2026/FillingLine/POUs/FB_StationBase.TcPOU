@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_StationBase" Id="{bc3c8fc6-ecac-4bf1-83f0-ca59597c7418}" SpecialFunc="None">
+    <Declaration><![CDATA[// Abstract station base — extends the SPT-Libraries FB_ComponentBase.
+// Provides shared mode/alarm/HMI logic. Derived stations override
+// ExecuteSequence (the per-station CASE) and GetStepName (status text).
+//
+// Production code would back AlarmText/AlarmCode with FB_TcAlarm arrays
+// + TC_Events; intentionally simplified here so the inheritance lesson
+// stays the focus.
+FUNCTION_BLOCK FB_StationBase EXTENDS SPT_Components.FB_ComponentBase
+VAR_INPUT
+    Execute      : BOOL;
+    ModeAuto     : BOOL;
+    ModeManual   : BOOL;
+    PartPresent  : BOOL;
+    AlarmAck     : BOOL;
+END_VAR
+VAR_OUTPUT
+    Done         : BOOL;
+    StatusText   : STRING(80);
+    StateDisplay : INT;
+    AlarmActive  : BOOL;
+    AlarmText    : STRING(255);
+END_VAR
+VAR
+    State        : INT;
+    Timeout      : TON;
+    AlarmLatched : BOOL;
+    AlarmAckEdge : R_TRIG;
+    AlarmCode    : UDINT;
+    ActiveMode   : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="CyclicLogic" Id="{d881dc39-0418-4090-9df1-82c864b09262}">
+      <Declaration><![CDATA[// Entry point — called each scan from MAIN. Runs the SPT framework
+// lifecycle (Initialize → Monitoring → ...) then the station's sequence.
+METHOD PUBLIC CyclicLogic
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT _InitComplete THEN
+    _InitComplete := Initialize();
+    RETURN;
+END_IF
+
+SUPER^.CyclicLogic();   // framework: invokes Monitoring (overridden below)
+
+THIS^.ExecuteSequence();
+THIS^.UpdateHmiStatus();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Monitoring" Id="{4abe9ebd-cb45-4f39-9ced-488d76d03a4f}">
+      <Declaration><![CDATA[// Mode resolution + alarm acknowledge. Children may override to add
+// station-specific alarm conditions; they should call SUPER^.Monitoring()
+// first to keep this behavior.
+METHOD PROTECTED Monitoring
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ModeAuto THEN
+    ActiveMode := 1;
+ELSIF ModeManual THEN
+    ActiveMode := 2;
+ELSE
+    ActiveMode := 0;
+END_IF
+
+AlarmAckEdge(CLK := AlarmAck);
+IF AlarmLatched AND AlarmAckEdge.Q THEN
+    AlarmLatched := FALSE;
+    AlarmCode    := 0;
+    AlarmText    := '';
+    _Error       := FALSE;
+    _ErrorID     := 0;
+END_IF
+
+SUPER^.Monitoring();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{9d944465-a488-43e1-b861-cfc572ba72f0}">
+      <Declaration><![CDATA[// Clear sequence + alarm state. Multi-cycle: returns TRUE only when the
+// SPT base finishes its own reset.
+METHOD PUBLIC Reset : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[State        := 0;
+AlarmLatched := FALSE;
+AlarmCode    := 0;
+AlarmText    := '';
+Done         := FALSE;
+Timeout(IN := FALSE);
+
+IF SUPER^.Reset() THEN
+    _Error   := FALSE;
+    _ErrorID := 0;
+    Reset    := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ExecuteSequence" Id="{aa3954ba-3a32-43cc-b4df-4dc442e58804}">
+      <Declaration><![CDATA[// Virtual hook — concrete station overrides with its CASE state machine.
+METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{54dac95f-0a58-4038-8bf2-f3f7d514eb79}">
+      <Declaration><![CDATA[// Virtual hook — concrete station overrides with its step-name mapping.
+METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:   GetStepName := 'Idle';
+ELSE
+    GetStepName := 'Running';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RaiseStationAlarm" Id="{3ab655c1-5824-46b5-ae4f-940a438d0eb7}">
+      <Declaration><![CDATA[// Helper — latch a fault. Wires through to the SPT base's _Error/_ErrorID
+// so framework diagnostics see it.
+METHOD PROTECTED RaiseStationAlarm
+VAR_INPUT
+    Code : UDINT;
+    Text : STRING(255);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AlarmLatched := TRUE;
+AlarmCode    := Code;
+AlarmText    := Text;
+_Error       := TRUE;
+_ErrorID     := Code;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TransitionTo" Id="{db3dc823-f545-4879-89e4-b67f69f0cda3}">
+      <Declaration><![CDATA[METHOD PROTECTED TransitionTo
+VAR_INPUT
+    NextStep : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[State := NextStep;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UpdateHmiStatus" Id="{d9ca5760-26b3-48bd-941c-c01db03b117f}">
+      <Declaration><![CDATA[METHOD PROTECTED UpdateHmiStatus
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateDisplay := State;
+StatusText   := THIS^.GetStepName();
+AlarmActive  := AlarmLatched;
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
