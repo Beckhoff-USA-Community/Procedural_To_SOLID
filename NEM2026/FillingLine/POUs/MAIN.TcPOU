@@ -1,13 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}">
+  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+    // ----- shared services -----
+    ModeManager  : FB_ModeManager;
+
+    // ----- per-station alarm strategies -----
+    // stage-3-exercise: every station uses LineFault (latching, stops line).
+    // The CR-2 swap exercise replaces InspectAlarm with FB_AlarmHandler_QualityFlag.
+    FillAlarm    : FB_AlarmHandler_LineFault;
+    CapAlarm     : FB_AlarmHandler_LineFault;
+    LabelAlarm   : FB_AlarmHandler_LineFault;
+    InspectAlarm : FB_AlarmHandler_LineFault;
+
+    // ----- stations composed via FB_Init dependency injection -----
+    StationFill    : FB_StationFill(ModeRef := ModeManager, AlarmHandler := FillAlarm);
+    StationCap     : FB_StationCap(ModeRef := ModeManager, AlarmHandler := CapAlarm);
+    StationLabel   : FB_StationLabel(ModeRef := ModeManager, AlarmHandler := LabelAlarm);
+    StationInspect : FB_StationInspect(ModeRef := ModeManager, AlarmHandler := InspectAlarm);
+
+    // ----- shared HMI inputs -----
+    ModeAuto      : BOOL;
+    ModeManual    : BOOL;
+    AlarmAck      : BOOL;
+
+    // ----- per-station process inputs -----
+    PartFill      : BOOL;
+    FlowRate      : LREAL := 1.0;
+    TargetVolume  : LREAL := 250.0;
+
+    PartCap        : BOOL;
+    CapFeederReady : BOOL;
+    TorqueLimit    : LREAL := 5.0;
+    TorqueActual   : LREAL;
+
+    PartLabel      : BOOL;
+    LabelReady     : BOOL;
+    ApplyPressure  : LREAL := 2.0;
+
+    PartInspect    : BOOL;
+    CameraReady    : BOOL;
+    InspectResult  : BOOL;
 END_VAR
-]]>
-    </Declaration>
+]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[// shared mode update
+ModeManager.ModeAuto   := ModeAuto;
+ModeManager.ModeManual := ModeManual;
+ModeManager.CyclicUpdate();
+
+// alarm-handler ack inputs (one HMI Ack drives all)
+FillAlarm.AckInput    := AlarmAck;
+CapAlarm.AckInput     := AlarmAck;
+LabelAlarm.AckInput   := AlarmAck;
+InspectAlarm.AckInput := AlarmAck;
+
+// Fill
+StationFill.PartPresent  := PartFill;
+StationFill.FlowRate     := FlowRate;
+StationFill.TargetVolume := TargetVolume;
+StationFill.Execute();
+
+// Cap
+StationCap.PartPresent    := PartCap;
+StationCap.CapFeederReady := CapFeederReady;
+StationCap.TorqueLimit    := TorqueLimit;
+StationCap.TorqueActual   := TorqueActual;
+StationCap.Execute();
+
+// Label
+StationLabel.PartPresent   := PartLabel;
+StationLabel.LabelReady    := LabelReady;
+StationLabel.ApplyPressure := ApplyPressure;
+StationLabel.Execute();
+
+// Inspect
+StationInspect.PartPresent   := PartInspect;
+StationInspect.CameraReady   := CameraReady;
+StationInspect.InspectResult := InspectResult;
+StationInspect.Execute();
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -24,14 +24,76 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Interfaces\I_Sequenceable.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\I_AlarmHandler.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\I_HmiReportable.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\I_ModeProvider.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\I_DataLogger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\BuildingBlocks\FB_ModeManager.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\BuildingBlocks\FB_AlarmHandler_LineFault.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\BuildingBlocks\FB_AlarmHandler_QualityFlag.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\BuildingBlocks\FB_StepSequencer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\BuildingBlocks\FB_ParallelSequencer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\BuildingBlocks\FB_TimeoutWatchdog.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\BuildingBlocks\FB_CycleDataLogger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\FB_StationFill.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\FB_StationCap.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\FB_StationLabel.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Stations\FB_StationInspect.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ST_LogEntry.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
+    <Folder Include="POUs\Interfaces" />
+    <Folder Include="POUs\BuildingBlocks" />
+    <Folder Include="POUs\Stations" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="Core">
+      <DefaultResolution>Core, * (Beckhoff Automation LLC)</DefaultResolution>
+      <Namespace>Core</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="CoreComponents">
+      <DefaultResolution>CoreComponents, * (Beckhoff Automation LLC)</DefaultResolution>
+      <Namespace>CoreComponents</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
@@ -39,6 +101,10 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_EventLogger">
+      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_EventLogger</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>

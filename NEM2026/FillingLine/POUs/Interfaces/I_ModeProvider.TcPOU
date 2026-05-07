@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_ModeProvider" Id="{2dc23b51-a2b2-47d1-a42e-5650f2ad2c8a}">
+    <Declaration><![CDATA[INTERFACE I_ModeProvider
+]]></Declaration>
+    <Property Name="CurrentMode" Id="{0adc6758-8186-4c90-be8e-35cede23ba37}">
+      <Declaration><![CDATA[// 0 = Idle, 1 = Auto, 2 = Manual, 3 = Paused (added at CR-1)
+PROPERTY CurrentMode : INT
+]]></Declaration>
+      <Get Name="Get" Id="{00a75fab-d1eb-41b6-b9e8-cba987909e02}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="AllowRun" Id="{39711bd7-01fe-4cf9-b463-33b2b0d6cb0a}">
+      <Declaration><![CDATA[PROPERTY AllowRun : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{801baaa9-fff2-42f4-bcbf-1770412db082}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="AllowJog" Id="{1d3aa30d-9b91-492d-b641-15ee60c38099}">
+      <Declaration><![CDATA[PROPERTY AllowJog : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{c932edbc-30b0-4102-b904-28af96c097ad}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>
