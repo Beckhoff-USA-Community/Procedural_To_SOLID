@@ -64,7 +64,7 @@ CASE Sequencer.CurrentStep OF
         IF Mode.AllowRun AND PartPresent AND CapFeederReady THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
-            Watchdog.Limit  := T#10S;
+            Watchdog.Duration := T#10S;
         END_IF
 
     10:

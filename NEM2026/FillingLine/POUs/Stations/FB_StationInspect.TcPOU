@@ -70,7 +70,7 @@ CASE Sequencer.CurrentStep OF
         IF Mode.AllowRun AND PartPresent AND CameraReady THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
-            Watchdog.Limit  := T#5S;
+            Watchdog.Duration := T#5S;
         END_IF
 
     10:
