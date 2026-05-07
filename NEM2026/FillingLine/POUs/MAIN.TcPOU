@@ -50,6 +50,13 @@ VAR
     PartInspect    : BOOL;
     CameraReady    : BOOL;
     InspectResult  : BOOL;
+
+    // ----- unit tests (PlcTestSuite) -----
+    // Set RunTests := TRUE in online view to drive the suite. Test results
+    // land in C:\ProgramData\Beckhoff\TwinCAT\3.1\Boot\TEST_Result.xml
+    // (JUnit format). See docs/testing.md.
+    RunTests       : BOOL := FALSE;
+    TestRunner     : FB_TestRunner;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -90,6 +97,12 @@ StationInspect.PartPresent   := PartInspect;
 StationInspect.CameraReady   := CameraReady;
 StationInspect.InspectResult := InspectResult;
 StationInspect.Execute();
+
+// Unit tests — see docs/testing.md
+IF RunTests THEN
+    Tc3_PlcTestSuite.TestSuite.TestSuiteName := 'FillingLine — Stage 3 SOLID';
+    TestRunner();
+END_IF
 ]]></ST>
     </Implementation>
   </POU>

@@ -75,6 +75,9 @@
     <Compile Include="DUTs\ST_LogEntry.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\Tests\FB_TestRunner.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
@@ -84,8 +87,13 @@
     <Folder Include="POUs\Interfaces" />
     <Folder Include="POUs\BuildingBlocks" />
     <Folder Include="POUs\Stations" />
+    <Folder Include="POUs\Tests" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="[Tc3_PlcTestSuite]">
+      <DefaultResolution>[Tc3_PlcTestSuite], * (Simmel)</DefaultResolution>
+      <Namespace>Tc3_PlcTestSuite</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Core">
       <DefaultResolution>Core, * (Beckhoff Automation LLC)</DefaultResolution>
       <Namespace>Core</Namespace>
