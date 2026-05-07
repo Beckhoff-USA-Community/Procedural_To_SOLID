@@ -7,6 +7,7 @@ VAR_INPUT
     Reset            : BOOL;
     ModeAuto         : BOOL;
     ModeManual       : BOOL;
+    ModePause        : BOOL;          // CR-1
     JogForward       : BOOL;
     JogReverse       : BOOL;
     PartPresent      : BOOL;
@@ -34,12 +35,14 @@ VAR
     AlarmLatched     : BOOL;
     AlarmCode        : UDINT;
     ActiveMode       : INT;
-    ManualStep       : INT;
+    ManualStep       : INT;        // dead variable — legacy cruft
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
-IF ModeAuto THEN
+      <ST><![CDATA[// mode + Pause (CR-1)
+IF ModePause THEN
+    ActiveMode := 3;
+ELSIF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
     ActiveMode := 2;
@@ -47,7 +50,12 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack — Inspect uses LEVEL (drift from Fill/Label)
+// CR-1 Pause guard — Inspect halts mid-cycle
+IF ActiveMode = 3 THEN
+    RETURN;
+END_IF
+
+// alarm ack — LEVEL (drift)
 IF AlarmLatched AND AlarmAck THEN
     AlarmLatched := FALSE;
     AlarmCode    := 0;

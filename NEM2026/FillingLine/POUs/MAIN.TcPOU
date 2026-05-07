@@ -8,6 +8,7 @@ VAR
     Reset           : BOOL;
     ModeAuto        : BOOL;
     ModeManual      : BOOL;
+    ModePause       : BOOL;       // CR-1
     AlarmAck        : BOOL;
 
     // station instances
@@ -40,6 +41,7 @@ END_VAR
     Reset        := Reset,
     ModeAuto     := ModeAuto,
     ModeManual   := ModeManual,
+    ModePause    := ModePause,
     PartPresent  := PartFill,
     AlarmAck     := AlarmAck,
     FlowRate     := FlowRate,
@@ -50,6 +52,7 @@ StationCap(
     Reset          := Reset,
     ModeAuto       := ModeAuto,
     ModeManual     := ModeManual,
+    ModePause      := ModePause,
     PartPresent    := PartCap,
     AlarmAck       := AlarmAck,
     CapFeederReady := CapFeederReady,
@@ -60,6 +63,7 @@ StationLabel(
     Reset         := Reset,
     ModeAuto      := ModeAuto,
     ModeManual    := ModeManual,
+    ModePause     := ModePause,
     PartPresent   := PartLabel,
     AlarmAck      := AlarmAck,
     LabelReady    := LabelReady,
@@ -70,6 +74,7 @@ StationInspect(
     Reset         := Reset,
     ModeAuto      := ModeAuto,
     ModeManual    := ModeManual,
+    ModePause     := ModePause,
     PartPresent   := PartInspect,
     AlarmAck      := AlarmAck,
     CameraReady   := CameraReady,
