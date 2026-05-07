@@ -4,7 +4,7 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_TimeoutWatchdog
 VAR_INPUT
     Enable   : BOOL;
-    Limit    : TIME;
+    Duration : TIME;
 END_VAR
 VAR_OUTPUT
     TimedOut : BOOL;
@@ -20,7 +20,7 @@ END_VAR
       <Declaration><![CDATA[METHOD CyclicUpdate : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_Timer(IN := Enable, PT := Limit);
+        <ST><![CDATA[_Timer(IN := Enable, PT := Duration);
 TimedOut     := _Timer.Q;
 CyclicUpdate := TRUE;
 ]]></ST>
