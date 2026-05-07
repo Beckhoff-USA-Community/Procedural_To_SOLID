@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
+    <Declaration><![CDATA[// CR-2 IN PROGRESS — DO NOT MERGE.
+// Two requirements landed at once:
+//   (a) Quality flag instead of latching fault (line keeps running on defect)
+//   (b) Camera + reject-arm must run in parallel
+// Both axes fight FB_StationBase. Half-applied — see TODOs below.
+FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
-    CameraReady      : BOOL;
-    InspectResult    : BOOL;
+    CameraReady          : BOOL;
+    InspectResult        : BOOL;
+    QualityIssueDetected : BOOL;   // CR-2 input — separate from alarm path
 END_VAR
 VAR_OUTPUT
-    TriggerCamera    : BOOL;
-    RejectPusher     : BOOL;
-    PassResult       : BOOL;
+    TriggerCamera        : BOOL;
+    RejectPusher         : BOOL;
+    PassResult           : BOOL;
+    QualityFlag          : BOOL;   // CR-2 — non-latching defect signal
 END_VAR
 VAR
-    CameraDelay      : TON;
+    CameraDelay          : TON;
+    RejectDelay          : TON;
+
+    // CR-2 parallel hack — branch completion flags jammed into State=10
+    CameraDone           : BOOL;
+    RejectDone           : BOOL;
+
+    // CR-2 quality alarm — TODO: shadows the base's AlarmLatched/Code/Text
+    // path; HMI now has to read TWO different alarm fields depending on
+    // station type. This is the smell.
+    QualityCode          : UDINT;
+    QualityText          : STRING(255);
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -27,23 +45,41 @@ END_VAR
         TriggerCamera := FALSE;
         RejectPusher  := FALSE;
         PassResult    := FALSE;
+        QualityFlag   := FALSE;
         Done          := FALSE;
+        CameraDone    := FALSE;
+        RejectDone    := FALSE;
         IF Execute AND PartPresent AND CameraReady AND ActiveMode = 1 THEN
             THIS^.TransitionTo(10);
         END_IF
-    10:
-        TriggerCamera := TRUE;
-        CameraDelay(IN := TRUE, PT := T#200MS);
-        Timeout(IN := TRUE, PT := T#2S);
-        IF Timeout.Q THEN
-            THIS^.RaiseStationAlarm(4001, 'Inspect: Camera timeout');
+
+    10: // PARALLEL: camera capture + reject pre-arm (both must finish)
+        // Branch 0 — camera
+        IF NOT CameraDone THEN
+            TriggerCamera := TRUE;
+            CameraDelay(IN := TRUE, PT := T#200MS);
+            IF CameraDelay.Q THEN
+                CameraDelay(IN := FALSE);
+                TriggerCamera := FALSE;
+                CameraDone := TRUE;
+            END_IF
         END_IF
-        IF CameraDelay.Q THEN
-            CameraDelay(IN := FALSE);
-            Timeout(IN := FALSE);
-            TriggerCamera := FALSE;
+        // Branch 1 — reject arm to ready position
+        IF NOT RejectDone THEN
+            RejectDelay(IN := TRUE, PT := T#150MS);
+            IF RejectDelay.Q THEN
+                RejectDelay(IN := FALSE);
+                RejectDone := TRUE;
+            END_IF
+        END_IF
+        // TODO: base Timeout fires while parallel branches run; the
+        // RaiseStationAlarm path will trip even though we're not stuck.
+        // Need to either disable the timeout in this state or rework
+        // the base to know about parallel steps.
+        IF CameraDone AND RejectDone THEN
             THIS^.TransitionTo(20);
         END_IF
+
     20:
         IF InspectResult THEN
             PassResult := TRUE;
@@ -52,6 +88,7 @@ END_VAR
             PassResult := FALSE;
             THIS^.TransitionTo(25);
         END_IF
+
     25:
         RejectPusher := TRUE;
         CameraDelay(IN := TRUE, PT := T#300MS);
@@ -60,9 +97,49 @@ END_VAR
             RejectPusher := FALSE;
             THIS^.TransitionTo(30);
         END_IF
+
     30:
         Done := TRUE;
 END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Monitoring" Id="{fb11da75-808b-45c5-bca6-aff9fddb2b4c}">
+      <Declaration><![CDATA[// OVERRIDE — needed for non-latching quality flag.
+// Cannot call SUPER^.Monitoring() because base latches AlarmLatched and
+// flips _Error, which would stop the line. So the entire base behavior
+// has to be reimplemented here for THIS station only.
+METHOD PROTECTED Monitoring
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// TODO: duplicated from base — refactor when we figure out the right
+//       extension point. Drift target #1.
+IF ModeAuto THEN
+    ActiveMode := 1;
+ELSIF ModeManual THEN
+    ActiveMode := 2;
+ELSE
+    ActiveMode := 0;
+END_IF
+
+// TODO: lost the base's R_TRIG ack pattern. AlarmAck is now ineffective
+//       on this station, but the HMI screen still shows the ACK button.
+//       Drift target #2.
+
+// Quality flag — non-latching, does NOT set _Error, does NOT stop the line
+IF QualityIssueDetected THEN
+    QualityFlag := TRUE;
+    QualityCode := 4002;
+    QualityText := 'Inspect: Visual defect detected';
+ELSE
+    QualityFlag := FALSE;
+    QualityCode := 0;
+    QualityText := '';
+END_IF
+
+// TODO: cannot SUPER^.Monitoring() — see method comment.
+//       Means we also lost any future base-level monitoring additions.
+//       Every new alarm condition added to the base must be re-copied here.
 ]]></ST>
       </Implementation>
     </Method>
@@ -72,7 +149,7 @@ END_CASE
       <Implementation>
         <ST><![CDATA[CASE State OF
     0:  GetStepName := 'Idle';
-    10: GetStepName := 'Inspecting';
+    10: GetStepName := 'Inspecting (parallel)';
     20: GetStepName := 'Evaluate';
     25: GetStepName := 'Rejecting';
     30: GetStepName := 'Complete';
