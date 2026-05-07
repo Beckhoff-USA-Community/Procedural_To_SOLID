@@ -34,11 +34,13 @@ VAR
     AlarmLatched     : BOOL;
     AlarmCode        : UDINT;
     ActiveMode       : INT;
-    ManualStep       : INT;
+    ManualStep       : INT;        // dead variable — legacy cruft
+    LogBuffer        : ARRAY[0..99] OF STRING(120);   // CR-3 (duplicated from Fill)
+    LogIndex         : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
+      <ST><![CDATA[// mode
 IF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
@@ -47,7 +49,7 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack — Inspect uses LEVEL (drift from Fill/Label)
+// alarm ack — LEVEL (drift)
 IF AlarmLatched AND AlarmAck THEN
     AlarmLatched := FALSE;
     AlarmCode    := 0;
@@ -105,6 +107,9 @@ CASE State OF
             State := 30;
         END_IF
     30:
+        // CR-3: cycle data logging (duplicated identically in FB_StationFill)
+        LogBuffer[LogIndex] := 'Inspect cycle complete';
+        LogIndex := (LogIndex + 1) MOD 100;
         Done := TRUE;
 END_CASE
 
