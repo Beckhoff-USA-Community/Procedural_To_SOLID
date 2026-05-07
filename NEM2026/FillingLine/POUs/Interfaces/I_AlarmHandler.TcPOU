@@ -13,6 +13,9 @@ END_VAR
     </Method>
     <Method Name="Acknowledge" Id="{0f9b1d17-8bc8-4b9e-a96a-5436e8fe9148}">
       <Declaration><![CDATA[METHOD Acknowledge : BOOL
+VAR_INPUT
+    AckInput : BOOL;
+END_VAR
 ]]></Declaration>
     </Method>
     <Method Name="Clear" Id="{6c6d5862-0181-4fb2-aee7-6711dc338917}">

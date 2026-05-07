@@ -4,14 +4,11 @@
     <Declaration><![CDATA[// Latching alarm strategy — stops the line until acknowledged.
 // Default for all stations except those that need a soft quality flag.
 FUNCTION_BLOCK FB_AlarmHandler_LineFault IMPLEMENTS I_AlarmHandler
-VAR_INPUT
-    AckInput     : BOOL;
-END_VAR
 VAR
     _Latched     : BOOL;
     _ActiveCode  : UDINT;
     _ActiveText  : STRING(255);
-    _AckEdge     : R_TRIG;
+    _AckEdge     : R_TRIG;   // edge detection inside Acknowledge()
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -34,6 +31,9 @@ RaiseAlarm  := TRUE;
     </Method>
     <Method Name="Acknowledge" Id="{81416eb2-d7f5-4edf-9dfd-47014b6183b0}">
       <Declaration><![CDATA[METHOD Acknowledge : BOOL
+VAR_INPUT
+    AckInput : BOOL;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_AckEdge(CLK := AckInput);

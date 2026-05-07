@@ -49,7 +49,6 @@ FB_Init := TRUE;
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Watchdog.CyclicUpdate();
-Alarm.Acknowledge();
 
 IF Watchdog.TimedOut THEN
     Alarm.RaiseAlarm(Code := 3000, Text := 'Label: Timeout');
