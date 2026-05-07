@@ -5,9 +5,10 @@
 VAR_INPUT
     ModeAuto    : BOOL;
     ModeManual  : BOOL;
+    ModePause   : BOOL;   // CR-1
 END_VAR
 VAR
-    _Mode       : INT;   // 0=Idle, 1=Auto, 2=Manual (3=Pause added at CR-1)
+    _Mode       : INT;   // 0=Idle, 1=Auto, 2=Manual, 3=Paused
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -17,7 +18,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PUBLIC CyclicUpdate : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF ModeAuto THEN
+        <ST><![CDATA[IF ModePause THEN
+    _Mode := 3;
+ELSIF ModeAuto THEN
     _Mode := 1;
 ELSIF ModeManual THEN
     _Mode := 2;
@@ -55,6 +58,18 @@ PROPERTY CurrentMode : INT
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AllowJog := (_Mode = 2);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="IsPaused" Id="{a1389e34-223f-4455-ab33-3d5aed9bb6d9}">
+      <Declaration><![CDATA[// CR-1: stations that care can opt-in by checking Mode.IsPaused.
+// Stations that need to ignore Pause (e.g., Fill mid-cycle) just don't.
+PROPERTY IsPaused : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{c1f8cc95-9b08-4af9-9fc8-404fa7cafc43}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsPaused := (_Mode = 3);]]></ST>
         </Implementation>
       </Get>
     </Property>
