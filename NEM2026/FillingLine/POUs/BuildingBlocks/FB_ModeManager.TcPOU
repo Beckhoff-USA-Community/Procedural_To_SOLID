@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_ModeManager" Id="{fd048e39-0f5d-42ef-a252-51bcb1c6712b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ModeManager IMPLEMENTS I_ModeProvider
 VAR_INPUT
@@ -9,10 +9,41 @@ VAR_INPUT
 END_VAR
 VAR
     _Mode       : INT;   // 0=Idle, 1=Auto, 2=Manual, 3=Paused
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Property Name="AllowJog" Id="{2c7cbd80-fa34-451e-b330-5aa898524c95}">
+      <Declaration><![CDATA[PROPERTY AllowJog : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{aa740da4-9d21-482b-8fb6-2ef777320a1d}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AllowJog := (_Mode = 2);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="AllowRun" Id="{598e8179-c609-4380-9f97-a4ba5ca9da04}">
+      <Declaration><![CDATA[PROPERTY AllowRun : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{884628f3-64cd-43a0-a689-8f3226fb6268}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AllowRun := (_Mode = 1);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="CurrentMode" Id="{c62828f2-bab3-471e-b281-d8b4fa2fded8}">
+      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
+PROPERTY CurrentMode : INT
+]]></Declaration>
+      <Get Name="Get" Id="{f2594f14-62c7-4064-bb56-c17f2f9b63d5}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrentMode := _Mode;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="CyclicUpdate" Id="{a713e7af-a9c2-4a84-9363-22a68ab24972}">
       <Declaration><![CDATA[METHOD PUBLIC CyclicUpdate : BOOL
 ]]></Declaration>
@@ -29,43 +60,12 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="CurrentMode" Id="{c62828f2-bab3-471e-b281-d8b4fa2fded8}">
-      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
-PROPERTY CurrentMode : INT
-]]></Declaration>
-      <Get Name="Get" Id="{f2594f14-62c7-4064-bb56-c17f2f9b63d5}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[CurrentMode := _Mode;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="AllowRun" Id="{598e8179-c609-4380-9f97-a4ba5ca9da04}">
-      <Declaration><![CDATA[PROPERTY AllowRun : BOOL
-]]></Declaration>
-      <Get Name="Get" Id="{884628f3-64cd-43a0-a689-8f3226fb6268}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[AllowRun := (_Mode = 1);]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="AllowJog" Id="{2c7cbd80-fa34-451e-b330-5aa898524c95}">
-      <Declaration><![CDATA[PROPERTY AllowJog : BOOL
-]]></Declaration>
-      <Get Name="Get" Id="{aa740da4-9d21-482b-8fb6-2ef777320a1d}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[AllowJog := (_Mode = 2);]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="IsPaused" Id="{a1389e34-223f-4455-ab33-3d5aed9bb6d9}">
+    <Property Name="IsPaused" Id="{62d9cdf1-6a5e-40a2-8a46-a40738d2c8ab}">
       <Declaration><![CDATA[// CR-1: stations that care can opt-in by checking Mode.IsPaused.
 // Stations that need to ignore Pause (e.g., Fill mid-cycle) just don't.
 PROPERTY IsPaused : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{c1f8cc95-9b08-4af9-9fc8-404fa7cafc43}">
+      <Get Name="Get" Id="{2529c444-1108-43f4-937d-a76860a6faaa}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[IsPaused := (_Mode = 3);]]></ST>
