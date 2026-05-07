@@ -87,11 +87,12 @@ nav:
   - Home: index.md
   - Getting started: getting-started.md
   - Workshop:
-    - workshop/overview.md
-    - workshop/change-requests.md
-    - workshop/scoreboard.md
+    - Overview: workshop/overview.md
+    - Prerequisites: workshop/prerequisites.md
+    - Change Requests: workshop/change-requests.md
+    - Scoreboard: workshop/scoreboard.md
   - Stages:
-    - stages/index.md
+    - Overview: stages/index.md
     - Stage 1 — Procedural: stages/procedural.md
     - Stage 2 — Inheritance: stages/inheritance.md
     - Stage 3 — Composition: stages/composition.md
