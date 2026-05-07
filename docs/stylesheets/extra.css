@@ -33,7 +33,12 @@
 }
 
 /* Branch labels — give them a translucent dark background instead of
-   the default near-white that vanishes against slate */
+   the default near-white that vanishes against slate.
+   Mermaid v11 gitGraph uses <rect class="branchLabelBkg labelN"> where
+   .labelN supplies a bright per-branch fill (yellow/cyan/lime/etc.) —
+   target .branchLabelBkg directly so we win regardless of which labelN
+   is also applied. .label-container / .edgeLabel cover flowcharts. */
+[data-md-color-scheme="slate"] .mermaid svg .branchLabelBkg,
 [data-md-color-scheme="slate"] .mermaid svg .branchLabel rect,
 [data-md-color-scheme="slate"] .mermaid svg .label-container,
 [data-md-color-scheme="slate"] .mermaid svg .edgeLabel rect {
@@ -41,8 +46,24 @@
     stroke: rgba(160, 170, 200, 0.6) !important;
 }
 
-/* Branch label text — explicitly bright against the new dark fill */
+/* gitGraph commit labels — Mermaid's default is pale cream (#ffffde) at
+   0.5 opacity with near-black text, which inverts badly when we force
+   text light. Force the bkg dark and full-opacity so light text reads. */
+[data-md-color-scheme="slate"] .mermaid svg .commit-label-bkg {
+    fill: rgba(40, 50, 70, 0.85) !important;
+    stroke: rgba(160, 170, 200, 0.6) !important;
+    opacity: 1 !important;
+}
+
+/* Branch label text — explicitly bright against the new dark fill.
+   Mermaid v11 uses <text class="branchLabel"> wrapped in
+   <g class="label branch-labelN"> where .branch-labelN alternates
+   black/white for contrast against the original bright fill. Override
+   both so all branch labels render light on our dark bkg. */
+[data-md-color-scheme="slate"] .mermaid svg .branchLabel,
 [data-md-color-scheme="slate"] .mermaid svg .branchLabel text,
+[data-md-color-scheme="slate"] .mermaid svg [class*="branch-label"],
+[data-md-color-scheme="slate"] .mermaid svg .commit-label,
 [data-md-color-scheme="slate"] .mermaid svg .label-container text {
     fill: rgba(255, 255, 255, 0.95) !important;
 }
