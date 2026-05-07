@@ -63,5 +63,16 @@ END_CASE
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="AllowPause" Id="{8ec93571-9f3f-4772-82c4-0f824c43364f}">
+      <Declaration><![CDATA[// CR-1 OVERRIDE: Fill must not be pausable mid-stroke.
+// Returns FALSE while State = 10 (filling) so the base's Monitoring
+// keeps ActiveMode at the prior value rather than going to 3 (Pause).
+METHOD PROTECTED AllowPause : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AllowPause := (State <> 10);
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
