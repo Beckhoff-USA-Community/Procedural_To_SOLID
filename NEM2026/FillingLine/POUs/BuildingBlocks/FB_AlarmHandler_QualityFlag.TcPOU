@@ -31,7 +31,11 @@ RaiseAlarm  := TRUE;
     </Method>
     <Method Name="Acknowledge" Id="{bca403ec-631f-4ad5-976c-7245db4f9e4b}">
       <Declaration><![CDATA[// Quality flags auto-clear when the condition stops; ack is a no-op.
+// AckInput is interface-required (I_AlarmHandler.Acknowledge) but ignored here.
 METHOD Acknowledge : BOOL
+VAR_INPUT
+    AckInput : BOOL;
+END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Acknowledge := TRUE;

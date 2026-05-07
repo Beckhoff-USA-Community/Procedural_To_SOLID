@@ -50,11 +50,12 @@ ModeManager.ModeAuto   := ModeAuto;
 ModeManager.ModeManual := ModeManual;
 ModeManager.CyclicUpdate();
 
-// alarm-handler ack inputs (one HMI Ack drives all)
-FillAlarm.AckInput    := AlarmAck;
-CapAlarm.AckInput     := AlarmAck;
-LabelAlarm.AckInput   := AlarmAck;
-InspectAlarm.AckInput := AlarmAck;
+// HMI Ack drives every alarm handler — both LineFault (consumes) and
+// QualityFlag (ignores) honor the same I_AlarmHandler.Acknowledge contract.
+FillAlarm.Acknowledge(AckInput    := AlarmAck);
+CapAlarm.Acknowledge(AckInput     := AlarmAck);
+LabelAlarm.Acknowledge(AckInput   := AlarmAck);
+InspectAlarm.Acknowledge(AckInput := AlarmAck);
 
 // Fill
 StationFill.PartPresent  := PartFill;
