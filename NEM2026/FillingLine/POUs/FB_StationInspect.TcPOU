@@ -61,6 +61,8 @@ END_VAR
             THIS^.TransitionTo(30);
         END_IF
     30:
+        // CR-3: log cycle data via base helper
+        THIS^.LogCycleData(Note := 'Inspect cycle complete');
         Done := TRUE;
 END_CASE
 ]]></ST>
@@ -79,6 +81,15 @@ END_CASE
 ELSE
     GetStepName := 'Unknown';
 END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LoggingEnabled" Id="{a1389e34-223f-4455-ab33-3d5aed9bb6d9}">
+      <Declaration><![CDATA[// CR-3 OVERRIDE: Inspect participates in cycle logging.
+METHOD PROTECTED LoggingEnabled : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LoggingEnabled := TRUE;
 ]]></ST>
       </Implementation>
     </Method>

@@ -44,6 +44,8 @@ END_VAR
     20:
         OpenFillValve := FALSE;
         Timeout(IN := FALSE);
+        // CR-3: log cycle data via base helper (gated by LoggingEnabled())
+        THIS^.LogCycleData(Note := 'Fill cycle complete');
         Done := TRUE;
 END_CASE
 ]]></ST>
@@ -60,6 +62,15 @@ END_CASE
 ELSE
     GetStepName := 'Unknown';
 END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LoggingEnabled" Id="{d013a472-e12b-4b37-ac79-1a6b8b778d53}">
+      <Declaration><![CDATA[// CR-3 OVERRIDE: Fill participates in cycle logging.
+METHOD PROTECTED LoggingEnabled : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LoggingEnabled := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
