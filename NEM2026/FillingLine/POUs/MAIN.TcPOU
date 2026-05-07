@@ -7,12 +7,13 @@ VAR
     ModeManager  : FB_ModeManager;
 
     // ----- per-station alarm strategies -----
-    // stage-3-exercise: every station uses LineFault (latching, stops line).
-    // The CR-2 swap exercise replaces InspectAlarm with FB_AlarmHandler_QualityFlag.
+    // stage-3-composition: Inspect now uses QualityFlag — defects flag but
+    // don't latch or stop the line. Fill/Cap/Label still use LineFault.
+    // Stations are unaware of the swap (interface-typed dependency).
     FillAlarm    : FB_AlarmHandler_LineFault;
     CapAlarm     : FB_AlarmHandler_LineFault;
     LabelAlarm   : FB_AlarmHandler_LineFault;
-    InspectAlarm : FB_AlarmHandler_LineFault;
+    InspectAlarm : FB_AlarmHandler_QualityFlag;
 
     // ----- stations composed via FB_Init dependency injection -----
     StationFill    : FB_StationFill(ModeRef := ModeManager, AlarmHandler := FillAlarm);
