@@ -49,6 +49,9 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/Mark-Code-Cowboys/NEM_Workshop
 
+extra_css:
+  - stylesheets/extra.css
+
 markdown_extensions:
   - admonition
   - pymdownx.details

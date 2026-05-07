@@ -1,0 +1,73 @@
+/* ============================================================
+ * Workshop docs — custom overrides
+ *
+ * Primary purpose: make Mermaid diagrams readable in dark mode.
+ * Material's default Mermaid integration uses the diagram's own
+ * theme defaults, which assume a light background. On the slate
+ * (dark) scheme the gitGraph branch labels and commit text drop to
+ * near-illegible contrast. This file targets Material's
+ * data-md-color-scheme="slate" body attribute and forces sane
+ * foreground / line / fill colors.
+ * ============================================================ */
+
+/* -------- Mermaid: dark-mode readability -------- */
+[data-md-color-scheme="slate"] .mermaid svg {
+    background: transparent;
+}
+
+/* All text in any diagram — use the page's foreground color */
+[data-md-color-scheme="slate"] .mermaid svg text,
+[data-md-color-scheme="slate"] .mermaid svg .label text,
+[data-md-color-scheme="slate"] .mermaid svg .nodeLabel,
+[data-md-color-scheme="slate"] .mermaid svg .edgeLabel {
+    fill: var(--md-default-fg-color) !important;
+    color: var(--md-default-fg-color) !important;
+}
+
+/* Commit messages on gitGraph specifically */
+[data-md-color-scheme="slate"] .mermaid svg .commit-id,
+[data-md-color-scheme="slate"] .mermaid svg g.commit-labels text,
+[data-md-color-scheme="slate"] .mermaid svg text.commit,
+[data-md-color-scheme="slate"] .mermaid svg .gitTitleText {
+    fill: var(--md-default-fg-color) !important;
+}
+
+/* Branch labels — give them a translucent dark background instead of
+   the default near-white that vanishes against slate */
+[data-md-color-scheme="slate"] .mermaid svg .branchLabel rect,
+[data-md-color-scheme="slate"] .mermaid svg .label-container,
+[data-md-color-scheme="slate"] .mermaid svg .edgeLabel rect {
+    fill: rgba(40, 50, 70, 0.85) !important;
+    stroke: rgba(160, 170, 200, 0.6) !important;
+}
+
+/* Branch label text — explicitly bright against the new dark fill */
+[data-md-color-scheme="slate"] .mermaid svg .branchLabel text,
+[data-md-color-scheme="slate"] .mermaid svg .label-container text {
+    fill: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Connecting lines / arrows — bump contrast */
+[data-md-color-scheme="slate"] .mermaid svg .commit-arrows path,
+[data-md-color-scheme="slate"] .mermaid svg .messageLine0,
+[data-md-color-scheme="slate"] .mermaid svg .messageLine1,
+[data-md-color-scheme="slate"] .mermaid svg path.relation,
+[data-md-color-scheme="slate"] .mermaid svg .flowchart-link {
+    stroke: rgba(200, 210, 230, 0.75) !important;
+}
+
+/* Flowchart node boxes (used in stages/index.md graph LR) */
+[data-md-color-scheme="slate"] .mermaid svg .node rect,
+[data-md-color-scheme="slate"] .mermaid svg .node circle,
+[data-md-color-scheme="slate"] .mermaid svg .node ellipse,
+[data-md-color-scheme="slate"] .mermaid svg .node polygon,
+[data-md-color-scheme="slate"] .mermaid svg .node path {
+    stroke: rgba(180, 195, 235, 0.85) !important;
+    stroke-width: 1.5px !important;
+}
+
+/* Cluster boxes (group rectangles in flowcharts) */
+[data-md-color-scheme="slate"] .mermaid svg .cluster rect {
+    fill: rgba(40, 50, 70, 0.55) !important;
+    stroke: rgba(160, 170, 200, 0.6) !important;
+}
