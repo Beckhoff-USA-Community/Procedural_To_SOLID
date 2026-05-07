@@ -44,6 +44,8 @@ END_VAR
     20:
         OpenFillValve := FALSE;
         Timeout(IN := FALSE);
+        // CR-3: log cycle data via base helper (gated by LoggingEnabled())
+        THIS^.LogCycleData(Note := 'Fill cycle complete');
         Done := TRUE;
 END_CASE
 ]]></ST>
@@ -60,6 +62,26 @@ END_CASE
 ELSE
     GetStepName := 'Unknown';
 END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AllowPause" Id="{8ec93571-9f3f-4772-82c4-0f824c43364f}">
+      <Declaration><![CDATA[// CR-1 OVERRIDE: Fill must not be pausable mid-stroke.
+// Returns FALSE while State = 10 (filling) so the base's Monitoring
+// keeps ActiveMode at the prior value rather than going to 3 (Pause).
+METHOD PROTECTED AllowPause : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AllowPause := (State <> 10);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LoggingEnabled" Id="{d013a472-e12b-4b37-ac79-1a6b8b778d53}">
+      <Declaration><![CDATA[// CR-3 OVERRIDE: Fill participates in cycle logging.
+METHOD PROTECTED LoggingEnabled : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LoggingEnabled := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
