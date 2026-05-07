@@ -129,6 +129,41 @@ NEM2026/
 
 ---
 
+## Patterns by name (in case anyone asks)
+
+You don't need the vocabulary to do good work — most controls engineers use these every day without naming them. But after the workshop, some students walk out asking "what was that swap thing called?" Here's the answer key.
+
+**Strategy** — *swap the implementation, keep the contract.*
+The CR-2 demonstration on Stage 3 is the textbook example: same `I_AlarmHandler` interface, two interchangeable implementations (`FB_AlarmHandler_LineFault` for production faults, `FB_AlarmHandler_QualityFlag` for non-faulting quality flags), selected by **which one MAIN constructs**. The station never knows which it has. Same idea applies to `I_DataLogger` (one impl today, but you could write `FB_FileLogger` / `FB_NullLogger` for tests / `FB_TcEventLogger` for production telemetry without touching the stations) and to the `FB_StepSequencer` ↔ `FB_ParallelSequencer` swap inside Inspect.
+
+If your shop ships test rigs, this is the testability win — your test bench injects a simulated alarm handler and your station code runs unchanged.
+
+**Template Method** — *base class defines the skeleton, children fill in the gaps.*
+This is exactly what `FB_StationBase` does on Stage 2. `CyclicLogic` is the template — it always runs `Initialize → Monitoring → ExecuteSequence → UpdateHmiStatus`. `ExecuteSequence` and `GetStepName` are the protected virtual hooks each station overrides with its own logic. Classic GoF, the canonical use of inheritance.
+
+**Dependency Injection** — *construct with what you need, don't reach for it.*
+Stage 3's `FB_Init(bInitRetains, bInCopyCode, ModeRef, AlarmHandler, DataLogger)` is constructor injection. Beckhoff calls this "extended FB_Init"; the rest of software engineering calls it DI. The station has no globals to hunt down, no factory lookup, no Service Locator — what it needs arrives at construction time.
+
+**State** — *every CASE OF State pattern you've ever written.*
+The PLC dialect of the GoF State pattern is the flat `CASE State OF 0: ... 10: ... 20: ...` table. Software engineering would build one class per state with a `Transition` method; PLCs prefer the table because it scans deterministically and you can see the whole machine on one page. Both are correct. Knowing the GoF version exists helps when you watch C# or Java engineers do the same problem differently.
+
+### Patterns adjacent to this codebase that are worth a verbal mention
+
+If a student asks during the workshop, here's what to point at — these aren't demonstrated as branches but they live in the same neighborhood and Beckhoff's own libraries use them:
+
+- **Visitor** — *do operation X across every component without modifying the components.* The Beckhoff Core libraries rely on it heavily (the [VFFS sample](https://github.com/Beckhoff-USA-Community/PackML_PLC_Example) has `ChangeStateOnAllSubModules`, `SetOverrideVisitor`, `ForceVisitor`). The mental model: an aggregator FB walks the parent module's children and applies an operation. *Useful when:* "compute total alarm severity across all stations," "flush all loggers," "reset everything." If the workshop has time, point at the VFFS source as homework.
+- **Adapter** — *make a vendor FB look like your interface.* You'll need this the first time you wire a third-party motion library to your `I_Sequenceable` contract.
+- **Observer** — *one event, many listeners.* Useful for HMI updates, fault chains, and inter-station messaging. The Tc3 EventLogger is essentially Observer.
+- **Singleton** — *one instance, project-wide access.* `FB_ModeManager` in our Stage 3 design behaves like a Singleton (one instance, all stations reference it). Use sparingly; it's as much an antipattern as a pattern when overused.
+
+### What this means for a controls engineer
+
+You already know how to write state machines, how to copy a station file, how to put shared state in a global. The patterns above aren't replacements for those skills — they're **names** for choices you make every day. Naming them lets you talk to software engineers, recognize the same shapes when you read C#/Java/Python, and read Beckhoff's own framework code instead of bouncing off the abstractions.
+
+The real takeaway: **composition isn't a moral upgrade over procedural code.** It's a tool that pays for itself when your codebase outgrows what one engineer can hold in their head. The scoreboard tells you when that's happened.
+
+---
+
 ## Editing conventions
 
 If you're contributing back:
