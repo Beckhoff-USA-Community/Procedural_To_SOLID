@@ -15,24 +15,11 @@
 // re-runs them on TestSuite.ReRunTests()).
 FUNCTION_BLOCK FB_TestRunner
 VAR
-    // building-block instances under test (or used as injected dependencies)
-    TestModeManager : FB_ModeManager;
-    TestLineFault   : FB_AlarmHandler_LineFault;
-    TestQualityFlag : FB_AlarmHandler_QualityFlag;
-    TestSequencer   : FB_StepSequencer;
-    TestParallel    : FB_ParallelSequencer;
-    TestLogger      : FB_CycleDataLogger;
-
-    // Fill station integration test harness — injected with shared mocks
-    UnitFill : FB_StationFill(ModeRef     := TestModeManager,
-                              AlarmHandler := TestLineFault,
-                              DataLogger   := TestLogger);
-
-    // Inspect station integration test harness — uses QualityFlag strategy
-    // to demonstrate Liskov substitution at the alarm-handler boundary
-    UnitInspect : FB_StationInspect(ModeRef     := TestModeManager,
-                                    AlarmHandler := TestQualityFlag,
-                                    DataLogger   := TestLogger);
+    // No top-level state — every test method owns its own VAR_INST
+    // mocks/units. Top-level VAR_INST initializers can't reference
+    // local FB instances (compiler: "The initial value for a VAR_INST
+    // variable may not use local variables"), so we keep this empty
+    // and let each test wire its dependencies in its own scope.
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -62,7 +49,11 @@ THIS^.Test_InspectStation_QualityFlagDoesNotFault();
       <Declaration><![CDATA[// Given ModeAuto, expect AllowRun = TRUE and CurrentMode = 1.
 METHOD Test_ModeManager_AutoModeAllowsRun
 VAR_INST
-    Local : FB_ModeManager;
+    Local         : FB_ModeManager;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
+    expected_int  : INT;
+    actual_int    : INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -71,8 +62,14 @@ END_VAR
     Local.ModeManual := FALSE;
     Local.ModePause := FALSE;
     Local.CyclicUpdate();
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.AllowRun);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(1, Local.CurrentMode);
+
+    expected_bool := TRUE;
+    actual_bool   := Local.AllowRun;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
+
+    expected_int := 1;
+    actual_int   := Local.CurrentMode;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_int, actual_int);
 END_IF
 ]]></ST>
       </Implementation>
@@ -83,7 +80,11 @@ END_IF
 // Mode must be 3 (Paused) and AllowRun must be FALSE.
 METHOD Test_ModeManager_PauseOverridesAuto
 VAR_INST
-    Local : FB_ModeManager;
+    Local         : FB_ModeManager;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
+    expected_int  : INT;
+    actual_int    : INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -91,8 +92,14 @@ END_VAR
     Local.ModeAuto := TRUE;        // would be Auto
     Local.ModePause := TRUE;       // but Pause wins
     Local.CyclicUpdate();
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(3, Local.CurrentMode);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Local.AllowRun);
+
+    expected_int := 3;
+    actual_int   := Local.CurrentMode;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_int, actual_int);
+
+    expected_bool := FALSE;
+    actual_bool   := Local.AllowRun;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -102,19 +109,27 @@ END_IF
       <Declaration><![CDATA[// CR-1: IsPaused property returns TRUE only when paused.
 METHOD Test_ModeManager_IsPausedProperty
 VAR_INST
-    Local : FB_ModeManager;
+    Local         : FB_ModeManager;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
     Local.ModePause := TRUE;
     Local.CyclicUpdate();
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.IsPaused);
+
+    expected_bool := TRUE;
+    actual_bool   := Local.IsPaused;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 
     Local.ModePause := FALSE;
     Local.ModeAuto  := TRUE;
     Local.CyclicUpdate();
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Local.IsPaused);
+
+    expected_bool := FALSE;
+    actual_bool   := Local.IsPaused;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -124,13 +139,18 @@ END_IF
       <Declaration><![CDATA[// LineFault strategy: RaiseAlarm latches HasActiveAlarm = TRUE.
 METHOD Test_LineFault_LatchesOnRaise
 VAR_INST
-    Local : FB_AlarmHandler_LineFault;
+    Local         : FB_AlarmHandler_LineFault;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
     Local.RaiseAlarm(Code := 1234, Text := 'unit test alarm');
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.HasActiveAlarm);
+
+    expected_bool := TRUE;
+    actual_bool   := Local.HasActiveAlarm;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -141,12 +161,16 @@ END_IF
 // Stations consult this to compute IsFaulted.
 METHOD Test_LineFault_StopsLineIsTrue
 VAR_INST
-    Local : FB_AlarmHandler_LineFault;
+    Local         : FB_AlarmHandler_LineFault;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.StopsLine);
+    expected_bool := TRUE;
+    actual_bool   := Local.StopsLine;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -157,7 +181,9 @@ END_IF
 // A held-high AckInput from a previous scan must NOT clear it.
 METHOD Test_LineFault_AcknowledgeOnRisingEdge
 VAR_INST
-    Local : FB_AlarmHandler_LineFault;
+    Local         : FB_AlarmHandler_LineFault;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -168,12 +194,18 @@ END_VAR
     // for the R_TRIG. The alarm should clear because the rising edge is
     // captured against the FB's initial FALSE state of _AckEdge.CLK.
     Local.Acknowledge(AckInput := TRUE);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Local.HasActiveAlarm);
+
+    expected_bool := FALSE;
+    actual_bool   := Local.HasActiveAlarm;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 
     // Re-raise and verify level-held AckInput does NOT clear (no new edge)
     Local.RaiseAlarm(Code := 101, Text := 're-raise');
     Local.Acknowledge(AckInput := TRUE);   // still TRUE — no edge
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.HasActiveAlarm);
+
+    expected_bool := TRUE;
+    actual_bool   := Local.HasActiveAlarm;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -184,13 +216,18 @@ END_IF
 // not latch in a stop-the-line sense.
 METHOD Test_QualityFlag_FlagsOnRaise
 VAR_INST
-    Local : FB_AlarmHandler_QualityFlag;
+    Local         : FB_AlarmHandler_QualityFlag;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
     Local.RaiseAlarm(Code := 4002, Text := 'visual defect');
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.HasActiveAlarm);
+
+    expected_bool := TRUE;
+    actual_bool   := Local.HasActiveAlarm;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -206,12 +243,16 @@ END_IF
 // which alarm handler is injected.
 METHOD Test_QualityFlag_StopsLineIsFalse
 VAR_INST
-    Local : FB_AlarmHandler_QualityFlag;
+    Local         : FB_AlarmHandler_QualityFlag;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Local.StopsLine);
+    expected_bool := FALSE;
+    actual_bool   := Local.StopsLine;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -221,7 +262,11 @@ END_IF
       <Declaration><![CDATA[// FB_StepSequencer: TransitionTo updates both CurrentStep and StepName.
 METHOD Test_StepSequencer_TransitionUpdatesStepName
 VAR_INST
-    Local : FB_StepSequencer;
+    Local           : FB_StepSequencer;
+    expected_int    : INT;
+    actual_int      : INT;
+    expected_string : STRING(40);
+    actual_string   : STRING(40);
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -230,8 +275,14 @@ END_VAR
     Local.SetStepName(Step := 10, Name := 'Working');
 
     Local.TransitionTo(NextStep := 10);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(10, Local.CurrentStep);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual('Working', Local.StepName);
+
+    expected_int := 10;
+    actual_int   := Local.CurrentStep;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_int, actual_int);
+
+    expected_string := 'Working';
+    actual_string   := Local.StepName;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_string, actual_string);
 END_IF
 ]]></ST>
       </Implementation>
@@ -242,14 +293,22 @@ END_IF
 // which stations expose via I_Sequenceable.IsComplete.
 METHOD Test_StepSequencer_MarkCompleteSetsFlag
 VAR_INST
-    Local : FB_StepSequencer;
+    Local         : FB_StepSequencer;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Local.Complete);
+    expected_bool := FALSE;
+    actual_bool   := Local.Complete;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
+
     Local.MarkComplete();
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.Complete);
+
+    expected_bool := TRUE;
+    actual_bool   := Local.Complete;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -260,7 +319,9 @@ END_IF
 // every configured branch has been marked done.
 METHOD Test_ParallelSequencer_AllBranchesComplete
 VAR_INST
-    Local : FB_ParallelSequencer;
+    Local         : FB_ParallelSequencer;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -268,10 +329,14 @@ END_VAR
     Local.Configure(NumberOfBranches := 2);
 
     Local.MarkBranchDone(BranchIndex := 0);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Local.AllBranchesComplete);
+    expected_bool := FALSE;
+    actual_bool   := Local.AllBranchesComplete;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 
     Local.MarkBranchDone(BranchIndex := 1);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.AllBranchesComplete);
+    expected_bool := TRUE;
+    actual_bool   := Local.AllBranchesComplete;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -281,12 +346,16 @@ END_IF
       <Declaration><![CDATA[// Default state of FB_CycleDataLogger is enabled (logs accepted).
 METHOD Test_CycleDataLogger_IsEnabled
 VAR_INST
-    Local : FB_CycleDataLogger;
+    Local         : FB_CycleDataLogger;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Local.IsEnabled);
+    expected_bool := TRUE;
+    actual_bool   := Local.IsEnabled;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -302,16 +371,24 @@ END_IF
 // Watchdog TON doesn't fire because T#10S >> our test duration.
 METHOD Test_FillStation_HappyPath_CompletesCycle
 VAR_INST
-    Local           : FB_ModeManager;
-    LocalAlarm      : FB_AlarmHandler_LineFault;
-    LocalLogger     : FB_CycleDataLogger;
-    Unit            : FB_StationFill(ModeRef     := Local,
-                                     AlarmHandler := LocalAlarm,
-                                     DataLogger   := LocalLogger);
+    // VAR_INST initializers can't reference local FB instances, so we
+    // construct Unit unwired and call FB_init manually below.
+    Local         : FB_ModeManager;
+    LocalAlarm    : FB_AlarmHandler_LineFault;
+    LocalLogger   : FB_CycleDataLogger;
+    Unit          : FB_StationFill;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
+    // Wire the unit-under-test by manually invoking FB_init on the
+    // first (and only) test pass. Equivalent to the constructor-style
+    // VAR_INST initializer but valid for locals.
+    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
+                 ModeRef := Local, AlarmHandler := LocalAlarm, DataLogger := LocalLogger);
+
     Local.ModeAuto := TRUE;
     Local.CyclicUpdate();
 
@@ -323,8 +400,13 @@ END_VAR
     Unit.Execute();   // Accumulated += 0.001 → triggers TransitionTo(20)
     Unit.Execute();   // State 20 → MarkComplete
 
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Unit.IsComplete);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Unit.IsFaulted);
+    expected_bool := TRUE;
+    actual_bool   := Unit.IsComplete;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
+
+    expected_bool := FALSE;
+    actual_bool   := Unit.IsFaulted;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -336,16 +418,19 @@ END_IF
 // IsFaulted goes TRUE.
 METHOD Test_FillStation_NoFlow_RaisesAlarm
 VAR_INST
-    Local       : FB_ModeManager;
-    LocalAlarm  : FB_AlarmHandler_LineFault;
-    LocalLogger : FB_CycleDataLogger;
-    Unit        : FB_StationFill(ModeRef     := Local,
-                                 AlarmHandler := LocalAlarm,
-                                 DataLogger   := LocalLogger);
+    Local         : FB_ModeManager;
+    LocalAlarm    : FB_AlarmHandler_LineFault;
+    LocalLogger   : FB_CycleDataLogger;
+    Unit          : FB_StationFill;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
+    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
+                 ModeRef := Local, AlarmHandler := LocalAlarm, DataLogger := LocalLogger);
+
     Local.ModeAuto := TRUE;
     Local.CyclicUpdate();
 
@@ -356,8 +441,13 @@ END_VAR
     Unit.Execute();   // State 0 → 10
     Unit.Execute();   // FlowRate < 0.1 — RaiseAlarm fires
 
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, LocalAlarm.HasActiveAlarm);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, Unit.IsFaulted);
+    expected_bool := TRUE;
+    actual_bool   := LocalAlarm.HasActiveAlarm;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
+
+    expected_bool := TRUE;
+    actual_bool   := Unit.IsFaulted;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -372,16 +462,21 @@ END_IF
 // consults Mode.AllowRun.
 METHOD Test_FillStation_PauseBlocksNewCycle
 VAR_INST
-    Local       : FB_ModeManager;
-    LocalAlarm  : FB_AlarmHandler_LineFault;
-    LocalLogger : FB_CycleDataLogger;
-    Unit        : FB_StationFill(ModeRef     := Local,
-                                 AlarmHandler := LocalAlarm,
-                                 DataLogger   := LocalLogger);
+    Local         : FB_ModeManager;
+    LocalAlarm    : FB_AlarmHandler_LineFault;
+    LocalLogger   : FB_CycleDataLogger;
+    Unit          : FB_StationFill;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
+    expected_int  : INT;
+    actual_int    : INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
+    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
+                 ModeRef := Local, AlarmHandler := LocalAlarm, DataLogger := LocalLogger);
+
     Local.ModeAuto  := TRUE;
     Local.ModePause := TRUE;       // CR-1: paused
     Local.CyclicUpdate();
@@ -395,8 +490,13 @@ END_VAR
     Unit.Execute();
 
     // station should still be at step 0, not complete
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(0, Unit.StateNumber);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, Unit.IsComplete);
+    expected_int := 0;
+    actual_int   := Unit.StateNumber;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_int, actual_int);
+
+    expected_bool := FALSE;
+    actual_bool   := Unit.IsComplete;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 END_IF
 ]]></ST>
       </Implementation>
@@ -415,21 +515,29 @@ VAR_INST
     Local         : FB_ModeManager;
     LocalQuality  : FB_AlarmHandler_QualityFlag;
     LocalLogger   : FB_CycleDataLogger;
-    Unit          : FB_StationInspect(ModeRef     := Local,
-                                      AlarmHandler := LocalQuality,
-                                      DataLogger   := LocalLogger);
+    Unit          : FB_StationInspect;
+    expected_bool : BOOL;
+    actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
+    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
+                 ModeRef := Local, AlarmHandler := LocalQuality, DataLogger := LocalLogger);
+
     // Directly raise an alarm via the strategy and verify the policy.
     // (Driving the full Inspect cycle through state 10's parallel
     // branches would require TON time-advance; the strategy contract
     // is what carries the architectural lesson.)
     LocalQuality.RaiseAlarm(Code := 4002, Text := 'visual defect');
 
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(TRUE, LocalQuality.HasActiveAlarm);
-    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(FALSE, LocalQuality.StopsLine);
+    expected_bool := TRUE;
+    actual_bool   := LocalQuality.HasActiveAlarm;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
+
+    expected_bool := FALSE;
+    actual_bool   := LocalQuality.StopsLine;
+    Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 
     // Now: a station consuming this alarm computes IsFaulted as
     //   Alarm.HasActiveAlarm AND Alarm.StopsLine
