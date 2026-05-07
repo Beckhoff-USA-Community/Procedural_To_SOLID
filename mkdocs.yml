@@ -97,5 +97,6 @@ nav:
     - Stage 2 — Inheritance: stages/inheritance.md
     - Stage 3 — Composition: stages/composition.md
   - Patterns: patterns.md
+  - Testing (extra credit): testing.md
   - Reference: reference.md
   - Instructor's guide: instructor.md
