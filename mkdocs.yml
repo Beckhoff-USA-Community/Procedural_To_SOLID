@@ -1,0 +1,100 @@
+site_name: From Procedural to SOLID
+site_description: A 4-hour TwinCAT 3 workshop in object-oriented PLC design — NEM 2026
+site_url: https://mark-code-cowboys.github.io/NEM_Workshop/
+repo_url: https://github.com/Mark-Code-Cowboys/NEM_Workshop
+repo_name: Mark-Code-Cowboys/NEM_Workshop
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - navigation.instant
+    - navigation.indexes
+    - search.highlight
+    - search.share
+    - search.suggest
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.action.edit
+    - content.action.view
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Mark-Code-Cowboys/NEM_Workshop
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: false
+      type: date
+      fallback_to_build_date: true
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Workshop:
+    - workshop/overview.md
+    - workshop/change-requests.md
+    - workshop/scoreboard.md
+  - Stages:
+    - stages/index.md
+    - Stage 1 — Procedural: stages/procedural.md
+    - Stage 2 — Inheritance: stages/inheritance.md
+    - Stage 3 — Composition: stages/composition.md
+  - Patterns: patterns.md
+  - Reference: reference.md
+  - Instructor's guide: instructor.md
