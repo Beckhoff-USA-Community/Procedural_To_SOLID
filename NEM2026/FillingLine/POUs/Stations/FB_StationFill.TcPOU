@@ -6,6 +6,7 @@ VAR_INPUT
     PartPresent  : BOOL;
     FlowRate     : LREAL;
     TargetVolume : LREAL;
+    ModePause    : BOOL;   // CR-1 (wrong way — see Execute)
 END_VAR
 VAR_OUTPUT
     OpenFillValve : BOOL;
@@ -51,7 +52,12 @@ FB_Init := TRUE;
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Watchdog.CyclicUpdate();
+        <ST><![CDATA[// CR-1: per-station Pause guard (wrong way — also halts mid-fill, ruining product)
+IF ModePause THEN
+    RETURN;
+END_IF
+
+Watchdog.CyclicUpdate();
 
 IF Watchdog.TimedOut THEN
     Alarm.RaiseAlarm(Code := 1000, Text := 'Fill: Timeout');

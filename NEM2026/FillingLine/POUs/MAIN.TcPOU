@@ -24,6 +24,7 @@ VAR
     // ----- shared HMI inputs -----
     ModeAuto      : BOOL;
     ModeManual    : BOOL;
+    ModePause     : BOOL;   // CR-1 — wired to every station individually
     AlarmAck      : BOOL;
 
     // ----- per-station process inputs -----
@@ -62,6 +63,7 @@ InspectAlarm.Acknowledge(AckInput := AlarmAck);
 StationFill.PartPresent  := PartFill;
 StationFill.FlowRate     := FlowRate;
 StationFill.TargetVolume := TargetVolume;
+StationFill.ModePause    := ModePause;          // CR-1
 StationFill.Execute();
 
 // Cap
@@ -69,18 +71,21 @@ StationCap.PartPresent    := PartCap;
 StationCap.CapFeederReady := CapFeederReady;
 StationCap.TorqueLimit    := TorqueLimit;
 StationCap.TorqueActual   := TorqueActual;
+StationCap.ModePause      := ModePause;         // CR-1
 StationCap.Execute();
 
 // Label
 StationLabel.PartPresent   := PartLabel;
 StationLabel.LabelReady    := LabelReady;
 StationLabel.ApplyPressure := ApplyPressure;
+StationLabel.ModePause     := ModePause;        // CR-1
 StationLabel.Execute();
 
 // Inspect
 StationInspect.PartPresent   := PartInspect;
 StationInspect.CameraReady   := CameraReady;
 StationInspect.InspectResult := InspectResult;
+StationInspect.ModePause     := ModePause;      // CR-1
 StationInspect.Execute();
 ]]></ST>
     </Implementation>

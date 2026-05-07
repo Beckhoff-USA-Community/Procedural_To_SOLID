@@ -7,6 +7,7 @@ VAR_INPUT
     CapFeederReady : BOOL;
     TorqueLimit    : LREAL;
     TorqueActual   : LREAL;
+    ModePause      : BOOL;   // CR-1 (wrong way)
 END_VAR
 VAR_OUTPUT
     RunCapMotor     : BOOL;
@@ -49,7 +50,12 @@ FB_Init := TRUE;
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Watchdog.CyclicUpdate();
+        <ST><![CDATA[// CR-1: per-station Pause guard (wrong way)
+IF ModePause THEN
+    RETURN;
+END_IF
+
+Watchdog.CyclicUpdate();
 
 IF Watchdog.TimedOut THEN
     Alarm.RaiseAlarm(Code := 2000, Text := 'Cap: Timeout');

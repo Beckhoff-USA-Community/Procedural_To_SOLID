@@ -10,6 +10,7 @@ VAR_INPUT
     PartPresent   : BOOL;
     CameraReady   : BOOL;
     InspectResult : BOOL;
+    ModePause     : BOOL;   // CR-1 (wrong way)
 END_VAR
 VAR_OUTPUT
     TriggerCamera : BOOL;
@@ -58,7 +59,12 @@ FB_Init := TRUE;
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Watchdog.CyclicUpdate();
+        <ST><![CDATA[// CR-1: per-station Pause guard (wrong way)
+IF ModePause THEN
+    RETURN;
+END_IF
+
+Watchdog.CyclicUpdate();
 
 IF Watchdog.TimedOut THEN
     Alarm.RaiseAlarm(Code := 4000, Text := 'Inspect: Timeout');
