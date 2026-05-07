@@ -7,6 +7,7 @@ VAR_INPUT
     Reset            : BOOL;
     ModeAuto         : BOOL;
     ModeManual       : BOOL;
+    ModePause        : BOOL;          // CR-1
     JogForward       : BOOL;
     JogReverse       : BOOL;
     PartPresent      : BOOL;
@@ -33,16 +34,25 @@ VAR
     AlarmCode        : UDINT;
     ActiveMode       : INT;
     Accumulated      : LREAL;
+    LogBuffer        : ARRAY[0..99] OF STRING(120);   // CR-3 (duplicated in Inspect)
+    LogIndex         : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
-IF ModeAuto THEN
+      <ST><![CDATA[// mode (copy-pasted across all stations) — CR-1 added Pause branch
+IF ModePause THEN
+    ActiveMode := 3;
+ELSIF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
     ActiveMode := 2;
 ELSE
     ActiveMode := 0;
+END_IF
+
+// CR-1 Pause guard — Fill exception: ignore Pause while State = 10 (mid-fill)
+IF ActiveMode = 3 AND State <> 10 THEN
+    RETURN;
 END_IF
 
 // alarm ack — Fill uses RISING EDGE
@@ -91,6 +101,9 @@ CASE State OF
     20:
         OpenFillValve := FALSE;
         Timeout(IN := FALSE);
+        // CR-3: cycle data logging (duplicated identically in FB_StationInspect)
+        LogBuffer[LogIndex] := 'Fill cycle complete';
+        LogIndex := (LogIndex + 1) MOD 100;
         Done := TRUE;
 END_CASE
 
