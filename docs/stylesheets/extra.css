@@ -46,13 +46,23 @@
     stroke: rgba(160, 170, 200, 0.6) !important;
 }
 
-/* gitGraph commit labels — Mermaid's default is pale cream (#ffffde) at
-   0.5 opacity with near-black text, which inverts badly when we force
-   text light. Force the bkg dark and full-opacity so light text reads. */
-[data-md-color-scheme="slate"] .mermaid svg .commit-label-bkg {
-    fill: rgba(40, 50, 70, 0.85) !important;
+/* gitGraph commit labels — Mermaid defaults the bkg to pale cream
+   (#ffffde) at 0.5 opacity with near-black text. Make the bkg fully
+   opaque dark so the rotated commit-id text on top is high contrast,
+   and use a tag-qualified selector so we beat the earlier
+   g.commit-labels rule (specificity 0,3,3) that would otherwise force
+   text to var(--md-default-fg-color) at only 0.82 alpha — which blended
+   into the rect and made the labels muddy/unreadable. */
+[data-md-color-scheme="slate"] .mermaid svg rect.commit-label-bkg {
+    fill: #1e293b !important;          /* slate-800, fully opaque */
     stroke: rgba(160, 170, 200, 0.6) !important;
     opacity: 1 !important;
+}
+
+/* Commit-id text — pure white, specificity (0,3,4) beats the earlier
+   g.commit-labels text rule (0,3,3) that forced low-alpha fg color. */
+[data-md-color-scheme="slate"] .mermaid svg g.commit-labels text.commit-label {
+    fill: #ffffff !important;
 }
 
 /* Branch label text — explicitly bright against the new dark fill.
@@ -63,7 +73,6 @@
 [data-md-color-scheme="slate"] .mermaid svg .branchLabel,
 [data-md-color-scheme="slate"] .mermaid svg .branchLabel text,
 [data-md-color-scheme="slate"] .mermaid svg [class*="branch-label"],
-[data-md-color-scheme="slate"] .mermaid svg .commit-label,
 [data-md-color-scheme="slate"] .mermaid svg .label-container text {
     fill: rgba(255, 255, 255, 0.95) !important;
 }
