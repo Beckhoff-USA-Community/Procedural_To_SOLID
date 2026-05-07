@@ -494,6 +494,34 @@ If you have time and the workshop is intimate enough (< 20 attendees), send each
 - **Extend the discussion in Block 4.** Customer-conversation rehearsal can run 15+ minutes if the room is engaged.
 - **Show the [Patterns reference](patterns.md) page** and walk through Strategy / Template Method / DI by name. Connect to the workshop they just did.
 - **Demo `stage-3-broken`** — the CR-1-the-wrong-way branch — and walk through *why* it's wrong even though it compiles.
+- **Run the unit-test demo on `stage-3-complete-tests`** (15-25 min, requires PlcTestSuite installed). The most powerful extension if the room is technically engaged. See the dedicated section below.
+
+### Bonus — running the unit-test demo (only if class finishes early)
+
+The [Testing (extra credit)](testing.md) page documents a working unit-test suite on the `stage-3-complete-tests` branch using [SimmelFlo's PlcTestSuite](https://github.com/SimmelFlo/PlcTestSuite). It's the most powerful demonstration of the testability advantage — but it's deliberately **not** in the core workshop schedule because:
+
+1. **It requires a library install on the day.** PlcTestSuite is a separate `.library` file (Tools → Library Repository → Install). If attendees don't already have it, the install eats 5+ minutes per machine.
+2. **It only works on Stage 3 code.** Demonstrating *why it doesn't work on Stage 1 or Stage 2* requires extra setup time the core workshop doesn't budget.
+3. **It needs a running TwinCAT runtime.** Attendees who came review-only (no target controller, no local runtime) can't actually execute the tests.
+
+**When to run it:**
+
+- You're at least 20 minutes ahead of schedule by Block 4
+- Most attendees have a running runtime (local or remote)
+- The room is leaning toward "what would I actually do with this back at my shop?" — testing is the answer
+
+**How to run it (15-25 min):**
+
+1. *(2 min)* Pull up the [Testing page](testing.md) on the projector. Read the "Why composition is testable" section aloud — it's the architectural argument that hasn't been made explicit yet.
+2. *(3 min)* Switch to `stage-3-complete-tests` on the presenter machine. Open `NEM2026/FillingLine/POUs/Tests/FB_TestRunner.TcPOU`. Walk through the file structure: 16 test methods organized into building-block tests + station integration tests.
+3. *(5 min)* Show one building-block test in detail — `Test_QualityFlag_StopsLineIsFalse` is the best one. The body is six lines, but the lesson is the entire Liskov substitution principle: same interface, opposite policy, station code unaware. *"Read this test out loud. That's the contract that makes CR-2 a one-line swap."*
+4. *(5 min)* Show one station integration test — `Test_FillStation_HappyPath_CompletesCycle`. Highlight the `VAR_INST` block declaring local `FB_ModeManager`, `FB_AlarmHandler_LineFault`, `FB_CycleDataLogger`, and the `FB_StationFill` constructed with all three. *"This is the testing seam: the FB takes its dependencies as constructor parameters. We can construct it with anything that satisfies the interface — including mocks."*
+5. *(5 min)* If you have a runtime: build, activate, login, start. Set `RunTests := TRUE` in MAIN. Show the JUnit results file at `C:\ProgramData\Beckhoff\TwinCAT\3.1\Boot\TEST_Result.xml`.
+6. *(2-5 min)* Discussion: *"What would it take to test a Stage 1 station? A Stage 2 station? Why is this only possible on Stage 3?"* The answer surfaces naturally — Stage 1 and 2 stations don't have the dependency-injection seam, so there's nowhere to plug in mocks.
+
+**Frame the segment as:** *"This is what the rest of software engineering takes for granted. Stage 3 makes it available to control code. Composition isn't optional architecture if your shop wants to move toward CI for PLC — it's the prerequisite."*
+
+**If you don't get to it:** that's fine. Send the [Testing page](testing.md) link in the post-workshop follow-up; attendees can read and run it on their own time. The architectural lesson lands fully without the testing demo — testing is the *cherry on top*, not the load-bearing beam.
 
 ### If a discussion is going long but is gold
 
@@ -513,6 +541,12 @@ Day-of:
 - [ ] Whiteboard or large sticky notes for the physical scoreboard
 - [ ] Sticky notes for attendees to track files-touched and lines-changed during exercises (the **physical** scoreboard is more engaging than digital)
 - [ ] Timer (phone is fine) for the timed exercises
+
+**Optional (only bring if you're confident you'll finish ahead — the testing demo is bonus content, not workshop-core):**
+
+- [ ] [PlcTestSuite library](https://github.com/SimmelFlo/PlcTestSuite/Releases) installed on the presenter machine *and* on attendee machines if you want hands-on
+- [ ] `stage-3-complete-tests` branch fetched (`git fetch && git switch stage-3-complete-tests`)
+- [ ] [Testing page](testing.md) bookmarked in the browser
 
 Day-after:
 
@@ -551,6 +585,9 @@ Useful for an intermediate audience that doesn't need every cell of the scoreboa
 ### 4 hours — "the full workshop"
 
 This document.
+
+!!! note "None of the shortened versions include the testing demo"
+    The unit-test demonstration on `stage-3-complete-tests` is reserved for the 4-hour version, and only when the class is running ahead of schedule. Even the full 4-hour workshop treats testing as bonus content — see the [If you're ahead → bonus testing section](#bonus-running-the-unit-test-demo-only-if-class-finishes-early) above for the rationale and the 15-25 minute facilitation script.
 
 ---
 
