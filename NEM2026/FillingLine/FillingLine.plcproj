@@ -78,6 +78,9 @@
     <Compile Include="POUs\Tests\FB_TestRunner.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GVLs\GVL_TestFixtures.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />

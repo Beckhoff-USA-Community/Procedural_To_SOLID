@@ -371,26 +371,24 @@ END_IF
 // Watchdog TON doesn't fire because T#10S >> our test duration.
 METHOD Test_FillStation_HappyPath_CompletesCycle
 VAR_INST
-    // VAR_INST initializers can't reference local FB instances, so we
-    // construct Unit unwired and call FB_init manually below.
-    Local         : FB_ModeManager;
-    LocalAlarm    : FB_AlarmHandler_LineFault;
-    LocalLogger   : FB_CycleDataLogger;
-    Unit          : FB_StationFill;
+    // Per-method Unit instance (state isolated from other test methods).
+    // Init args must reference globals — VAR_INST initializers can't use
+    // locally-declared FB instances. See GVL_TestFixtures for why.
+    Unit          : FB_StationFill(ModeRef := GVL_TestFixtures.Mode,
+                                   AlarmHandler := GVL_TestFixtures.AlarmLineFault,
+                                   DataLogger   := GVL_TestFixtures.Logger);
     expected_bool : BOOL;
     actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    // Wire the unit-under-test by manually invoking FB_init on the
-    // first (and only) test pass. Equivalent to the constructor-style
-    // VAR_INST initializer but valid for locals.
-    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
-                 ModeRef := Local, AlarmHandler := LocalAlarm, DataLogger := LocalLogger);
-
-    Local.ModeAuto := TRUE;
-    Local.CyclicUpdate();
+    // Reset shared GVL fixtures so prior tests don't leak state.
+    GVL_TestFixtures.Mode.ModeAuto    := TRUE;
+    GVL_TestFixtures.Mode.ModeManual  := FALSE;
+    GVL_TestFixtures.Mode.ModePause   := FALSE;
+    GVL_TestFixtures.Mode.CyclicUpdate();
+    GVL_TestFixtures.AlarmLineFault.Clear();
 
     Unit.PartPresent  := TRUE;
     Unit.FlowRate     := 1.0;
@@ -418,21 +416,20 @@ END_IF
 // IsFaulted goes TRUE.
 METHOD Test_FillStation_NoFlow_RaisesAlarm
 VAR_INST
-    Local         : FB_ModeManager;
-    LocalAlarm    : FB_AlarmHandler_LineFault;
-    LocalLogger   : FB_CycleDataLogger;
-    Unit          : FB_StationFill;
+    Unit          : FB_StationFill(ModeRef := GVL_TestFixtures.Mode,
+                                   AlarmHandler := GVL_TestFixtures.AlarmLineFault,
+                                   DataLogger   := GVL_TestFixtures.Logger);
     expected_bool : BOOL;
     actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
-                 ModeRef := Local, AlarmHandler := LocalAlarm, DataLogger := LocalLogger);
-
-    Local.ModeAuto := TRUE;
-    Local.CyclicUpdate();
+    GVL_TestFixtures.Mode.ModeAuto    := TRUE;
+    GVL_TestFixtures.Mode.ModeManual  := FALSE;
+    GVL_TestFixtures.Mode.ModePause   := FALSE;
+    GVL_TestFixtures.Mode.CyclicUpdate();
+    GVL_TestFixtures.AlarmLineFault.Clear();
 
     Unit.PartPresent  := TRUE;
     Unit.FlowRate     := 0.0;       // below 0.1 threshold
@@ -442,7 +439,7 @@ END_VAR
     Unit.Execute();   // FlowRate < 0.1 — RaiseAlarm fires
 
     expected_bool := TRUE;
-    actual_bool   := LocalAlarm.HasActiveAlarm;
+    actual_bool   := GVL_TestFixtures.AlarmLineFault.HasActiveAlarm;
     Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 
     expected_bool := TRUE;
@@ -462,10 +459,9 @@ END_IF
 // consults Mode.AllowRun.
 METHOD Test_FillStation_PauseBlocksNewCycle
 VAR_INST
-    Local         : FB_ModeManager;
-    LocalAlarm    : FB_AlarmHandler_LineFault;
-    LocalLogger   : FB_CycleDataLogger;
-    Unit          : FB_StationFill;
+    Unit          : FB_StationFill(ModeRef := GVL_TestFixtures.Mode,
+                                   AlarmHandler := GVL_TestFixtures.AlarmLineFault,
+                                   DataLogger   := GVL_TestFixtures.Logger);
     expected_bool : BOOL;
     actual_bool   : BOOL;
     expected_int  : INT;
@@ -474,12 +470,11 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
-                 ModeRef := Local, AlarmHandler := LocalAlarm, DataLogger := LocalLogger);
-
-    Local.ModeAuto  := TRUE;
-    Local.ModePause := TRUE;       // CR-1: paused
-    Local.CyclicUpdate();
+    GVL_TestFixtures.Mode.ModeAuto    := TRUE;
+    GVL_TestFixtures.Mode.ModeManual  := FALSE;
+    GVL_TestFixtures.Mode.ModePause   := TRUE;       // CR-1: paused
+    GVL_TestFixtures.Mode.CyclicUpdate();
+    GVL_TestFixtures.AlarmLineFault.Clear();
 
     Unit.PartPresent  := TRUE;
     Unit.FlowRate     := 1.0;
@@ -512,31 +507,31 @@ END_IF
 // station never knew which alarm strategy it had.
 METHOD Test_InspectStation_QualityFlagDoesNotFault
 VAR_INST
-    Local         : FB_ModeManager;
-    LocalQuality  : FB_AlarmHandler_QualityFlag;
-    LocalLogger   : FB_CycleDataLogger;
-    Unit          : FB_StationInspect;
+    // Note: Unit is wired to the QualityFlag fixture (not LineFault),
+    // demonstrating Liskov substitution at the I_AlarmHandler boundary.
+    Unit          : FB_StationInspect(ModeRef := GVL_TestFixtures.Mode,
+                                      AlarmHandler := GVL_TestFixtures.AlarmQualityFlag,
+                                      DataLogger   := GVL_TestFixtures.Logger);
     expected_bool : BOOL;
     actual_bool   : BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).ExecuteTest() THEN
-    Unit.FB_init(bInitRetains := FALSE, bInCopyCode := FALSE,
-                 ModeRef := Local, AlarmHandler := LocalQuality, DataLogger := LocalLogger);
+    GVL_TestFixtures.AlarmQualityFlag.Clear();
 
     // Directly raise an alarm via the strategy and verify the policy.
     // (Driving the full Inspect cycle through state 10's parallel
     // branches would require TON time-advance; the strategy contract
     // is what carries the architectural lesson.)
-    LocalQuality.RaiseAlarm(Code := 4002, Text := 'visual defect');
+    GVL_TestFixtures.AlarmQualityFlag.RaiseAlarm(Code := 4002, Text := 'visual defect');
 
     expected_bool := TRUE;
-    actual_bool   := LocalQuality.HasActiveAlarm;
+    actual_bool   := GVL_TestFixtures.AlarmQualityFlag.HasActiveAlarm;
     Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 
     expected_bool := FALSE;
-    actual_bool   := LocalQuality.StopsLine;
+    actual_bool   := GVL_TestFixtures.AlarmQualityFlag.StopsLine;
     Tc3_PlcTestSuite.TestSuite.Test(__POUNAME()).AssertEqual(expected_bool, actual_bool);
 
     // Now: a station consuming this alarm computes IsFaulted as
