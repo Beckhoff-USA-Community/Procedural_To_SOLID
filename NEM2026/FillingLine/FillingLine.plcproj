@@ -9,7 +9,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>FillingLine</Name>
-    <ProgramVersion>3.1.4026.22</ProgramVersion>
+    <ProgramVersion>3.1.4026.23</ProgramVersion>
     <Application>{7296cc47-455c-4ba0-8f4d-727df8245047}</Application>
     <TypeSystem>{960b0746-5c04-488f-88f2-23988c759776}</TypeSystem>
     <Implicit_Task_Info>{cf043747-0c88-4c95-88d7-03cf47865c37}</Implicit_Task_Info>
@@ -93,6 +93,10 @@
     <Folder Include="POUs\Tests" />
   </ItemGroup>
   <ItemGroup>
+    <PlaceholderReference Include="Tc3_PlcTestFramework">
+      <DefaultResolution>Tc3_PlcTestFramework, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_PlcTestFramework</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_PlcTestSuite">
       <DefaultResolution>Tc3_PlcTestSuite, * (Simmel)</DefaultResolution>
       <Namespace>Tc3_PlcTestSuite</Namespace>
@@ -122,6 +126,15 @@
       <Namespace>Tc3_Module</Namespace>
       <SystemLibrary>true</SystemLibrary>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_PlcTestUtilitiesGeneric">
+      <DefaultResolution>Tc3_PlcTestUtilitiesGeneric, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_PlcTestUtilitiesGeneric</Namespace>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FillingLine.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
