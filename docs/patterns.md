@@ -197,7 +197,7 @@ These aren't demonstrated as branches but live in the same neighborhood. Beckhof
 
 > *Do operation X across a heterogeneous collection without modifying the elements.*
 
-The Beckhoff Core libraries use Visitor heavily — see the [VFFS sample](https://github.com/Beckhoff-USA-Community/PackML_PLC_Example) for `ChangeStateOnAllSubModules`, `SetOverrideVisitor`, `HmiEnableDisableAllVisitor`, `ForceVisitor`.
+The Beckhoff Core libraries use Visitor heavily — patterns like `ChangeStateOnAllSubModules`, `SetOverrideVisitor`, `HmiEnableDisableAllVisitor`, and `ForceVisitor` are the canonical shape.
 
 The mental model: an aggregator FB walks the parent module's child components and applies an operation. Useful for:
 

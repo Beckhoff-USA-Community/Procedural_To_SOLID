@@ -89,7 +89,6 @@ Recommended:
 For the curious:
 
 - One sample from [SPT_V4_Samples](https://github.com/Beckhoff-USA-Community/SPT_V4_Samples) (`SPT_Alarms` is the closest to Stage 2)
-- The [VFFS PackML Demo](https://github.com/Beckhoff-USA-Community/PackML_PLC_Example) for production Stage-3 patterns
 
 ## After the workshop
 

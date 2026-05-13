@@ -139,8 +139,7 @@ These will deepen your retention — not required, but if you have time:
 
 - **Read the [README](https://github.com/Mark-Code-Cowboys/NEM_Workshop/blob/main/README.md)** — 10-minute overview of what we're building and why
 - **Skim the [Patterns by name](../patterns.md) page** — gives you vocabulary in advance, makes the live discussion faster
-- **Look at one [VFFS_V4_Samples](https://github.com/Beckhoff-USA-Community/SPT_V4_Samples) project** — the `SPT_Alarms` example shows production code that uses Stage 2 patterns
-- **Browse the [VFFS PackML Demo](https://github.com/Beckhoff-USA-Community/PackML_PLC_Example) repo** — Stage 3 patterns in production. The interface-based `_Sealer`, `_Unwind`, `_PullWheels` composition is exactly what we build.
+- **Look at one [SPT_V4_Samples](https://github.com/Beckhoff-USA-Community/SPT_V4_Samples) project** — the `SPT_Alarms` example shows production code that uses Stage 2 patterns
 
 If you've never touched TcUnit but want to see where Stage 3 leads:
 

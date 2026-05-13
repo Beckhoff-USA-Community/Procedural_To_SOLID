@@ -160,5 +160,4 @@ Quick-lookup of what each branch contains:
 
 - [SPT-Libraries documentation](https://beckhoff-usa-community.github.io/SPT-Libraries/) — Stage 2 framework canon
 - [SPT_V4_Samples](https://github.com/Beckhoff-USA-Community/SPT_V4_Samples) — working SPT examples; `SPT_Alarms` was the grounding for Stage 2
-- [VFFS PackML Demo](https://github.com/Beckhoff-USA-Community/PackML_PLC_Example) — production Core library usage; grounded Stage 3
 - [Beckhoff TwinCAT 3 documentation](https://infosys.beckhoff.com) — language reference, FB_Init mechanics, attribute pragmas
