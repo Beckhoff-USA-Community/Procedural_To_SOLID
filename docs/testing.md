@@ -4,6 +4,8 @@ The deepest payoff of Stage 3's composition isn't visible in the diff scoreboard
 
 This page demonstrates that with a working test suite for `stage-3-complete`, built on top of [SimmelFlo's PlcTestSuite](https://github.com/SimmelFlo/PlcTestSuite) — a friendly TwinCAT 3 testing framework that lowers the TDD barrier for control-code engineers.
 
+PlcTestSuite was picked because it's the **lightest install** — a single library file, demoable in a workshop slot. [TcUnit](https://github.com/tcunit/TcUnit) is the older, better-known alternative; a **first-party Beckhoff test framework is also in flight** and will be worth tracking for shops standardizing on Beckhoff tooling. Both alternatives are heavier lifts than PlcTestSuite. Whichever framework you pick later, the architectural prerequisite is the same: dependency injection. Stage 1 and Stage 2 stations don't have it, so none of these frameworks can test them in isolation.
+
 The branch `stage-3-complete-tests` carries the test suite. The mainline `stage-3-complete` branch deliberately does not — testing is extra credit, not a workshop prerequisite.
 
 ## Why composition is testable
@@ -180,5 +182,5 @@ That's the deeper structural argument. Composition is a prerequisite for the tes
 
 - [SimmelFlo/PlcTestSuite](https://github.com/SimmelFlo/PlcTestSuite) — the framework's repo, including releases and CLAUDE.md
 - [TcUnit](https://github.com/tcunit/TcUnit) — alternative TwinCAT testing framework, more established but heavier setup
-- [Beckhoff TC3 PLC Test Examples](https://github.com/Beckhoff-USA-Community) — Beckhoff USA's own test examples in their sample repos
+- A **first-party Beckhoff test framework is in flight** — no public link yet; track Beckhoff InfoSys for the announcement
 - This repo's `stage-3-complete-tests` branch — `NEM2026/FillingLine/POUs/Tests/FB_TestRunner.TcPOU`

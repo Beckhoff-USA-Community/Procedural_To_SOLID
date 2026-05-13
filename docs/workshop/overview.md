@@ -96,4 +96,4 @@ The workshop ends; the material doesn't have to. Three modes for continued learn
 
 1. **Self-paced refresher.** Re-run the docs site (`./serve-docs.sh`) any time. Walk through the stages in order. Re-read the per-CR diffs against the workshop scoreboard.
 2. **Teaching mode.** The [Instructor's guide](../instructor.md) is structured so an FAE who attended can run a shorter version (1-2 hours) for their own team or customer. The "Tour script" section is the live narration; the "Pre-emptive pushback" section is the customer-conversation cheat sheet.
-3. **Deep-end.** Read the Beckhoff USA samples. Try TcUnit on a Stage 3 station — it'll work because of DI; try the same on Stage 1 and watch it not work — there's the testability lesson made visceral.
+3. **Deep-end.** Read the Beckhoff USA samples. Try PlcTestSuite on a Stage 3 station — it'll work because of DI; try the same on Stage 1 and watch it not work — there's the testability lesson made visceral.

@@ -541,7 +541,7 @@ Before declaring victory, ask yourself:
 
 2. **What would adding station 5 cost?** Roughly 200 lines for a new station FB (composing the same building blocks Fill / Cap / Label / Inspect already use), plus 1 alarm strategy instance + 1 station instance + 1 wire in MAIN. **No existing code is modified.** Compare to Stage 1's "copy-paste-then-fix" cost.
 
-3. **What's the testability story?** A TcUnit test can `FB_StationFill(ModeRef := MockMode, AlarmHandler := MockAlarm, DataLogger := MockLogger)` — every dependency is a mock. Drive the inputs, assert the outputs. **Real test isolation, on real PLC code, with real semantics.** That's what composition buys that inheritance can't.
+3. **What's the testability story?** A PlcTestSuite test can `FB_StationFill(ModeRef := MockMode, AlarmHandler := MockAlarm, DataLogger := MockLogger)` — every dependency is a mock. Drive the inputs, assert the outputs. **Real test isolation, on real PLC code, with real semantics.** That's what composition buys that inheritance can't.
 
 ---
 

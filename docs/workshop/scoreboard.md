@@ -71,7 +71,7 @@ The right frame is **blast radius**, not lines:
 
 The scoreboard tracks the visible cost of CRs. The invisible cost the scoreboard *can't* show is testability. Stage 1 and Stage 2 stations are entangled with their I/O — you can't unit-test them without spinning up the whole framework.
 
-Stage 3 stations accept their dependencies at construction. In a TcUnit test you can:
+Stage 3 stations accept their dependencies at construction. In a PlcTestSuite test you can:
 
 ```iecst
 VAR

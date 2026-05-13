@@ -422,7 +422,7 @@ Before moving to Stage 3, ask yourself:
 
 1. **Did CR-1's `AllowPause` virtual feel right?** It works, but Cap / Label / Inspect inherit it forever for no reason.
 2. **What would a 4th alarm policy do to the base?** (E.g., a stop-then-restart-after-confirm policy.) Probably another override in the relevant child, with another duplication of base behavior.
-3. **What's the testability story now?** You can subclass the base in a TcUnit test — better than Stage 1 — but you can't swap alarm policies at runtime; that's still hardcoded into base + override structure.
+3. **What's the testability story now?** You can subclass the base in a PlcTestSuite test — better than Stage 1 — but you can't swap alarm policies at runtime; that's still hardcoded into base + override structure.
 
 The transition to Stage 3 is justified when you can articulate why CR-2's `SUPER`-can't-be-called and CR-3's dead-weight-in-base feel like *fundamental* limits, not just inconveniences.
 

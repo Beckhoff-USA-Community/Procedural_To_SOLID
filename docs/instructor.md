@@ -460,7 +460,7 @@ Take answers. Encourage debate. The honest answers are:
 1. *"Three modes for keeping this material alive after today:"*
     - **Self-paced refresher** — `./serve-docs.sh` from the cloned repo, walk through stages in order
     - **Teaching mode** — this docs site is structured so an attendee can run a 1-2 hour version for their own team or customer; the [Instructor's guide](#) is the script, the [Patterns reference](patterns.md) is the cheat sheet
-    - **Deep end** — TcUnit on a Stage 3 station, then on Stage 1; testability difference is visceral
+    - **Deep end** — PlcTestSuite on a Stage 3 station, then on Stage 1; testability difference is visceral
 2. *"Send me one specific machine, project, or customer this material applies to. I want to know what you'll teach it for. That's how I make this workshop better."*
 
 **Personal recommendation per attendee** (post-workshop, optional but high-impact):
