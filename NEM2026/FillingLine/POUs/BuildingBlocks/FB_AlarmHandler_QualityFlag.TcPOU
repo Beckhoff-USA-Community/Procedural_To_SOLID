@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_AlarmHandler_QualityFlag" Id="{c055bdf6-50f9-404f-86be-db8a387adb0e}" SpecialFunc="None">
+    <Declaration><![CDATA[// Non-latching quality strategy — flags a defect but lets the line
+// keep running. Same I_AlarmHandler interface, opposite policy.
+// Used by Inspect station starting from stage-3-composition.
+FUNCTION_BLOCK FB_AlarmHandler_QualityFlag IMPLEMENTS I_AlarmHandler
+VAR
+    _Flagged     : BOOL;
+    _ActiveCode  : UDINT;
+    _ActiveText  : STRING(255);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="RaiseAlarm" Id="{a170483a-b9c2-43d8-b914-295b5025e387}">
+      <Declaration><![CDATA[METHOD RaiseAlarm : BOOL
+VAR_INPUT
+    Code : UDINT;
+    Text : STRING(255);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_Flagged    := TRUE;
+_ActiveCode := Code;
+_ActiveText := Text;
+RaiseAlarm  := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Acknowledge" Id="{bca403ec-631f-4ad5-976c-7245db4f9e4b}">
+      <Declaration><![CDATA[// Quality flags auto-clear when the condition stops; ack is a no-op.
+// AckInput is interface-required (I_AlarmHandler.Acknowledge) but ignored here.
+METHOD Acknowledge : BOOL
+VAR_INPUT
+    AckInput : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Acknowledge := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clear" Id="{c653e09c-18f2-4440-a28e-30fb2c3a795e}">
+      <Declaration><![CDATA[METHOD Clear : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[_Flagged    := FALSE;
+_ActiveCode := 0;
+_ActiveText := '';
+Clear       := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="HasActiveAlarm" Id="{7dfe8b7a-0eae-4a1b-a3f5-95e65a9c69bc}">
+      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
+PROPERTY HasActiveAlarm : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{41ce4e4a-012d-416d-be8c-13f93d213f3f}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[HasActiveAlarm := _Flagged;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="AlarmText" Id="{54236bb1-a15b-4f57-94e5-6747ca1d70e4}">
+      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
+PROPERTY AlarmText : STRING(255)
+]]></Declaration>
+      <Get Name="Get" Id="{476c52ee-bd09-40fe-9e71-0ac5a70d085f}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AlarmText := _ActiveText;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="StopsLine" Id="{88e900e6-7534-46f3-9ecd-3a094d7a111b}">
+      <Declaration><![CDATA[PROPERTY StopsLine : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{d4f0620b-9be9-4777-a822-59442e1c9d1b}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[StopsLine := FALSE;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

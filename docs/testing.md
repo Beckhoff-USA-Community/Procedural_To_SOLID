@@ -1,10 +1,5 @@
 # Unit testing — extra credit
 
-!!! info "When to use this page"
-    This is **bonus material for classes that finish early**, or for self-paced learners who want to extend the workshop after attending. It is **not** part of the core 4-hour workshop schedule. Instructors should treat it as an *if-time-permits* segment — see the [Instructor's guide → If you're ahead](instructor.md#if-youre-ahead) section for facilitation guidance.
-    
-    For attendees: feel free to read this any time. The architectural lesson lands fully without ever running a test.
-
 The deepest payoff of Stage 3's composition isn't visible in the diff scoreboard. It's in **testability**. PLC code that depends on its dependencies via construction (instead of reaching for globals or instantiating its own actuators) is unit-testable in a way Stage 1 and Stage 2 code fundamentally cannot be.
 
 This page demonstrates that with a working test suite for `stage-3-complete`, built on top of [SimmelFlo's PlcTestSuite](https://github.com/SimmelFlo/PlcTestSuite) — a friendly TwinCAT 3 testing framework that lowers the TDD barrier for control-code engineers.

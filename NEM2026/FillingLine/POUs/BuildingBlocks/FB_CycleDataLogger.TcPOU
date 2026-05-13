@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_CycleDataLogger" Id="{5faebb55-0757-4ea0-b1c5-01cc4ae25741}" SpecialFunc="None">
+    <Declaration><![CDATA[// Cycle data logger — buffers per-cycle records until full, then flushes.
+// Injected only into Fill and Inspect at stage-3-complete (CR-3 selective logging).
+FUNCTION_BLOCK FB_CycleDataLogger IMPLEMENTS I_DataLogger
+VAR
+    _Enabled     : BOOL := TRUE;
+    _BufferIndex : INT;
+    _Buffer      : ARRAY[0..99] OF ST_LogEntry;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="LogCycleData" Id="{24c5b8ad-7286-4814-b3c7-ca5799734eec}">
+      <Declaration><![CDATA[METHOD LogCycleData : BOOL
+VAR_INPUT
+    StationName : STRING(40);
+    StepNumber  : INT;
+    CycleTimeMs : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT _Enabled THEN RETURN; END_IF
+IF _BufferIndex > 99 THEN
+    THIS^.Flush();
+END_IF
+_Buffer[_BufferIndex].StationName := StationName;
+_Buffer[_BufferIndex].StepNumber  := StepNumber;
+_Buffer[_BufferIndex].CycleTimeMs := CycleTimeMs;
+_Buffer[_BufferIndex].Timestamp   := DT#1970-01-01-00:00:00;   // production: F_GetSystemTime()
+_BufferIndex := _BufferIndex + 1;
+LogCycleData := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Flush" Id="{d2dd4d75-3c8c-486d-88e4-10ab82393ee1}">
+      <Declaration><![CDATA[METHOD Flush : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Production code: write _Buffer to file/database via SysFile or ADS.
+// Workshop simplification: just rewind the buffer index.
+_BufferIndex := 0;
+Flush        := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="IsEnabled" Id="{24025ca7-6f9f-4e65-9ab2-7f65865c24c7}">
+      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
+PROPERTY IsEnabled : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{9f7b43a9-496e-4258-89ee-cacd68cdbfbf}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IsEnabled := _Enabled;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <Itf Name="I_AlarmHandler" Id="{a18474dc-c2a4-4011-a1a0-d8fd7a358cea}">
+    <Declaration><![CDATA[INTERFACE I_AlarmHandler
+]]></Declaration>
+    <Method Name="RaiseAlarm" Id="{e9c0f44a-220b-4165-9063-9da9d8102d7b}">
+      <Declaration><![CDATA[METHOD RaiseAlarm : BOOL
+VAR_INPUT
+    Code : UDINT;
+    Text : STRING(255);
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Acknowledge" Id="{0f9b1d17-8bc8-4b9e-a96a-5436e8fe9148}">
+      <Declaration><![CDATA[METHOD Acknowledge : BOOL
+VAR_INPUT
+    AckInput : BOOL;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Clear" Id="{6c6d5862-0181-4fb2-aee7-6711dc338917}">
+      <Declaration><![CDATA[METHOD Clear : BOOL
+]]></Declaration>
+    </Method>
+    <Property Name="HasActiveAlarm" Id="{8e83636c-8d53-498b-889a-185c57532ba9}">
+      <Declaration><![CDATA[PROPERTY HasActiveAlarm : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{15e8042f-b024-4046-b338-6f25f5a4ee2e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="AlarmText" Id="{8eb428b6-59a5-4d44-aa76-8360d910662f}">
+      <Declaration><![CDATA[PROPERTY AlarmText : STRING(255)
+]]></Declaration>
+      <Get Name="Get" Id="{2b00cd44-44e9-4b29-9f07-7f8a602b4f21}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="StopsLine" Id="{c8a595d3-c508-481e-a497-83f41136f70d}">
+      <Declaration><![CDATA[// Key distinction between strategies: a LineFault returns TRUE,
+// a QualityFlag returns FALSE. Lets the caller decide whether to halt.
+PROPERTY StopsLine : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{ed2c44cd-ae11-4d4b-a19b-17b5a0dc9f50}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -1,13 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
-  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}">
+  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+    // ----- shared services -----
+    ModeManager : FB_ModeManager;
+    CycleLogger : FB_CycleDataLogger;          // CR-3: shared by Fill + Inspect
+
+    // ----- per-station alarm strategies -----
+    FillAlarm    : FB_AlarmHandler_LineFault;
+    CapAlarm     : FB_AlarmHandler_LineFault;
+    LabelAlarm   : FB_AlarmHandler_LineFault;
+    InspectAlarm : FB_AlarmHandler_QualityFlag;
+
+    // ----- stations composed via FB_Init dependency injection -----
+    // CR-3: only Fill + Inspect carry DataLogger. Cap + Label have no logger
+    // dependency and don't pay the cost of carrying one.
+    StationFill    : FB_StationFill(ModeRef     := ModeManager,
+                                    AlarmHandler := FillAlarm,
+                                    DataLogger   := CycleLogger);
+    StationCap     : FB_StationCap(ModeRef     := ModeManager,
+                                   AlarmHandler := CapAlarm);
+    StationLabel   : FB_StationLabel(ModeRef     := ModeManager,
+                                     AlarmHandler := LabelAlarm);
+    StationInspect : FB_StationInspect(ModeRef     := ModeManager,
+                                       AlarmHandler := InspectAlarm,
+                                       DataLogger   := CycleLogger);
+
+    // ----- shared HMI inputs -----
+    ModeAuto      : BOOL;
+    ModeManual    : BOOL;
+    ModePause     : BOOL;       // CR-1
+    AlarmAck      : BOOL;
+
+    // ----- per-station process inputs -----
+    PartFill      : BOOL;
+    FlowRate      : LREAL := 1.0;
+    TargetVolume  : LREAL := 250.0;
+
+    PartCap        : BOOL;
+    CapFeederReady : BOOL;
+    TorqueLimit    : LREAL := 5.0;
+    TorqueActual   : LREAL;
+
+    PartLabel      : BOOL;
+    LabelReady     : BOOL;
+    ApplyPressure  : LREAL := 2.0;
+
+    PartInspect    : BOOL;
+    CameraReady    : BOOL;
+    InspectResult  : BOOL;
+
+    // ----- unit tests (PlcTestSuite) -----
+    // Set RunTests := TRUE in online view to drive the suite. Test results
+    // land in C:\ProgramData\Beckhoff\TwinCAT\3.1\Boot\TEST_Result.xml
+    // (JUnit format). See docs/testing.md.
+    RunTests       : BOOL := FALSE;
+    TestRunner     : FB_TestRunner;
 END_VAR
-]]>
-    </Declaration>
+]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[// shared mode update
+ModeManager.ModeAuto   := ModeAuto;
+ModeManager.ModeManual := ModeManual;
+ModeManager.ModePause  := ModePause;     // CR-1
+ModeManager.CyclicUpdate();
+
+// HMI Ack drives every alarm handler — both LineFault (consumes) and
+// QualityFlag (ignores) honor the same I_AlarmHandler.Acknowledge contract.
+FillAlarm.Acknowledge(AckInput    := AlarmAck);
+CapAlarm.Acknowledge(AckInput     := AlarmAck);
+LabelAlarm.Acknowledge(AckInput   := AlarmAck);
+InspectAlarm.Acknowledge(AckInput := AlarmAck);
+
+// Fill
+StationFill.PartPresent  := PartFill;
+StationFill.FlowRate     := FlowRate;
+StationFill.TargetVolume := TargetVolume;
+StationFill.Execute();
+
+// Cap
+StationCap.PartPresent    := PartCap;
+StationCap.CapFeederReady := CapFeederReady;
+StationCap.TorqueLimit    := TorqueLimit;
+StationCap.TorqueActual   := TorqueActual;
+StationCap.Execute();
+
+// Label
+StationLabel.PartPresent   := PartLabel;
+StationLabel.LabelReady    := LabelReady;
+StationLabel.ApplyPressure := ApplyPressure;
+StationLabel.Execute();
+
+// Inspect
+StationInspect.PartPresent   := PartInspect;
+StationInspect.CameraReady   := CameraReady;
+StationInspect.InspectResult := InspectResult;
+StationInspect.Execute();
+
+// Unit tests — see docs/testing.md
+IF RunTests THEN
+    Tc3_PlcTestSuite.TestSuite.TestSuiteName := 'FillingLine — Stage 3 SOLID';
+    TestRunner();
+END_IF
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

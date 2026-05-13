@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="ST_LogEntry" Id="{9d3c0cda-ecc7-49a6-ac4e-eec04a209cb5}">
+    <Declaration><![CDATA[TYPE ST_LogEntry :
+STRUCT
+    StationName  : STRING(40);
+    StepNumber   : INT;
+    CycleTimeMs  : LREAL;
+    Timestamp    : DT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
