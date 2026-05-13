@@ -13,6 +13,29 @@ venv/
 .venv/
 .venv-docs/
 
+# TwinCAT 3 build output and editor scratch
+# (NOTE: NEM2026/FillingLine/_Libraries/ is committed deliberately — see CLAUDE.md)
+_Boot/
+_CompileInfo/
+_ModuleInstall/
+_Deployment/
+_Repository/
+*.plcproj.bak
+*.plcproj.orig
+*.tsproj.bak
+*.tsproj.orig
+*.xti.bak
+*.xti.orig
+*.tpy
+*.tclrs
+*.tmcRefac
+*.compiled-library
+*.compileinfo
+*.project.~u
+.~u
+LineIDs.dbg
+LineIDs.dbg.bak
+
 # User-specific files
 *.rsuser
 *.suo

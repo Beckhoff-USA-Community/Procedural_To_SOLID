@@ -58,7 +58,3 @@ No CLI build on Linux — TwinCAT projects build only via XAE on Windows. Open `
 - **Stage 2 broken** compiles but is gross: Inspect overrides `UpdateAlarms` and partially shadows base state in service of CR-2; leave the TODO comments in.
 - **Match SPT API to https://beckhoff-usa-community.github.io/SPT-Libraries/** for Stage 2 (FB names, method signatures, namespace prefixes). If unsure of an exact symbol against the installed library version in `_Libraries/`, flag it inline so a Windows reviewer can fix in XAE.
 
-## Known repo quirks
-
-- Duplicate `gitignore` file (no leading dot) sits alongside `.gitignore` and differs from it. Likely accidental — flag before relying on either.
-- `README.md` is a one-line stub.
