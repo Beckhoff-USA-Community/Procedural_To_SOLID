@@ -72,11 +72,12 @@ class Theme:
     RULE_GRAY     = RGBColor(0xC8, 0xCE, 0xD6)
 
     # Semantic stage accents — preserved for back-compat with build_slides()
-    AMBER   = SLATE_DARK     # Stage 1 — procedural
-    TEAL    = SLATE          # Stage 2 — inheritance
-    VIOLET  = BECKHOFF_BLUE  # Stage 3 — composition
+    # Stage progression climbs warm → neutral → brand: dark red → slate → blue.
+    AMBER   = DARK_RED       # Stage 1 — procedural ("the legacy that hurts")
+    TEAL    = SLATE          # Stage 2 — inheritance (the bridge)
+    VIOLET  = BECKHOFF_BLUE  # Stage 3 — composition (brand climax)
     NAVY    = BLACK          # Block 0/4 + section framing
-    CRIMSON = BECKHOFF_RED   # Pre-emptive pushback warnings
+    CRIMSON = BECKHOFF_RED   # Pre-emptive pushback warnings (brighter red)
 
     SANS         = "Arial"
     MONO         = "Consolas"
