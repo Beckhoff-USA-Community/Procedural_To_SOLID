@@ -2,33 +2,10 @@
 
 Beckhoff TwinCAT 3 workshop — *From Procedural to SOLID: Object-Oriented PLC Design in TwinCAT 3* (NEM 2026).
 
-See `CLAUDE.md` for project layout, branch map, and editing conventions.
+Students build the same 4-station filling line three ways (procedural → inheritance → composition) and apply the same three change requests at each stage to compare blast radius. The branches and the diffs between them are the workshop scoreboard.
 
-## Serving the documentation locally
+## Where to start
 
-The docs source (`mkdocs.yml`, `docs/`) lives on `main`. The published HTML lives on the `gh-pages` branch (built by `mkdocs gh-deploy`). Pick whichever fits:
-
-### Option 1 — preview the built site (any branch)
-
-Use a worktree so your current branch stays put:
-
-```bash
-git worktree add /tmp/nem-docs-site gh-pages
-python3 -m http.server 8000 --directory /tmp/nem-docs-site
-# browse http://localhost:8000/
-```
-
-Cleanup:
-
-```bash
-kill $(lsof -ti:8000)
-git worktree remove /tmp/nem-docs-site
-```
-
-### Option 2 — live-reload dev server (from `main`)
-
-```bash
-git switch main
-source .venv-docs/bin/activate   # or: python3 -m venv .venv-docs && pip install mkdocs-material
-mkdocs serve                     # http://127.0.0.1:8000/ with live reload
-```
+- **Workshop docs** — `docs/getting-started.md` covers prerequisites, cloning, and running the docs site locally on Windows or Linux/macOS via `serve-docs.cmd` / `serve-docs.sh`. Browse the full site at <https://mark-code-cowboys.github.io/NEM_Workshop/>.
+- **Repo conventions** — `CLAUDE.md` for project layout, branch map, library reference policy, and editing rules for `.TcPOU` / `.TcDUT` / `.TcGVL` files.
+- **Workshop deck** — `presentation/` builds `NEM2026_workshop.pptx` from `presentation/build_deck.py` on top of the Beckhoff SPT template; see `presentation/README.md` for rebuild and theme notes.
