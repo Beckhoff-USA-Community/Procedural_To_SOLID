@@ -10,10 +10,20 @@ cd NEM_Workshop
 git switch stage-1-procedural
 explorer NEM2026/NEM2026.sln    # Windows; macOS: open / Linux: xdg-open
 ```
+``` gitKraken for switching branches
+close XAE if open
+check for branch under Local and Remote
+if under Remote, then right-click it and then select Checkout origin/stage-1-procedural
+if it doesn't work because changes were made when you opened the project then you'll need to revert first
+go to files in the unstaged area and undo changes
+if under Local right click and select Checkout origin/stage-1-procedural
+create your own branch stage-1-procedural-name
+now open the solution
+```
 
 When XAE loads:
 
-1. Solution Explorer (left) → expand `FillingLine` → `POUs/`
+1. Solution Explorer (left) → expand `FillingLine Project` → `POUs/`
 2. Double-click `MAIN.TcPOU`
 3. Press `F7` (Build Solution) — should complete without errors
 4. Look at the four `FB_Station*` files — they're the stars of Stage 1
