@@ -65,6 +65,21 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
+// HMI Mapping
+StateDisplay := State;
+CASE State OF
+    0:   StatusText := 'Idle';
+    100: StatusText := 'Picking Label';
+    200: StatusText := 'Applying';
+    300: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
+
 // State machine
 CASE State OF
     0:
@@ -101,19 +116,6 @@ CASE State OF
         Done := TRUE;
 END_CASE
 
-StateDisplay := State;
-CASE State OF
-    0:   StatusText := 'Idle';
-    100: StatusText := 'Picking Label';
-    200: StatusText := 'Applying';
-    300: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
 ]]></ST>
     </Implementation>
   </POU>
