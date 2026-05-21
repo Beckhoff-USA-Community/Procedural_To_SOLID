@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_StationLabel" Id="{43aa657a-066e-45f8-a8e9-bdac046f77cf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel EXTENDS FB_StationBase
+VAR_INPUT
+    LabelReady       : BOOL;
+    ApplyPressure    : LREAL;
+END_VAR
+VAR_OUTPUT
+    ExtendApplicator : BOOL;
+    LabelVacuum      : BOOL;
+END_VAR
+VAR
+    ApplySettle      : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ExecuteSequence" Id="{04e1374a-4095-4468-aa16-ef3d06e45747}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:
+        LabelVacuum      := FALSE;
+        ExtendApplicator := FALSE;
+        Done             := FALSE;
+        IF Execute AND PartPresent AND LabelReady AND ActiveMode = 1 THEN
+            THIS^.TransitionTo(10);
+        END_IF
+    10:
+        LabelVacuum := TRUE;
+        ApplySettle(IN := TRUE, PT := T#300MS);
+        IF ApplySettle.Q THEN
+            ApplySettle(IN := FALSE);
+            THIS^.TransitionTo(20);
+        END_IF
+    20:
+        ExtendApplicator := TRUE;
+        ApplySettle(IN := TRUE, PT := T#400MS);
+        Timeout(IN := TRUE, PT := T#3S);
+        IF Timeout.Q THEN
+            THIS^.RaiseStationAlarm(3001, 'Label: Apply timeout');
+        END_IF
+        IF ApplySettle.Q THEN
+            ApplySettle(IN := FALSE);
+            ExtendApplicator := FALSE;
+            Timeout(IN := FALSE);
+            THIS^.TransitionTo(30);
+        END_IF
+    30:
+        LabelVacuum := FALSE;
+        Done := TRUE;
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{99d191b6-6f05-4585-9af6-6ccc64a17304}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:  GetStepName := 'Idle';
+    10: GetStepName := 'Pick Label';
+    20: GetStepName := 'Applying';
+    30: GetStepName := 'Complete';
+ELSE
+    GetStepName := 'Unknown';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

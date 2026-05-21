@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_StationFill" Id="{c8b56ccb-9e54-404c-b28c-9e8f9a838929}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill EXTENDS FB_StationBase
+VAR_INPUT
+    FlowRate         : LREAL;
+    TargetVolume     : LREAL;
+END_VAR
+VAR_OUTPUT
+    OpenFillValve    : BOOL;
+END_VAR
+VAR
+    Accumulated      : LREAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ExecuteSequence" Id="{7012b869-cba7-4451-a462-d26725a9ae47}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:
+        OpenFillValve := FALSE;
+        Done          := FALSE;
+        Accumulated   := 0.0;
+        IF Execute AND PartPresent AND ActiveMode = 1 THEN
+            THIS^.TransitionTo(10);
+        END_IF
+    10:
+        OpenFillValve := TRUE;
+        Timeout(IN := TRUE, PT := T#10S);
+        IF Timeout.Q THEN
+            THIS^.RaiseStationAlarm(1000, 'Fill: Timeout');
+        END_IF
+        IF FlowRate < 0.1 THEN
+            THIS^.RaiseStationAlarm(1001, 'Fill: No flow detected');
+        END_IF
+        Accumulated := Accumulated + (FlowRate * 0.001);
+        IF Accumulated >= TargetVolume THEN
+            THIS^.TransitionTo(20);
+        END_IF
+    20:
+        OpenFillValve := FALSE;
+        Timeout(IN := FALSE);
+        Done := TRUE;
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{263d6cd9-6cc0-4b5d-93a1-b87fa2ae9031}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:  GetStepName := 'Idle';
+    10: GetStepName := 'Filling';
+    20: GetStepName := 'Complete';
+ELSE
+    GetStepName := 'Unknown';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

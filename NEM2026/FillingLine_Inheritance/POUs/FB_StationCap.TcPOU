@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_StationCap" Id="{995aa1f9-2aab-436e-9cda-670bc81baac1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap EXTENDS FB_StationBase
+VAR_INPUT
+    CapFeederReady   : BOOL;
+    TorqueLimit      : LREAL;
+    TorqueActual     : LREAL;
+END_VAR
+VAR_OUTPUT
+    RunCapMotor      : BOOL;
+    CapPickCylinder  : BOOL;
+END_VAR
+VAR
+    CapSettle        : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="ExecuteSequence" Id="{97774c85-7365-4ba1-a61f-c6f0e3be2e81}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:
+        RunCapMotor     := FALSE;
+        CapPickCylinder := FALSE;
+        Done            := FALSE;
+        IF Execute AND PartPresent AND CapFeederReady AND ActiveMode = 1 THEN
+            THIS^.TransitionTo(10);
+        END_IF
+    10:
+        CapPickCylinder := TRUE;
+        CapSettle(IN := TRUE, PT := T#500MS);
+        IF CapSettle.Q THEN
+            CapSettle(IN := FALSE);
+            THIS^.TransitionTo(20);
+        END_IF
+    20:
+        RunCapMotor := TRUE;
+        Timeout(IN := TRUE, PT := T#5S);
+        IF Timeout.Q THEN
+            THIS^.RaiseStationAlarm(2001, 'Cap: Torque timeout');
+        END_IF
+        IF TorqueActual >= TorqueLimit THEN
+            RunCapMotor := FALSE;
+            Timeout(IN := FALSE);
+            THIS^.TransitionTo(30);
+        END_IF
+    30:
+        CapPickCylinder := FALSE;
+        Done := TRUE;
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{cd840df6-775a-44ea-892d-ec56f396d9c0}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:  GetStepName := 'Idle';
+    10: GetStepName := 'Pick Cap';
+    20: GetStepName := 'Torquing';
+    30: GetStepName := 'Complete';
+ELSE
+    GetStepName := 'Unknown';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
