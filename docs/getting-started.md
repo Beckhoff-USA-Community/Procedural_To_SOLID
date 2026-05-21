@@ -11,6 +11,20 @@ git switch Release
 explorer NEM2026/NEM2026.sln    # Windows; macOS: open / Linux: xdg-open
 ```
 
+### GitKraken workflow (if you prefer a GUI)
+
+If you're using GitKraken instead of the command line:
+
+1. **Close XAE** before switching branches — the solution can't reload its underlying files while it's open.
+2. In the left panel, find the branch you want under **Local** or **Remote**.
+3. **If under Remote** — right-click and select **Checkout `origin/Release`** (substitute the branch name).
+    - If GitKraken refuses because the working tree has uncommitted changes, **revert them first**: go to the unstaged area in the central panel and undo the file modifications.
+4. **If under Local** — right-click and select **Checkout `Release`** (no `origin/` prefix).
+5. Optional but recommended: **create your own branch off `Release`** (`Release-yourname`) so you can experiment freely without touching the canonical branches. In GitKraken: right-click `Release` → **Create branch here**.
+6. **Now open `NEM2026/NEM2026.sln`** in XAE.
+
+The same flow works for the CR branches — substitute `cr1-applied` / `cr2-applied` / `cr3-applied` / `complete` wherever `Release` appears.
+
 When XAE loads, you'll see **three PLC projects** side-by-side in Solution Explorer:
 
 1. `FillingLine_Procedural` — Stage 1's plain-ST implementation
