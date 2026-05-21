@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_StationLabel" Id="{43aa657a-066e-45f8-a8e9-bdac046f77cf}" SpecialFunc="None">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="FB_StationLabel" Id="{8fa9683b-6c6c-4a5e-9e37-9361af5f8d6b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel EXTENDS FB_StationBase
 VAR_INPUT
     LabelReady       : BOOL;
@@ -21,7 +21,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE State OF
+        <ST><![CDATA[SUPER^.ExecuteSequence();
+
+CASE State OF
     0:
         LabelVacuum      := FALSE;
         ExtendApplicator := FALSE;

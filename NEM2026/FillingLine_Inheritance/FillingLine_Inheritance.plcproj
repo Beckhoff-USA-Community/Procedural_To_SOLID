@@ -9,7 +9,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>FillingLine_Inheritance</Name>
-    <ProgramVersion>3.1.4026.22</ProgramVersion>
+    <ProgramVersion>3.1.4026.23</ProgramVersion>
     <Application>{ba19c416-c0cd-4eec-89e9-2c7debc8ffcf}</Application>
     <TypeSystem>{a0d5392d-5c51-4524-bb0e-52855410ca87}</TypeSystem>
     <Implicit_Task_Info>{47d67d84-2317-48b6-b90b-5df83be86f53}</Implicit_Task_Info>
