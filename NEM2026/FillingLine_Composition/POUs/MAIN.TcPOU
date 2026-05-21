@@ -7,8 +7,6 @@ VAR
     ModeManager  : FB_ModeManager;
 
     // ----- per-station alarm strategies -----
-    // stage-3-exercise: every station uses LineFault (latching, stops line).
-    // The CR-2 swap exercise replaces InspectAlarm with FB_AlarmHandler_QualityFlag.
     FillAlarm    : FB_AlarmHandler_LineFault;
     CapAlarm     : FB_AlarmHandler_LineFault;
     LabelAlarm   : FB_AlarmHandler_LineFault;
@@ -23,6 +21,7 @@ VAR
     // ----- shared HMI inputs -----
     ModeAuto      : BOOL;
     ModeManual    : BOOL;
+    ModePause     : BOOL;       // CR-1
     AlarmAck      : BOOL;
 
     // ----- per-station process inputs -----
@@ -48,10 +47,9 @@ END_VAR
       <ST><![CDATA[// shared mode update
 ModeManager.ModeAuto   := ModeAuto;
 ModeManager.ModeManual := ModeManual;
+ModeManager.ModePause  := ModePause;     // CR-1
 ModeManager.CyclicUpdate();
 
-// HMI Ack drives every alarm handler — both LineFault (consumes) and
-// QualityFlag (ignores) honor the same I_AlarmHandler.Acknowledge contract.
 FillAlarm.Acknowledge(AckInput    := AlarmAck);
 CapAlarm.Acknowledge(AckInput     := AlarmAck);
 LabelAlarm.Acknowledge(AckInput   := AlarmAck);
