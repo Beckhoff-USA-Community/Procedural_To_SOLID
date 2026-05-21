@@ -28,10 +28,10 @@ The CR-2 demonstration is the textbook example. Two FBs both implement `I_AlarmH
 The station code is **identical** for both. It calls `Alarm.RaiseAlarm(...)`, reads `Alarm.HasActiveAlarm`, consults `Alarm.StopsLine` for `IsFaulted`. Which strategy it has is a MAIN-construction-time decision:
 
 ```iecst
-// stage-3-composition (default)
+// FillingLine_Composition on Release (default)
 InspectAlarm : FB_AlarmHandler_LineFault;
 
-// stage-3-cr2-applied (the swap)
+// FillingLine_Composition on cr2-applied (the swap)
 InspectAlarm : FB_AlarmHandler_QualityFlag;
 ```
 

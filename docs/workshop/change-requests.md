@@ -2,6 +2,9 @@
 
 The same three CRs are issued at every stage. They're chosen specifically because they target where each methodology is weakest.
 
+!!! info "Diffs available in two forms"
+    The per-stage diffs below link to GitHub compares between the legacy single-PLC branches (`stage-N-<baseline>` vs `stage-N-crN-applied`). The same cost is also visible on the current 3-PLC structure as `git diff Release...crN-applied -- NEM2026/FillingLine_<Stage>/`. See the [scoreboard](scoreboard.md) for both invocations side by side.
+
 ---
 
 ## CR-1 — Add a Pause mode

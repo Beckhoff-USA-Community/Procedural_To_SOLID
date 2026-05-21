@@ -8,20 +8,20 @@
 
 ## The setup
 
-You are going to build the same 4-station filling line — **Fill → Cap → Label → Inspect** — three different ways. At each stage, the instructor will issue the same three change requests. You'll track files touched, lines changed, and regression risk on a visible scoreboard.
+You are going to study the same 4-station filling line — **Fill → Cap → Label → Inspect** — implemented **three different ways, side-by-side in one TwinCAT solution**. The instructor will then issue the same three change requests. For each CR, you'll track files touched, lines changed, and regression risk *per implementation* on a visible scoreboard.
 
 By the end, the scoreboard will tell the story without anyone needing to argue it.
 
 !!! tip "The lesson lives in the diffs, not the slides"
-    Every claim this workshop makes about "blast radius" is a real `git diff --stat` you can run yourself. The branches in this repo are the workshop scoreboard.
+    Every claim this workshop makes about "blast radius" is a real `git diff --stat` you can run yourself. Open the `Release` branch in XAE and you'll see three PLC projects in the solution tree; switch to `cr1-applied` / `cr2-applied` / `cr3-applied` and diff each PLC's source against `Release` to see the same change request hit each architecture differently.
 
-## The three stages
+## The three implementations
 
-| Stage | Approach | Framework |
-|---|---|---|
-| **1** | [Procedural / monolithic](stages/procedural.md) | Plain ST + `Tc2_Standard` |
-| **2** | [Inheritance](stages/inheritance.md) | [SPT-Libraries](https://beckhoff-usa-community.github.io/SPT-Libraries/) — `FB_ComponentBase` |
-| **3** | [SOLID / composition](stages/composition.md) | Beckhoff Core libraries — interfaces + DI |
+| | Approach | Framework | PLC project in XAE |
+|---|---|---|---|
+| **1** | [Procedural / monolithic](stages/procedural.md) | Plain ST + `Tc2_Standard` | `FillingLine_Procedural` |
+| **2** | [Inheritance](stages/inheritance.md) | [SPT-Libraries](https://beckhoff-usa-community.github.io/SPT-Libraries/) — `FB_ComponentBase` | `FillingLine_Inheritance` |
+| **3** | [SOLID / composition](stages/composition.md) | Beckhoff Core libraries — interfaces + DI | `FillingLine_Composition` |
 
 ## The three change requests
 
@@ -47,7 +47,7 @@ You already know how to write state machines. You already know how to copy a sta
 
     ---
 
-    Read the [getting-started](getting-started.md) page for prerequisites and how to navigate the branches.
+    Read the [getting-started](getting-started.md) page for prerequisites and how to navigate the solution + CR branches.
 
     [→ Getting started](getting-started.md)
 

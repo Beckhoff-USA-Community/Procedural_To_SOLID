@@ -3,7 +3,7 @@ site_description: A 4-hour TwinCAT 3 workshop in object-oriented PLC design — 
 site_url: https://mark-code-cowboys.github.io/NEM_Workshop/
 repo_url: https://github.com/Mark-Code-Cowboys/NEM_Workshop
 repo_name: Mark-Code-Cowboys/NEM_Workshop
-edit_uri: edit/main/docs/
+edit_uri: edit/Release/docs/
 
 theme:
   name: material

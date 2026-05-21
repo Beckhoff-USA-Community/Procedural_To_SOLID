@@ -1,6 +1,8 @@
 # Stage 3 — SOLID / composition
 
-**Branches:** `stage-3-composition`, `stage-3-broken`, `stage-3-cr1-applied`, `stage-3-cr2-applied`, `stage-3-cr3-applied`, `stage-3-complete`
+**Where this lives:** `NEM2026/FillingLine_Composition/` in the `Release` solution. Diff against `Release` on the `cr1-applied` / `cr2-applied` / `cr3-applied` / `complete` branches to see CR application costs.
+
+**Historical reference:** the single-PLC iteration lives on the legacy branches `stage-3-composition` / `stage-3-broken` / `stage-3-cr{1,2,3}-applied` / `stage-3-complete`. The walkthrough below was authored against those branches and they still exist — switching to `stage-3-broken` for the wrong-way CR-1 demo still works.
 
 ---
 
@@ -110,7 +112,7 @@ The FB body running once per scan does nothing. Behavior is invoked explicitly v
 ### File layout (18 source files)
 
 ```
-NEM2026/FillingLine/POUs/
+NEM2026/FillingLine_Composition/POUs/
 ├── Interfaces/                                  ~5 files, ~100 lines total
 │   ├── I_Sequenceable.TcPOU                     Execute / Reset / Abort + props
 │   ├── I_AlarmHandler.TcPOU                     RaiseAlarm / Acknowledge / Clear + props
@@ -563,6 +565,23 @@ The workshop teaches these by doing first, then names them. The names matter for
 ---
 
 ## Branches in this stage
+
+**Current structure (`Release` family) — Stage 3 lives in `FillingLine_Composition/`:**
+
+| Branch | What FillingLine_Composition shows |
+|---|---|
+| `Release` | Full architecture; Inspect uses `LineFault` + `StepSequencer` like other stations |
+| `cr1-applied` | `FB_ModeManager` only — 6 lines + 1 wire |
+| `cr2-applied` | 1 line in MAIN + ~3 lines internal Inspect — the headline swap demo |
+| `cr3-applied` | Logger DI to Fill + Inspect only |
+| `complete` | The composition endgame — all 3 CRs cumulative |
+
+To compare a CR's cost on this paradigm only:
+```fish
+git diff Release...cr2-applied --stat -- NEM2026/FillingLine_Composition/
+```
+
+**Legacy single-PLC branches (still present as a historical record, used by the walkthrough above):**
 
 | Branch | Role | Forks from | One-line summary |
 |---|---|---|---|

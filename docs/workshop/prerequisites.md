@@ -80,7 +80,13 @@ Distribution: same feeds as SPT.
 
 ### You don't have to install these for the workshop
 
-`NEM2026/FillingLine/_Libraries/` is **committed** to the repo. Every library any stage references is pre-resolved in there, so XAE can resolve placeholder references **offline**. The first time you open the project, XAE may complain it doesn't recognize the libraries — point it at `_Libraries/` (it should auto-detect) and click through.
+Each PLC project has its own committed `_Libraries/` cache:
+
+- `NEM2026/FillingLine_Procedural/_Libraries/`
+- `NEM2026/FillingLine_Inheritance/_Libraries/`
+- `NEM2026/FillingLine_Composition/_Libraries/`
+
+Every library any stage references is pre-resolved in there, so XAE can resolve placeholder references **offline**. The first time you open the solution, XAE may complain it doesn't recognize the libraries — point it at the appropriate `_Libraries/` and click through.
 
 If you want to upgrade libraries later (or use them in your own projects), connect the NuGet feeds.
 
@@ -112,14 +118,11 @@ Before the workshop starts, verify your setup. Five-minute checklist:
 git clone https://github.com/Mark-Code-Cowboys/NEM_Workshop.git
 cd NEM_Workshop
 
-# 2. Switch through a few branches and verify file presence
-git switch stage-1-procedural
-ls NEM2026/FillingLine/POUs/         # should see FB_Station* files
-
-git switch stage-3-composition
-ls NEM2026/FillingLine/POUs/Stations/ # should see the four station FBs
-
-git switch main                      # back to neutral
+# 2. Switch to the Release baseline and verify the three PLC projects are present
+git switch Release
+ls NEM2026/                                         # should see FillingLine_Procedural / _Inheritance / _Composition
+ls NEM2026/FillingLine_Procedural/POUs/             # should see flat FB_Station* files
+ls NEM2026/FillingLine_Composition/POUs/Stations/   # should see the four station FBs (Stage 3 layout)
 
 # 3. Open the solution in XAE
 explorer NEM2026/NEM2026.sln          # Windows
@@ -127,9 +130,9 @@ explorer NEM2026/NEM2026.sln          # Windows
 
 When XAE loads:
 
-- Solution Explorer should show `FillingLine` as the PLC project
-- `POUs/MAIN.TcPOU` should open without errors
-- `Build → Build Solution` should complete cleanly (warnings are OK; errors are not)
+- Solution Explorer should show **three PLC projects**: `FillingLine_Procedural`, `FillingLine_Inheritance`, `FillingLine_Composition`
+- Each project's `POUs/MAIN.TcPOU` should open without errors
+- `Build → Build Solution` should compile all three cleanly (warnings are OK; errors are not)
 
 If any of those don't work, post the error message in your team chat / to the workshop organizer **before the day**. Day-of debugging eats discussion time.
 

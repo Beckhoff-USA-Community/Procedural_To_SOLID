@@ -1,6 +1,8 @@
 # Stage 2 — Inheritance
 
-**Branches:** `stage-2-inheritance`, `stage-2-broken`, `stage-2-cr1-applied`, `stage-2-cr2-applied`, `stage-2-cr3-applied`, `stage-2-complete`
+**Where this lives:** `NEM2026/FillingLine_Inheritance/` in the `Release` solution. Diff against `Release` on the `cr1-applied` / `cr2-applied` / `cr3-applied` / `complete` branches to see CR application costs.
+
+**Historical reference:** the single-PLC iteration lives on the legacy branches `stage-2-inheritance` / `stage-2-broken` / `stage-2-cr{1,2,3}-applied` / `stage-2-complete`. The walkthrough below was authored against those branches and they still exist — switching to `stage-2-broken` for the half-applied CR-2 exercise still works.
 
 ---
 
@@ -86,7 +88,7 @@ This passes `'Fill'` to `FB_StationFill`'s extended `FB_init` method. The SPT ba
 ### File layout (6 files)
 
 ```
-NEM2026/FillingLine/POUs/
+NEM2026/FillingLine_Inheritance/POUs/
 ├── FB_StationBase.TcPOU       ~165 lines — abstract base
 ├── FB_StationFill.TcPOU       ~65 lines — extends Base
 ├── FB_StationCap.TcPOU        ~75 lines — extends Base
@@ -429,6 +431,23 @@ The transition to Stage 3 is justified when you can articulate why CR-2's `SUPER
 ---
 
 ## Branches in this stage
+
+**Current structure (`Release` family) — Stage 2 lives in `FillingLine_Inheritance/`:**
+
+| Branch | What FillingLine_Inheritance shows |
+|---|---|
+| `Release` | `FB_StationBase` extending `SPT_Components.FB_ComponentBase` + 4 children |
+| `cr1-applied` | `AllowPause` virtual added to base + Fill override |
+| `cr2-applied` | Inspect overrides `Monitoring` without SUPER + parallel hack in `ExecuteSequence` |
+| `cr3-applied` | Base gets `LogBuffer` + `LoggingEnabled` virtual + Fill/Inspect overrides |
+| `complete` | The inheritance endgame — base is now a junk drawer |
+
+To compare a CR's cost on this paradigm only:
+```fish
+git diff Release...cr2-applied --stat -- NEM2026/FillingLine_Inheritance/
+```
+
+**Legacy single-PLC branches (still present as a historical record, used by the walkthrough above):**
 
 | Branch | Role | Forks from | One-line summary |
 |---|---|---|---|

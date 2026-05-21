@@ -2,6 +2,9 @@
 
 These numbers are the literal output of `git diff --stat` against each branch. No estimates, no theory — every cell is a clickable diff you can audit.
 
+!!! info "Two ways to look at every cell"
+    Each scoreboard cell can be reproduced either against the **legacy single-PLC branches** (the historical single-`FillingLine/` iteration) or against the **current 3-PLC structure** (`Release` → `crN-applied` with a path filter to one PLC). Both produce the same line counts because the underlying source files are byte-identical.
+
 ## The matrix
 
 | | Stage 1 (procedural) | Stage 2 (inheritance) | Stage 3 (composition) |
@@ -16,29 +19,42 @@ These numbers are the literal output of `git diff --stat` against each branch. N
 
 ## Verify any cell
 
-Run these from the repo root:
+### Against the current 3-PLC structure (recommended)
+
+From the repo root, each CR's per-paradigm cost is one diff against `Release` with a path filter:
 
 ```fish
 # CR-1 — Pause across methodologies
+git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Procedural/
+git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Inheritance/
+git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Composition/
+
+# CR-2 — Inspect quality + parallel
+git diff Release...cr2-applied --stat -- NEM2026/FillingLine_Procedural/
+git diff Release...cr2-applied --stat -- NEM2026/FillingLine_Inheritance/
+git diff Release...cr2-applied --stat -- NEM2026/FillingLine_Composition/
+
+# CR-3 — Selective logging
+git diff Release...cr3-applied --stat -- NEM2026/FillingLine_Procedural/
+git diff Release...cr3-applied --stat -- NEM2026/FillingLine_Inheritance/
+git diff Release...cr3-applied --stat -- NEM2026/FillingLine_Composition/
+```
+
+For full file content drop `--stat`. The cumulative end state is on `complete`:
+
+```fish
+git diff Release...complete --stat
+```
+
+### Against the legacy single-PLC branches (historical)
+
+The same cells reproduce against the older one-PLC-per-branch layout:
+
+```fish
 git diff stage-1-procedural...stage-1-cr1-applied --stat
 git diff stage-2-inheritance...stage-2-cr1-applied --stat
 git diff stage-3-composition...stage-3-cr1-applied --stat
-
-# CR-2 — Inspect quality + parallel
-git diff stage-1-procedural...stage-1-cr2-applied --stat
-git diff stage-2-inheritance...stage-2-cr2-applied --stat
-git diff stage-3-composition...stage-3-cr2-applied --stat
-
-# CR-3 — Selective logging
-git diff stage-1-procedural...stage-1-cr3-applied --stat
-git diff stage-2-inheritance...stage-2-cr3-applied --stat
-git diff stage-3-composition...stage-3-cr3-applied --stat
-```
-
-For full file content:
-
-```fish
-git diff stage-1-procedural...stage-1-cr1-applied
+# ...and so on for CR-2, CR-3
 ```
 
 ## GitHub compare links (one per cell)

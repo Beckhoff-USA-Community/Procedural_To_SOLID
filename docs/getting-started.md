@@ -7,39 +7,34 @@ Hands-on quickstart after you've cloned the repo. For pre-workshop setup (TwinCA
 ```fish
 git clone https://github.com/Mark-Code-Cowboys/NEM_Workshop.git
 cd NEM_Workshop
-git switch stage-1-procedural
+git switch Release
 explorer NEM2026/NEM2026.sln    # Windows; macOS: open / Linux: xdg-open
 ```
 
-When XAE loads:
+When XAE loads, you'll see **three PLC projects** side-by-side in Solution Explorer:
 
-1. Solution Explorer (left) → expand `FillingLine` → `POUs/`
-2. Double-click `MAIN.TcPOU`
-3. Press `F7` (Build Solution) — should complete without errors
-4. Look at the four `FB_Station*` files — they're the stars of Stage 1
+1. `FillingLine_Procedural` — Stage 1's plain-ST implementation
+2. `FillingLine_Inheritance` — Stage 2's SPT-base-class implementation
+3. `FillingLine_Composition` — Stage 3's interfaces + DI implementation
+
+For a quick sanity check:
+
+1. Expand any one project → `POUs/` → double-click `MAIN.TcPOU`
+2. Press `F7` (Build Solution) — all three PLCs should compile without errors
+3. Compare the same station across the three projects (e.g. `FB_StationFill.TcPOU` in each) to see the architectural difference for yourself
 
 That's enough to confirm your setup works. Don't activate / login / run yet — we'll do that during the workshop.
 
 ## Branch navigation
 
-Every workshop checkpoint is its own branch. Switching branches in TwinCAT XAE is the workshop's main interaction loop:
+The workshop uses **five branches** — one baseline + three CR snapshots + a cumulative end-state. Each branch carries all three PLC projects; the difference between branches is which CRs have been applied to *each PLC*.
 
 ```fish
-git switch stage-1-procedural   # clean baseline
-git switch stage-1-broken       # pedagogical broken state
-git switch stage-1-cr1-applied  # CR-1 alone
-git switch stage-1-complete     # all 3 CRs applied
-
-# Stage 2 family
-git switch stage-2-inheritance
-git switch stage-2-broken
-git switch stage-2-cr2-applied
-# ...
-
-# Stage 3 family
-git switch stage-3-composition
-git switch stage-3-cr2-applied   # the headline swap demo
-git switch stage-3-complete
+git switch Release        # pre-class baseline — three implementations, no CRs
+git switch cr1-applied    # CR-1 applied across all 3 PLC projects
+git switch cr2-applied    # CR-2 applied across all 3 PLC projects
+git switch cr3-applied    # CR-3 applied across all 3 PLC projects
+git switch complete       # all 3 CRs cumulative — post-class end state
 ```
 
 !!! tip "XAE doesn't auto-reload on branch switch"
@@ -49,61 +44,64 @@ git switch stage-3-complete
 
 ```mermaid
 gitGraph
-   commit id: "main"
-   branch stage-1-procedural
-   commit id: "drift baseline"
-   branch stage-1-broken
-   commit id: "CR-1 half"
-   checkout stage-1-procedural
-   branch stage-1-cr1-applied
-   commit id: "Pause only"
-   checkout stage-1-procedural
-   branch stage-1-complete
-   commit id: "all 3 CRs"
+   commit id: "Release"
+   branch cr1-applied
+   commit id: "CR-1 × 3 PLCs"
    checkout main
-   branch stage-2-inheritance
-   commit id: "FB_StationBase"
-   branch stage-2-broken
-   commit id: "Inspect override"
+   branch cr2-applied
+   commit id: "CR-2 × 3 PLCs"
    checkout main
-   branch stage-3-composition
-   commit id: "interfaces+DI"
-   branch stage-3-cr2-applied
-   commit id: "swap demo"
-   checkout stage-3-composition
-   branch stage-3-complete
-   commit id: "all 3 CRs"
+   branch cr3-applied
+   commit id: "CR-3 × 3 PLCs"
+   checkout main
+   branch complete
+   commit id: "all CRs × 3 PLCs"
 ```
 
 ### Branch role table
 
-| Pattern | What it shows |
+| Branch | What it shows |
 |---|---|
-| `stage-X-{procedural,inheritance,composition}` | Clean baseline of each methodology |
-| `stage-X-broken` | Pedagogically-staged "half-applied" or wrong-way state |
-| `stage-X-crN-applied` | One CR applied in isolation — single-commit diff vs. baseline |
-| `stage-X-cr2-applied` *(stage 3 only)* | The architectural CR-2 answer key (alarm strategy + sequencer swap) |
-| `stage-X-complete` | All 3 CRs applied — the methodology's final answer |
+| `Release` | Pre-class baseline. All three PLC projects in their initial methodology-pure state. No CRs applied. |
+| `cr1-applied` | CR-1 (Pause mode) applied to **all three** PLC projects independently. Diff vs. `Release` per PLC shows how each architecture absorbs the same CR. |
+| `cr2-applied` | CR-2 (non-faulting alarms + parallel camera/reject) applied to all three PLC projects. The headline blast-radius comparison. |
+| `cr3-applied` | CR-3 (cycle data logging in Fill + Inspect only) applied to all three PLC projects. |
+| `complete` | All three CRs cumulative. The post-class end state. |
+
+The 20 `stage-*` branches from the previous workshop iteration are kept as a historical record — diff them if you want to see how the workshop evolved, but you can ignore them for active use.
 
 ## Inside the solution
 
 ```
-NEM2026/                            # TwinCAT project root
-├── NEM2026.sln                     # ← open this in XAE
-├── NEM2026.tspproj                 # TwinCAT system project (refs FillingLine.plcproj)
-└── FillingLine/                    # the PLC project
-    ├── FillingLine.plcproj         # library refs (varies per branch family)
-    ├── PlcTask.TcTTO               # task: 10 ms cycle, priority 20
-    ├── POUs/                       # programs / FBs / methods
-    │   ├── Interfaces/             # Stage 3 only — SOLID contracts
-    │   ├── BuildingBlocks/         # Stage 3 only — composable primitives
-    │   ├── Stations/               # Stage 3 only — composed stations
-    │   ├── FB_Station*.TcPOU       # Stages 1 & 2 — flat at this level
-    │   ├── FB_StationBase.TcPOU    # Stage 2 only
-    │   └── MAIN.TcPOU              # cyclic entry point
-    ├── DUTs/                       # struct types
-    └── _Libraries/                 # resolved library cache (committed for offline use)
+NEM2026/                                # TwinCAT solution root
+├── NEM2026.sln                         # ← open this in XAE
+├── NEM2026.tsproj                      # System project: 3 tasks, 3 <Plc> instances
+├── FillingLine_Procedural/
+│   ├── FillingLine_Procedural.plcproj  # Tc2_Standard + Tc3_Module — no framework
+│   ├── PlcTask_Pr.TcTTO                # 10 ms / priority 20 / AmsPort 851
+│   ├── POUs/
+│   │   ├── MAIN.TcPOU                  # cyclic entry — orchestrates 4 stations
+│   │   └── FB_Station*.TcPOU           # 4 stations, flat (no shared base)
+│   └── _Libraries/                     # library cache (committed for offline use)
+├── FillingLine_Inheritance/
+│   ├── FillingLine_Inheritance.plcproj # + SPT-Libraries
+│   ├── PlcTask_In.TcTTO                # 10 ms / priority 21 / AmsPort 852
+│   └── POUs/
+│       ├── MAIN.TcPOU
+│       ├── FB_StationBase.TcPOU        # SPT-derived station base class
+│       └── FB_Station*.TcPOU           # 4 stations, all extend FB_StationBase
+└── FillingLine_Composition/
+    ├── FillingLine_Composition.plcproj # + Core / CoreComponents / MechatronicsCore
+    ├── PlcTask_Co.TcTTO                # 10 ms / priority 22 / AmsPort 853
+    ├── DUTs/                           # ST_LogEntry etc.
+    └── POUs/
+        ├── MAIN.TcPOU
+        ├── Interfaces/                 # SOLID contracts
+        ├── BuildingBlocks/             # composable primitives (sequencer, alarm handler, …)
+        └── Stations/                   # 4 stations composed from building blocks
 ```
+
+Each PLC project is independent — its own task, its own AmsPort, its own library refs, its own POU tree. The same station name (e.g. `FB_StationFill`) appears in all three projects but is *not* shared between them; each is a separate file with the paradigm-specific implementation.
 
 ## Driving the code
 
@@ -129,22 +127,23 @@ Write `Execute := TRUE; ModeAuto := TRUE; PartFill := TRUE; FlowRate := 1.0; Tar
 
 ## Reading the diffs
 
-The scoreboard is generated from real `git diff --stat` output. To see any cell yourself:
+The scoreboard is generated from real `git diff --stat` output. To see any cell yourself, diff the CR branch against `Release` and filter to one PLC project:
 
 ```fish
-git diff stage-1-procedural...stage-1-cr1-applied --stat
+# CR-1's blast radius on the Procedural implementation
+git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Procedural/
+
+# Same CR on the Inheritance implementation
+git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Inheritance/
+
+# Same CR on the Composition implementation
+git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Composition/
 ```
 
-For full file content:
-
-```fish
-git diff stage-1-procedural...stage-1-cr1-applied
-```
-
-Or open the GitHub compare URL:
+For full file content drop the `--stat`. Or open the GitHub compare URL:
 
 ```
-https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-1-procedural...stage-1-cr1-applied
+https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/Release...cr1-applied
 ```
 
 [See all the cells →](workshop/scoreboard.md){ .md-button .md-button--primary }
@@ -186,10 +185,10 @@ Pages auto-reload on save. To produce a static `site/` directory for sharing or 
 
 | Symptom | Most likely cause |
 |---|---|
-| XAE complains about library versions on branch switch | The placeholder refs differ between stage families. XAE may offer to download from the configured NuGet feeds, or use the bundled `_Libraries/`. Either is fine. |
+| XAE complains about library versions on solution open | Library placeholder refs differ per PLC project (Procedural uses fewer libraries than Composition). XAE may offer to download from the configured NuGet feeds, or use the bundled per-project `_Libraries/`. Either is fine. |
 | Build error: "function block X not found" | Branch swapped while solution was open. **Close and re-open NEM2026.sln.** |
-| Build error: "ModePause is not an input variable" | You're on `stage-1-broken` — that branch is intentionally broken. Switch to a working branch. |
-| `git switch stage-1-broken` fails with "destination is not a commit" | Repo wasn't fetched after a recent push. `git fetch origin` then retry. |
+| Only one PLC project visible in Solution Explorer | The `.sln` may have stale config. Verify `git status` is clean on the current branch and you opened `NEM2026/NEM2026.sln` (not `NEM2026.tspproj` directly). |
+| `git switch cr1-applied` fails with "destination is not a commit" | Repo wasn't fetched after a recent push. `git fetch origin` then retry. |
 | Activate Configuration prompts for license | First-time activation — pick the 7-day demo license (sufficient for the workshop). |
 
 For anything that's not in this table, post in the workshop chat or grab the instructor.

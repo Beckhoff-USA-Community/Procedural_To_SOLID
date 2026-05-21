@@ -1,6 +1,8 @@
 # Stage 1 — Procedural / monolithic
 
-**Branches:** `stage-1-procedural`, `stage-1-broken`, `stage-1-cr1-applied`, `stage-1-cr2-applied`, `stage-1-cr3-applied`, `stage-1-complete`
+**Where this lives:** `NEM2026/FillingLine_Procedural/` in the `Release` solution. Diff against `Release` on the `cr1-applied` / `cr2-applied` / `cr3-applied` / `complete` branches to see CR application costs.
+
+**Historical reference:** the single-PLC iteration of this stage lives on the legacy branches `stage-1-procedural` / `stage-1-broken` / `stage-1-cr{1,2,3}-applied` / `stage-1-complete`. The walkthrough below was authored against those branches and they still exist — switching to `stage-1-broken` for the half-applied CR-1 exercise still works.
 
 ---
 
@@ -46,7 +48,7 @@ The middle of every station — the actual sequence logic — is genuinely diffe
 ### File layout (5 files)
 
 ```
-NEM2026/FillingLine/POUs/
+NEM2026/FillingLine_Procedural/POUs/
 ├── FB_StationFill.TcPOU      ~110 lines — fills a bottle
 ├── FB_StationCap.TcPOU       ~110 lines — picks a cap, torques it down
 ├── FB_StationLabel.TcPOU     ~115 lines — picks a label, applies it
@@ -339,6 +341,23 @@ The transition to Stage 2 is justified when you can articulate why the procedura
 ---
 
 ## Branches in this stage
+
+**Current structure (`Release` family) — Stage 1 lives in `FillingLine_Procedural/`:**
+
+| Branch | What FillingLine_Procedural shows |
+|---|---|
+| `Release` | Four monolithic stations with deliberate drift |
+| `cr1-applied` | Pause everywhere with Fill mid-cycle exception |
+| `cr2-applied` | Inspect quality flag + parallel state-10 |
+| `cr3-applied` | Log buffer duplicated in Fill and Inspect |
+| `complete` | The procedural endgame — all 3 CRs cumulative |
+
+To compare a CR's cost on this paradigm only, diff against `Release` with the path filter:
+```fish
+git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Procedural/
+```
+
+**Legacy single-PLC branches (still present as a historical record, used by the walkthrough above):**
 
 | Branch | Role | Forks from | One-line summary |
 |---|---|---|---|

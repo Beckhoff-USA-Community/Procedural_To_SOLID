@@ -12,34 +12,23 @@ Three stages, one filling line, three architectures.
 | **CR friction** | Every CR touches every station | Base class becomes the constraint | One-line swaps, zero blast |
 | **Best fit** | One-off panels, single machine | A family of similar machines | Test-driven, multi-machine OEM |
 
-## Branch tree
+## Where each stage lives in the solution
 
-Each stage has the same shape: a clean baseline, a `-broken` pedagogical state, four `crN-applied` answer keys (one per CR plus `complete`).
+All three stages live side-by-side in `Release`'s TwinCAT solution as separate PLC projects:
 
 ```mermaid
 graph LR
-    A[main] --> B[stage-1-procedural]
-    A --> C[stage-2-inheritance]
-    A --> D[stage-3-composition]
+    R[Release branch] --> P[FillingLine_Procedural / —]
+    R --> I[FillingLine_Inheritance / —]
+    R --> C[FillingLine_Composition / —]
 
-    B --> B1[stage-1-broken]
-    B --> B2[stage-1-cr1-applied]
-    B --> B3[stage-1-cr2-applied]
-    B --> B4[stage-1-cr3-applied]
-    B --> B5[stage-1-complete]
-
-    C --> C1[stage-2-broken]
-    C --> C2[stage-2-cr1-applied]
-    C --> C3[stage-2-cr2-applied]
-    C --> C4[stage-2-cr3-applied]
-    C --> C5[stage-2-complete]
-
-    D --> D1[stage-3-broken]
-    D --> D2[stage-3-cr1-applied]
-    D --> D3[stage-3-cr2-applied]
-    D --> D4[stage-3-cr3-applied]
-    D --> D5[stage-3-complete]
+    R --> CR1[cr1-applied — CR-1 across all 3 PLCs]
+    R --> CR2[cr2-applied — CR-2 across all 3 PLCs]
+    R --> CR3[cr3-applied — CR-3 across all 3 PLCs]
+    R --> CP[complete — all 3 CRs cumulative]
 ```
+
+Each per-stage page below describes the architecture, then walks through the CRs applied to *that* PLC project. The walkthroughs were authored against the original single-PLC `stage-N-*` branches (still present as a historical record); the same exercises map cleanly onto the new structure by switching to `cr1-applied` / `cr2-applied` / `cr3-applied` and inspecting the `FillingLine_<Stage>/` subfolder.
 
 ## When to teach which stage
 

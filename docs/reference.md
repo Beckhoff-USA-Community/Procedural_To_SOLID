@@ -32,17 +32,17 @@ The `_Libraries/` directory is committed deliberately. It contains pre-resolved 
 
 ---
 
-## Library policy per stage
+## Library policy per PLC project
 
-Each stage branch carries only the placeholder references it actually needs. This keeps the project tree clean and makes the framework distinction visible at the project-properties level.
+Each PLC project carries only the placeholder references it actually needs. This keeps each project's tree clean and makes the framework distinction visible at the project-properties level.
 
-| Branch family | Required `<PlaceholderReference>` entries |
+| PLC project | Required `<PlaceholderReference>` entries |
 |---|---|
-| `main`, `stage-1-*` | `Tc2_Standard`, `Tc2_System`, `Tc3_Module` |
-| `stage-2-*` | above + `SPT Base Types`, `SPT Components`, `SPT Diagnostic`, `SPT Event Logger`, `SPT Utilities`, `Tc3_EventLogger`, `Tc3_PackML_V3` |
-| `stage-3-*` | above-base + `Core`, `CoreComponents`, `Tc3_EventLogger` |
+| `FillingLine_Procedural`  | `Tc2_Standard`, `Tc2_System`, `Tc3_Module` |
+| `FillingLine_Inheritance` | above + `Tc3_EventLogger`, `Tc3_PackML_V3`, `SPT Base Types`, `SPT Components`, `SPT Diagnostic`, `SPT Event Logger`, `SPT Utilities` |
+| `FillingLine_Composition` | above-base + `Core`, `CoreComponents`, `MechatronicsCore` |
 
-The actual library *files* are present on disk in `_Libraries/` regardless of which branch you're on — only the `plcproj` references differ.
+The actual library *files* are present on disk in each project's `_Libraries/` cache — only the `plcproj` placeholder references differ. (Legacy single-PLC branches use the same family policy expressed per-branch: `stage-1-*` matches Procedural, `stage-2-*` matches Inheritance, `stage-3-*` matches Composition.)
 
 ---
 
@@ -130,7 +130,19 @@ These are configured in `FillingLine.plcproj` under `DisabledWarningIds`.
 
 ## Branch reference
 
-Quick-lookup of what each branch contains:
+### Current branches (canonical)
+
+| Branch | Forks from | Contains |
+|---|---|---|
+| `Release` | `main` | Three PLC projects side-by-side: `FillingLine_Procedural`, `_Inheritance`, `_Composition`. Pre-class baseline — no CRs applied. |
+| `cr1-applied` | `Release` | CR-1 (Pause) applied to all 3 PLC projects |
+| `cr2-applied` | `Release` | CR-2 (Inspect quality + parallel) applied to all 3 PLC projects |
+| `cr3-applied` | `Release` | CR-3 (selective logging) applied to all 3 PLC projects |
+| `complete` | `Release` | All 3 CRs cumulative across all 3 PLC projects — post-class end state |
+
+### Legacy single-PLC branches (historical, preserved)
+
+These predate the multi-PLC restructure. The same source content survives in the canonical branches' PLC project subfolders; these are kept as a historical record and as the source for some walkthrough exercises.
 
 | Branch | Forks from | Contains |
 |---|---|---|
