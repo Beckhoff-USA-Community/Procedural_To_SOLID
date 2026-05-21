@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationLabel" Id="{43aa657a-066e-45f8-a8e9-bdac046f77cf}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel
 VAR_INPUT
@@ -37,7 +37,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
+      <ST><![CDATA[// mode 
 IF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
@@ -46,7 +46,7 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack — Label uses RISING EDGE (same shape as Fill)
+// alarm ack 
 AlarmAckEdge(CLK := AlarmAck);
 IF AlarmLatched AND AlarmAckEdge.Q THEN
     AlarmLatched := FALSE;
@@ -54,6 +54,7 @@ IF AlarmLatched AND AlarmAckEdge.Q THEN
     AlarmText    := '';
 END_IF
 
+// Reset
 IF Reset THEN
     State        := 0;
     AlarmLatched := FALSE;
@@ -64,7 +65,7 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
-// state numbering 0/100/200/300 — drifts from other stations
+// State machine
 CASE State OF
     0:
         LabelVacuum      := FALSE;
