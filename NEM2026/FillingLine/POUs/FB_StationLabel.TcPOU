@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationLabel" Id="{43aa657a-066e-45f8-a8e9-bdac046f77cf}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel
 VAR_INPUT
@@ -49,11 +49,6 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// CR-1 Pause guard — Label halts mid-cycle
-IF ActiveMode = 3 THEN
-    RETURN;
-END_IF
-
 // alarm ack — RISING EDGE (matches Fill)
 AlarmAckEdge(CLK := AlarmAck);
 IF AlarmLatched AND AlarmAckEdge.Q THEN
@@ -62,6 +57,7 @@ IF AlarmLatched AND AlarmAckEdge.Q THEN
     AlarmText    := '';
 END_IF
 
+// Reset
 IF Reset THEN
     State        := 0;
     AlarmLatched := FALSE;
@@ -72,7 +68,28 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
-// state numbering 0/100/200/300 — drifts from other stations (kept)
+// HMI Mapping
+StateDisplay := State;
+CASE State OF
+    0:   StatusText := 'Idle';
+    100: StatusText := 'Picking Label';
+    200: StatusText := 'Applying';
+    300: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
+
+// CR-1 Pause guard — Label halts mid-cycle
+IF ActiveMode = 3 THEN
+	StatusText := 'Paused';
+    RETURN;
+END_IF
+
+// State machine
 CASE State OF
     0:
         LabelVacuum      := FALSE;
@@ -108,19 +125,6 @@ CASE State OF
         Done := TRUE;
 END_CASE
 
-StateDisplay := State;
-CASE State OF
-    0:   StatusText := 'Idle';
-    100: StatusText := 'Picking Label';
-    200: StatusText := 'Applying';
-    300: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
 ]]></ST>
     </Implementation>
   </POU>
