@@ -14,7 +14,8 @@ venv/
 .venv-docs/
 
 # TwinCAT 3 build output and editor scratch
-# (NOTE: NEM2026/FillingLine/_Libraries/ is committed deliberately — see CLAUDE.md)
+# (NOTE: each PLC project's _Libraries/ — e.g. NEM2026/FillingLine_Procedural/_Libraries/ —
+#  is committed deliberately so XAE resolves library refs offline. See CLAUDE.md.)
 _Boot/
 _CompileInfo/
 _ModuleInstall/
@@ -24,6 +25,8 @@ _Repository/
 *.plcproj.orig
 *.tsproj.bak
 *.tsproj.orig
+*.tspproj.bak
+*.tspproj.orig
 *.xti.bak
 *.xti.orig
 *.tpy
@@ -32,6 +35,7 @@ _Repository/
 *.compiled-library
 *.compileinfo
 *.project.~u
+*.~u
 .~u
 LineIDs.dbg
 LineIDs.dbg.bak
