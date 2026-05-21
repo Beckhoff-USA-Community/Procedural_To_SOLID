@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect
 VAR_INPUT
@@ -38,7 +38,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations)
+      <ST><![CDATA[// mode 
 IF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
@@ -47,13 +47,14 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack — Inspect uses LEVEL (drift from Fill/Label)
+// alarm ack 
 IF AlarmLatched AND AlarmAck THEN
     AlarmLatched := FALSE;
     AlarmCode    := 0;
     AlarmText    := '';
 END_IF
 
+// Reset
 IF Reset THEN
     State        := 0;
     AlarmLatched := FALSE;
@@ -64,6 +65,23 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
+// HMI Display
+StateDisplay := State;
+CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Inspecting';
+    20: StatusText := 'Evaluate';
+    25: StatusText := 'Rejecting';
+    30: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
+
+// State machine
 CASE State OF
     0:
         TriggerCamera := FALSE;
@@ -108,20 +126,6 @@ CASE State OF
         Done := TRUE;
 END_CASE
 
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Inspecting';
-    20: StatusText := 'Evaluate';
-    25: StatusText := 'Rejecting';
-    30: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
 ]]></ST>
     </Implementation>
   </POU>
