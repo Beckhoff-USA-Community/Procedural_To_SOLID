@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationCap" Id="{995aa1f9-2aab-436e-9cda-670bc81baac1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap
 VAR_INPUT
@@ -38,7 +38,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations) — Pause added (half of CR-1)
+      <ST><![CDATA[// mode 
 IF ModePause THEN
     ActiveMode := 3;
 ELSIF ModeAuto THEN
@@ -49,13 +49,14 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack — Cap uses LEVEL (no edge detection — drift from Fill)
+// alarm ack 
 IF AlarmLatched AND AlarmAck THEN
     AlarmLatched := FALSE;
     AlarmCode    := 0;
     AlarmText    := '';
 END_IF
 
+// Reset
 IF Reset THEN
     State        := 0;
     AlarmLatched := FALSE;
@@ -66,6 +67,22 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
+// HMI Mapping
+StateDisplay := State;
+CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Pick Cap';
+    20: StatusText := 'Torquing';
+    30: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
+
+// State machine
 CASE State OF
     0:
         RunCapMotor     := FALSE;
@@ -99,19 +116,6 @@ CASE State OF
         Done := TRUE;
 END_CASE
 
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Pick Cap';
-    20: StatusText := 'Torquing';
-    30: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
 ]]></ST>
     </Implementation>
   </POU>
