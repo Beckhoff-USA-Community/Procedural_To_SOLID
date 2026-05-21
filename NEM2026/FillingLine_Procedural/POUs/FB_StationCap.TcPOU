@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationCap" Id="{995aa1f9-2aab-436e-9cda-670bc81baac1}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap
 VAR_INPUT
@@ -7,6 +7,7 @@ VAR_INPUT
     Reset            : BOOL;
     ModeAuto         : BOOL;
     ModeManual       : BOOL;
+    ModePause        : BOOL;          // CR-1
     JogForward       : BOOL;
     JogReverse       : BOOL;
     PartPresent      : BOOL;
@@ -37,8 +38,10 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode 
-IF ModeAuto THEN
+      <ST><![CDATA[// mode + Pause (CR-1)
+IF ModePause THEN
+    ActiveMode := 3;
+ELSIF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
     ActiveMode := 2;
@@ -46,14 +49,18 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack 
+// CR-1 Pause guard — Cap halts mid-cycle (no Fill-style exception)
+IF ActiveMode = 3 THEN
+    RETURN;
+END_IF
+
+// alarm ack — LEVEL (drift from Fill — kept on purpose)
 IF AlarmLatched AND AlarmAck THEN
     AlarmLatched := FALSE;
     AlarmCode    := 0;
     AlarmText    := '';
 END_IF
 
-// Reset
 IF Reset THEN
     State        := 0;
     AlarmLatched := FALSE;
@@ -64,22 +71,6 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
-// HMI Mapping
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Pick Cap';
-    20: StatusText := 'Torquing';
-    30: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
-
-// State machine
 CASE State OF
     0:
         RunCapMotor     := FALSE;
@@ -113,6 +104,19 @@ CASE State OF
         Done := TRUE;
 END_CASE
 
+StateDisplay := State;
+CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Pick Cap';
+    20: StatusText := 'Torquing';
+    30: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
 ]]></ST>
     </Implementation>
   </POU>

@@ -4,25 +4,33 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // ----- shared services -----
-    ModeManager  : FB_ModeManager;
+    ModeManager : FB_ModeManager;
+    CycleLogger : FB_CycleDataLogger;          // CR-3: shared by Fill + Inspect
 
     // ----- per-station alarm strategies -----
-    // stage-3-exercise: every station uses LineFault (latching, stops line).
-    // The CR-2 swap exercise replaces InspectAlarm with FB_AlarmHandler_QualityFlag.
     FillAlarm    : FB_AlarmHandler_LineFault;
     CapAlarm     : FB_AlarmHandler_LineFault;
     LabelAlarm   : FB_AlarmHandler_LineFault;
-    InspectAlarm : FB_AlarmHandler_LineFault;
+    InspectAlarm : FB_AlarmHandler_QualityFlag;
 
     // ----- stations composed via FB_Init dependency injection -----
-    StationFill    : FB_StationFill(ModeRef := ModeManager, AlarmHandler := FillAlarm);
-    StationCap     : FB_StationCap(ModeRef := ModeManager, AlarmHandler := CapAlarm);
-    StationLabel   : FB_StationLabel(ModeRef := ModeManager, AlarmHandler := LabelAlarm);
-    StationInspect : FB_StationInspect(ModeRef := ModeManager, AlarmHandler := InspectAlarm);
+    // CR-3: only Fill + Inspect carry DataLogger. Cap + Label have no logger
+    // dependency and don't pay the cost of carrying one.
+    StationFill    : FB_StationFill(ModeRef     := ModeManager,
+                                    AlarmHandler := FillAlarm,
+                                    DataLogger   := CycleLogger);
+    StationCap     : FB_StationCap(ModeRef     := ModeManager,
+                                   AlarmHandler := CapAlarm);
+    StationLabel   : FB_StationLabel(ModeRef     := ModeManager,
+                                     AlarmHandler := LabelAlarm);
+    StationInspect : FB_StationInspect(ModeRef     := ModeManager,
+                                       AlarmHandler := InspectAlarm,
+                                       DataLogger   := CycleLogger);
 
     // ----- shared HMI inputs -----
     ModeAuto      : BOOL;
     ModeManual    : BOOL;
+    ModePause     : BOOL;       // CR-1
     AlarmAck      : BOOL;
 
     // ----- per-station process inputs -----
@@ -48,6 +56,7 @@ END_VAR
       <ST><![CDATA[// shared mode update
 ModeManager.ModeAuto   := ModeAuto;
 ModeManager.ModeManual := ModeManual;
+ModeManager.ModePause  := ModePause;     // CR-1
 ModeManager.CyclicUpdate();
 
 // HMI Ack drives every alarm handler — both LineFault (consumes) and

@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
+    <Declaration><![CDATA[// Stage-2-complete: CR-2 fully applied (an evolved version of stage-2-broken).
+// Inspect now overrides Monitoring with a non-latching quality flag and
+// jams parallel branches into ExecuteSequence step 10. The override is
+// still architecturally fragile (every base-Monitoring change must be
+// re-mirrored here) but at least it's no longer half-finished with TODOs.
+FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
-    CameraReady      : BOOL;
-    InspectResult    : BOOL;
+    CameraReady          : BOOL;
+    InspectResult        : BOOL;
+    QualityIssueDetected : BOOL;          // CR-2 — non-faulting input
 END_VAR
 VAR_OUTPUT
-    TriggerCamera    : BOOL;
-    RejectPusher     : BOOL;
-    PassResult       : BOOL;
+    TriggerCamera        : BOOL;
+    RejectPusher         : BOOL;
+    PassResult           : BOOL;
+    QualityFlag          : BOOL;          // CR-2 — non-latching defect
 END_VAR
 VAR
-    CameraDelay      : TON;
+    CameraDelay          : TON;
+    RejectDelay          : TON;
+    CameraDone           : BOOL;          // CR-2 parallel branch flag
+    RejectDone           : BOOL;          // CR-2 parallel branch flag
+    QualityCode          : UDINT;         // shadows base AlarmCode (smell)
+    QualityText          : STRING(255);   // shadows base AlarmText (smell)
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -28,22 +40,38 @@ END_VAR
         RejectPusher  := FALSE;
         PassResult    := FALSE;
         Done          := FALSE;
+        CameraDone    := FALSE;
+        RejectDone    := FALSE;
         IF Execute AND PartPresent AND CameraReady AND ActiveMode = 1 THEN
             THIS^.TransitionTo(10);
         END_IF
-    10:
-        TriggerCamera := TRUE;
-        CameraDelay(IN := TRUE, PT := T#200MS);
+
+    10: // CR-2 PARALLEL: camera + reject pre-arm in one step
+        IF NOT CameraDone THEN
+            TriggerCamera := TRUE;
+            CameraDelay(IN := TRUE, PT := T#200MS);
+            IF CameraDelay.Q THEN
+                CameraDelay(IN := FALSE);
+                TriggerCamera := FALSE;
+                CameraDone := TRUE;
+            END_IF
+        END_IF
+        IF NOT RejectDone THEN
+            RejectDelay(IN := TRUE, PT := T#150MS);
+            IF RejectDelay.Q THEN
+                RejectDelay(IN := FALSE);
+                RejectDone := TRUE;
+            END_IF
+        END_IF
         Timeout(IN := TRUE, PT := T#2S);
         IF Timeout.Q THEN
             THIS^.RaiseStationAlarm(4001, 'Inspect: Camera timeout');
         END_IF
-        IF CameraDelay.Q THEN
-            CameraDelay(IN := FALSE);
+        IF CameraDone AND RejectDone THEN
             Timeout(IN := FALSE);
-            TriggerCamera := FALSE;
             THIS^.TransitionTo(20);
         END_IF
+
     20:
         IF InspectResult THEN
             PassResult := TRUE;
@@ -52,17 +80,66 @@ END_VAR
             PassResult := FALSE;
             THIS^.TransitionTo(25);
         END_IF
+
     25:
         RejectPusher := TRUE;
-        CameraDelay(IN := TRUE, PT := T#300MS);
-        IF CameraDelay.Q THEN
-            CameraDelay(IN := FALSE);
+        RejectDelay(IN := TRUE, PT := T#300MS);
+        IF RejectDelay.Q THEN
+            RejectDelay(IN := FALSE);
             RejectPusher := FALSE;
             THIS^.TransitionTo(30);
         END_IF
+
     30:
+        // CR-3: log cycle data via base helper
+        THIS^.LogCycleData(Note := 'Inspect cycle complete');
         Done := TRUE;
 END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Monitoring" Id="{403b68d0-6e56-4bd1-8225-585d1f1754b1}">
+      <Declaration><![CDATA[// CR-2 OVERRIDE: non-latching quality flag — does NOT call SUPER^.Monitoring()
+// because the base would latch the alarm and stop the line. The cost is
+// that this method must re-implement mode resolution and alarm-ack from
+// the base. If the base's Monitoring gets a new alarm condition added
+// later, it must be re-mirrored here too. Pure inheritance pain.
+METHOD PROTECTED Monitoring
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// duplicated from base — see method comment
+IF ModePause AND THIS^.AllowPause() THEN
+    ActiveMode := 3;
+ELSIF ModeAuto THEN
+    ActiveMode := 1;
+ELSIF ModeManual THEN
+    ActiveMode := 2;
+ELSE
+    ActiveMode := 0;
+END_IF
+
+// hard-fault ack still rises through AlarmLatched / R_TRIG
+AlarmAckEdge(CLK := AlarmAck);
+IF AlarmLatched AND AlarmAckEdge.Q THEN
+    AlarmLatched := FALSE;
+    AlarmCode    := 0;
+    AlarmText    := '';
+    _Error       := FALSE;
+    _ErrorID     := 0;
+END_IF
+
+// quality flag — non-latching, does NOT touch _Error
+IF QualityIssueDetected THEN
+    QualityFlag := TRUE;
+    QualityCode := 4002;
+    QualityText := 'Inspect: Visual defect detected';
+ELSE
+    QualityFlag := FALSE;
+    QualityCode := 0;
+    QualityText := '';
+END_IF
+
+// SUPER intentionally NOT called — see method comment
 ]]></ST>
       </Implementation>
     </Method>
@@ -72,13 +149,22 @@ END_CASE
       <Implementation>
         <ST><![CDATA[CASE State OF
     0:  GetStepName := 'Idle';
-    10: GetStepName := 'Inspecting';
+    10: GetStepName := 'Inspecting (parallel)';
     20: GetStepName := 'Evaluate';
     25: GetStepName := 'Rejecting';
     30: GetStepName := 'Complete';
 ELSE
     GetStepName := 'Unknown';
 END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LoggingEnabled" Id="{a1389e34-223f-4455-ab33-3d5aed9bb6d9}">
+      <Declaration><![CDATA[// CR-3 OVERRIDE: Inspect participates in cycle logging.
+METHOD PROTECTED LoggingEnabled : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LoggingEnabled := TRUE;
 ]]></ST>
       </Implementation>
     </Method>

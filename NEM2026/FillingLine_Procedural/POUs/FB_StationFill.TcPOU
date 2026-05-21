@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationFill" Id="{c8b56ccb-9e54-404c-b28c-9e8f9a838929}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill
 VAR_INPUT
@@ -7,6 +7,7 @@ VAR_INPUT
     Reset            : BOOL;
     ModeAuto         : BOOL;
     ModeManual       : BOOL;
+    ModePause        : BOOL;          // CR-1
     JogForward       : BOOL;
     JogReverse       : BOOL;
     PartPresent      : BOOL;
@@ -33,11 +34,15 @@ VAR
     AlarmCode        : UDINT;
     ActiveMode       : INT;
     Accumulated      : LREAL;
+    LogBuffer        : ARRAY[0..99] OF STRING(120);   // CR-3 (duplicated in Inspect)
+    LogIndex         : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode 
-IF ModeAuto THEN
+      <ST><![CDATA[// mode (copy-pasted across all stations) — CR-1 added Pause branch
+IF ModePause THEN
+    ActiveMode := 3;
+ELSIF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
     ActiveMode := 2;
@@ -45,7 +50,12 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack 
+// CR-1 Pause guard — Fill exception: ignore Pause while State = 10 (mid-fill)
+IF ActiveMode = 3 AND State <> 10 THEN
+    RETURN;
+END_IF
+
+// alarm ack — Fill uses RISING EDGE
 AlarmAckEdge(CLK := AlarmAck);
 IF AlarmLatched AND AlarmAckEdge.Q THEN
     AlarmLatched := FALSE;
@@ -53,7 +63,6 @@ IF AlarmLatched AND AlarmAckEdge.Q THEN
     AlarmText    := '';
 END_IF
 
-// Reset
 IF Reset THEN
     State        := 0;
     AlarmLatched := FALSE;
@@ -64,21 +73,6 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
-// HMI Mapping
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Filling';
-    20: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
-
-// State machine
 CASE State OF
     0:
         OpenFillValve := FALSE;
@@ -107,9 +101,24 @@ CASE State OF
     20:
         OpenFillValve := FALSE;
         Timeout(IN := FALSE);
+        // CR-3: cycle data logging (duplicated identically in FB_StationInspect)
+        LogBuffer[LogIndex] := 'Fill cycle complete';
+        LogIndex := (LogIndex + 1) MOD 100;
         Done := TRUE;
 END_CASE
 
+StateDisplay := State;
+CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Filling';
+    20: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
 ]]></ST>
     </Implementation>
   </POU>

@@ -1,18 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect
+    <Declaration><![CDATA[// Stage-1 with all 3 CRs applied. Note the size compared to the Stage-3
+// composition equivalent — every CR adds inline state that bloats this FB.
+FUNCTION_BLOCK FB_StationInspect
 VAR_INPUT
-    Execute          : BOOL;
-    Reset            : BOOL;
-    ModeAuto         : BOOL;
-    ModeManual       : BOOL;
-    JogForward       : BOOL;
-    JogReverse       : BOOL;
-    PartPresent      : BOOL;
-    AlarmAck         : BOOL;
-    CameraReady      : BOOL;
-    InspectResult    : BOOL;
+    Execute              : BOOL;
+    Reset                : BOOL;
+    ModeAuto             : BOOL;
+    ModeManual           : BOOL;
+    ModePause            : BOOL;          // CR-1
+    JogForward           : BOOL;
+    JogReverse           : BOOL;
+    PartPresent          : BOOL;
+    AlarmAck             : BOOL;
+    CameraReady          : BOOL;
+    InspectResult        : BOOL;
+    QualityIssueDetected : BOOL;          // CR-2 — non-faulting input
 END_VAR
 VAR_OUTPUT
     Busy             : BOOL;
@@ -26,20 +30,30 @@ VAR_OUTPUT
     TriggerCamera    : BOOL;
     RejectPusher     : BOOL;
     PassResult       : BOOL;
+    QualityFlag      : BOOL;              // CR-2 — non-latching defect signal
+    QualityCode      : UDINT;
+    QualityText      : STRING(255);
 END_VAR
 VAR
     State            : INT;
     Timeout          : TON;
     CameraDelay      : TON;
+    RejectDelay      : TON;
     AlarmLatched     : BOOL;
     AlarmCode        : UDINT;
     ActiveMode       : INT;
-    ManualStep       : INT;
+    ManualStep       : INT;        // dead variable from earlier developer (legacy cruft)
+    CameraDone       : BOOL;       // CR-2 parallel branch flag
+    RejectDone       : BOOL;       // CR-2 parallel branch flag
+    LogBuffer        : ARRAY[0..99] OF STRING(120);   // CR-3 (duplicated from Fill)
+    LogIndex         : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode 
-IF ModeAuto THEN
+      <ST><![CDATA[// mode + Pause (CR-1)
+IF ModePause THEN
+    ActiveMode := 3;
+ELSIF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
     ActiveMode := 2;
@@ -47,14 +61,29 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// alarm ack 
+// CR-1 Pause guard
+IF ActiveMode = 3 THEN
+    RETURN;
+END_IF
+
+// alarm ack — LEVEL (drift)
 IF AlarmLatched AND AlarmAck THEN
     AlarmLatched := FALSE;
     AlarmCode    := 0;
     AlarmText    := '';
 END_IF
 
-// Reset
+// CR-2: non-latching quality flag — does NOT stop the line
+IF QualityIssueDetected THEN
+    QualityFlag := TRUE;
+    QualityCode := 4002;
+    QualityText := 'Inspect: Visual defect detected';
+ELSE
+    QualityFlag := FALSE;
+    QualityCode := 0;
+    QualityText := '';
+END_IF
+
 IF Reset THEN
     State        := 0;
     AlarmLatched := FALSE;
@@ -62,48 +91,48 @@ IF Reset THEN
     AlarmText    := '';
     Timeout(IN := FALSE);
     CameraDelay(IN := FALSE);
+    RejectDelay(IN := FALSE);
+    CameraDone   := FALSE;
+    RejectDone   := FALSE;
     Done         := FALSE;
 END_IF
 
-// HMI Display
-StateDisplay := State;
-CASE State OF
-    0:  StatusText := 'Idle';
-    10: StatusText := 'Inspecting';
-    20: StatusText := 'Evaluate';
-    25: StatusText := 'Rejecting';
-    30: StatusText := 'Complete';
-ELSE
-    StatusText := 'Unknown';
-END_CASE
-Busy        := (State <> 0) AND NOT Done;
-AlarmActive := AlarmLatched;
-Error       := AlarmLatched;
-ErrorID     := AlarmCode;
-
-// State machine
 CASE State OF
     0:
         TriggerCamera := FALSE;
         RejectPusher  := FALSE;
         PassResult    := FALSE;
         Done          := FALSE;
+        CameraDone    := FALSE;
+        RejectDone    := FALSE;
         IF Execute AND PartPresent AND CameraReady AND ActiveMode = 1 THEN
             State := 10;
         END_IF
-    10:
-        TriggerCamera := TRUE;
-        CameraDelay(IN := TRUE, PT := T#200MS);
+    10: // CR-2 PARALLEL: camera + reject pre-arm in same step
+        IF NOT CameraDone THEN
+            TriggerCamera := TRUE;
+            CameraDelay(IN := TRUE, PT := T#200MS);
+            IF CameraDelay.Q THEN
+                CameraDelay(IN := FALSE);
+                TriggerCamera := FALSE;
+                CameraDone := TRUE;
+            END_IF
+        END_IF
+        IF NOT RejectDone THEN
+            RejectDelay(IN := TRUE, PT := T#150MS);
+            IF RejectDelay.Q THEN
+                RejectDelay(IN := FALSE);
+                RejectDone := TRUE;
+            END_IF
+        END_IF
         Timeout(IN := TRUE, PT := T#2S);
         IF Timeout.Q THEN
             AlarmLatched := TRUE;
             AlarmCode    := 4001;
             AlarmText    := 'Inspect: Camera timeout';
         END_IF
-        IF CameraDelay.Q THEN
-            CameraDelay(IN := FALSE);
+        IF CameraDone AND RejectDone THEN
             Timeout(IN := FALSE);
-            TriggerCamera := FALSE;
             State := 20;
         END_IF
     20:
@@ -116,16 +145,33 @@ CASE State OF
         END_IF
     25:
         RejectPusher := TRUE;
-        CameraDelay(IN := TRUE, PT := T#300MS);
-        IF CameraDelay.Q THEN
-            CameraDelay(IN := FALSE);
+        RejectDelay(IN := TRUE, PT := T#300MS);
+        IF RejectDelay.Q THEN
+            RejectDelay(IN := FALSE);
             RejectPusher := FALSE;
             State := 30;
         END_IF
     30:
+        // CR-3: cycle data logging (duplicated identically in FB_StationFill)
+        LogBuffer[LogIndex] := 'Inspect cycle complete';
+        LogIndex := (LogIndex + 1) MOD 100;
         Done := TRUE;
 END_CASE
 
+StateDisplay := State;
+CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Inspecting (parallel)';
+    20: StatusText := 'Evaluate';
+    25: StatusText := 'Rejecting';
+    30: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched OR QualityFlag;   // CR-2: HMI shows either source
+Error       := AlarmLatched;                   // hard fault only — quality doesn't fault
+ErrorID     := AlarmCode;
 ]]></ST>
     </Implementation>
   </POU>

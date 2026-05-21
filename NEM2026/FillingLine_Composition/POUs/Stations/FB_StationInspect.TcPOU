@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1">
   <POU Name="FB_StationInspect" Id="{54dac95f-0a58-4038-8bf2-f3f7d514eb79}" SpecialFunc="None">
-    <Declaration><![CDATA[// Stage-3-exercise variant: Inspect uses a sequential FB_StepSequencer
-// and a LineFault-style alarm injection (latching). The CR-2 swap exercise
-// in stage-3-composition replaces the alarm strategy with a QualityFlag and
-// the sequencer with FB_ParallelSequencer — without touching the other stations.
+    <Declaration><![CDATA[// Stage-3-composition variant: Inspect now uses FB_ParallelSequencer to run
+// camera capture + reject pre-arm concurrently in step 10, and is wired with
+// FB_AlarmHandler_QualityFlag in MAIN (non-latching, StopsLine = FALSE).
+// The other stations are unchanged — that's the point of composition.
 FUNCTION_BLOCK FB_StationInspect IMPLEMENTS I_Sequenceable, I_HmiReportable
 VAR_INPUT
     PartPresent   : BOOL;
@@ -19,9 +19,12 @@ END_VAR
 VAR
     Mode      : REFERENCE TO FB_ModeManager;
     Alarm     : I_AlarmHandler;
+    Logger    : I_DataLogger;            // CR-3: optional cycle data sink
     Sequencer : FB_StepSequencer;
+    Parallel  : FB_ParallelSequencer;   // not used by other stations
     Watchdog  : FB_TimeoutWatchdog;
     _CameraDelay : TON;
+    _RejectDelay : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -34,17 +37,21 @@ VAR_INPUT
     bInCopyCode  : BOOL;
     ModeRef      : REFERENCE TO FB_ModeManager;
     AlarmHandler : I_AlarmHandler;
+    DataLogger   : I_DataLogger;         // CR-3
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Mode  REF= ModeRef;
-Alarm := AlarmHandler;
+        <ST><![CDATA[Mode   REF= ModeRef;
+Alarm  := AlarmHandler;
+Logger := DataLogger;
 
 Sequencer.SetStepName(0,  'Idle');
-Sequencer.SetStepName(10, 'Inspecting');
+Sequencer.SetStepName(10, 'Inspecting (parallel)');
 Sequencer.SetStepName(20, 'Evaluate');
 Sequencer.SetStepName(25, 'Rejecting');
 Sequencer.SetStepName(30, 'Complete');
+
+Parallel.Configure(NumberOfBranches := 2);
 
 FB_Init := TRUE;
 ]]></ST>
@@ -67,18 +74,31 @@ CASE Sequencer.CurrentStep OF
         RejectPusher  := FALSE;
         PassResult    := FALSE;
         Watchdog.Reset();
+        Parallel.ResetAll();
         IF Mode.AllowRun AND PartPresent AND CameraReady THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
             Watchdog.Duration := T#5S;
         END_IF
 
-    10:
+    10: // PARALLEL: camera capture + reject pre-arm
+        // Branch 0 — camera
         TriggerCamera := TRUE;
         _CameraDelay(IN := TRUE, PT := T#200MS);
         IF _CameraDelay.Q THEN
             _CameraDelay(IN := FALSE);
             TriggerCamera := FALSE;
+            Parallel.MarkBranchDone(BranchIndex := 0);
+        END_IF
+        // Branch 1 — reject arm (move to ready position)
+        RejectPusher := FALSE;
+        _RejectDelay(IN := TRUE, PT := T#150MS);
+        IF _RejectDelay.Q THEN
+            _RejectDelay(IN := FALSE);
+            Parallel.MarkBranchDone(BranchIndex := 1);
+        END_IF
+        // wait for both branches
+        IF Parallel.AllBranchesComplete THEN
             Sequencer.TransitionTo(20);
         END_IF
 
@@ -103,6 +123,10 @@ CASE Sequencer.CurrentStep OF
 
     30:
         Watchdog.Enable := FALSE;
+        // CR-3: log cycle on completion.
+        Logger.LogCycleData(StationName := 'Inspect',
+                            StepNumber  := Sequencer.CurrentStep,
+                            CycleTimeMs := 0);
         Sequencer.MarkComplete();
 END_CASE
 
@@ -115,6 +139,7 @@ Execute := TRUE;
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Sequencer.ResetSequencer();
+Parallel.ResetAll();
 Watchdog.Reset();
 Alarm.Clear();
 TriggerCamera := FALSE;
@@ -131,6 +156,7 @@ Reset := TRUE;
         <ST><![CDATA[TriggerCamera := FALSE;
 RejectPusher  := FALSE;
 Sequencer.ResetSequencer();
+Parallel.ResetAll();
 Watchdog.Reset();
 Abort := TRUE;
 ]]></ST>
