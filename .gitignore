@@ -37,6 +37,8 @@ _Repository/
 *.project.~u
 *.~u
 .~u
+# LibreOffice / OpenOffice lock files (e.g. .~lock.NEM2026_workshop.pptx#)
+.~lock.*#
 LineIDs.dbg
 LineIDs.dbg.bak
 
