@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_StationFill" Id="{c8b56ccb-9e54-404c-b28c-9e8f9a838929}" SpecialFunc="None">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="FB_StationFill" Id="{1a2305fd-2a37-41b1-bc32-76636d723fd9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill EXTENDS FB_StationBase
 VAR_INPUT
     FlowRate         : LREAL;
@@ -20,7 +20,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE State OF
+        <ST><![CDATA[SUPER^.ExecuteSequence();
+
+CASE State OF
     0:
         OpenFillValve := FALSE;
         Done          := FALSE;
