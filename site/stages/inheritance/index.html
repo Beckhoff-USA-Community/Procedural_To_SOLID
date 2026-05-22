@@ -1631,7 +1631,7 @@
 
 
   
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/main/docs/stages/inheritance.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/Release/docs/stages/inheritance.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1640,7 +1640,7 @@
     
       
     
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/main/docs/stages/inheritance.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/Release/docs/stages/inheritance.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
@@ -1648,7 +1648,8 @@
 
 
 <h1 id="stage-2-inheritance">Stage 2 — Inheritance<a class="headerlink" href="#stage-2-inheritance" title="Permanent link">&para;</a></h1>
-<p><strong>Branches:</strong> <code>stage-2-inheritance</code>, <code>stage-2-broken</code>, <code>stage-2-cr1-applied</code>, <code>stage-2-cr2-applied</code>, <code>stage-2-cr3-applied</code>, <code>stage-2-complete</code></p>
+<p><strong>Where this lives:</strong> <code>NEM2026/FillingLine_Inheritance/</code> in the <code>Release</code> solution. Diff against <code>Release</code> on the <code>cr1-applied</code> / <code>cr2-applied</code> / <code>cr3-applied</code> / <code>complete</code> branches to see CR application costs.</p>
+<p><strong>Historical reference:</strong> the single-PLC iteration lives on the legacy branches <code>stage-2-inheritance</code> / <code>stage-2-broken</code> / <code>stage-2-cr{1,2,3}-applied</code> / <code>stage-2-complete</code>. The walkthrough below was authored against those branches and they still exist — switching to <code>stage-2-broken</code> for the half-applied CR-2 exercise still works.</p>
 <hr />
 <h2 id="the-oop-inheritance-paradigm">The OOP-inheritance paradigm<a class="headerlink" href="#the-oop-inheritance-paradigm" title="Permanent link">&para;</a></h2>
 <h3 id="origin-and-theory">Origin and theory<a class="headerlink" href="#origin-and-theory" title="Permanent link">&para;</a></h3>
@@ -1704,7 +1705,7 @@
 <hr />
 <h2 id="how-inheritance-is-constructed-in-this-workshop">How inheritance is constructed in this workshop<a class="headerlink" href="#how-inheritance-is-constructed-in-this-workshop" title="Permanent link">&para;</a></h2>
 <h3 id="file-layout-6-files">File layout (6 files)<a class="headerlink" href="#file-layout-6-files" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>NEM2026/FillingLine/POUs/
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>NEM2026/FillingLine_Inheritance/POUs/
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── FB_StationBase.TcPOU       ~165 lines — abstract base
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├── FB_StationFill.TcPOU       ~65 lines — extends Base
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── FB_StationCap.TcPOU        ~75 lines — extends Base
@@ -2062,11 +2063,46 @@
 <ol>
 <li><strong>Did CR-1's <code>AllowPause</code> virtual feel right?</strong> It works, but Cap / Label / Inspect inherit it forever for no reason.</li>
 <li><strong>What would a 4th alarm policy do to the base?</strong> (E.g., a stop-then-restart-after-confirm policy.) Probably another override in the relevant child, with another duplication of base behavior.</li>
-<li><strong>What's the testability story now?</strong> You can subclass the base in a TcUnit test — better than Stage 1 — but you can't swap alarm policies at runtime; that's still hardcoded into base + override structure.</li>
+<li><strong>What's the testability story now?</strong> You can subclass the base in a PlcTestSuite test — better than Stage 1 — but you can't swap alarm policies at runtime; that's still hardcoded into base + override structure.</li>
 </ol>
 <p>The transition to Stage 3 is justified when you can articulate why CR-2's <code>SUPER</code>-can't-be-called and CR-3's dead-weight-in-base feel like <em>fundamental</em> limits, not just inconveniences.</p>
 <hr />
 <h2 id="branches-in-this-stage">Branches in this stage<a class="headerlink" href="#branches-in-this-stage" title="Permanent link">&para;</a></h2>
+<p><strong>Current structure (<code>Release</code> family) — Stage 2 lives in <code>FillingLine_Inheritance/</code>:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Branch</th>
+<th>What FillingLine_Inheritance shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Release</code></td>
+<td><code>FB_StationBase</code> extending <code>SPT_Components.FB_ComponentBase</code> + 4 children</td>
+</tr>
+<tr>
+<td><code>cr1-applied</code></td>
+<td><code>AllowPause</code> virtual added to base + Fill override</td>
+</tr>
+<tr>
+<td><code>cr2-applied</code></td>
+<td>Inspect overrides <code>Monitoring</code> without SUPER + parallel hack in <code>ExecuteSequence</code></td>
+</tr>
+<tr>
+<td><code>cr3-applied</code></td>
+<td>Base gets <code>LogBuffer</code> + <code>LoggingEnabled</code> virtual + Fill/Inspect overrides</td>
+</tr>
+<tr>
+<td><code>complete</code></td>
+<td>The inheritance endgame — base is now a junk drawer</td>
+</tr>
+</tbody>
+</table>
+<p>To compare a CR's cost on this paradigm only:
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>git diff Release...cr2-applied --stat -- NEM2026/FillingLine_Inheritance/
+</span></code></pre></div></p>
+<p><strong>Legacy single-PLC branches (still present as a historical record, used by the walkthrough above):</strong></p>
 <table>
 <thead>
 <tr>
@@ -2135,7 +2171,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 7, 2026 16:49:52 UTC">May 7, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 21, 2026 20:11:26 UTC">May 21, 2026</span>
   </span>
 
     

@@ -1343,7 +1343,7 @@
 
 
   
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/main/docs/workshop/prerequisites.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/Release/docs/workshop/prerequisites.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1352,7 +1352,7 @@
     
       
     
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/main/docs/workshop/prerequisites.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/Release/docs/workshop/prerequisites.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
@@ -1417,15 +1417,8 @@
 <h2 id="library-installations">Library installations<a class="headerlink" href="#library-installations" title="Permanent link">&para;</a></h2>
 <p>Two library families show up in the workshop:</p>
 <h3 id="spt-libraries-used-in-stage-2">SPT-Libraries (used in Stage 2)<a class="headerlink" href="#spt-libraries-used-in-stage-2" title="Permanent link">&para;</a></h3>
-<p>The full set:</p>
-<ul>
-<li><strong>SPT Base Types</strong> — fundamental component types</li>
-<li><strong>SPT Components</strong> — <code>FB_ComponentBase</code> and friends (the inheritance base)</li>
-<li><strong>SPT Diagnostic</strong> — diagnostic interfaces</li>
-<li><strong>SPT Event Logger</strong> — event registration and routing</li>
-<li><strong>SPT Utilities</strong> — assorted helpers</li>
-</ul>
-<p>Source: <a href="https://github.com/Beckhoff-USA-Community/SPT-Libraries">https://github.com/Beckhoff-USA-Community/SPT-Libraries</a> (the master repo with documentation at <a href="https://beckhoff-usa-community.github.io/SPT-Libraries/">https://beckhoff-usa-community.github.io/SPT-Libraries/</a>)</p>
+<p>Stage 2's <code>FB_StationBase</code> derives from <strong><code>FB_ComponentBase</code></strong> in <strong>SPT Components</strong> — the workshop's only direct use of SPT. The Inheritance plcproj also declares <code>SPT Base Types</code>, <code>SPT Diagnostic</code>, <code>SPT Event Logger</code>, and <code>SPT Utilities</code> as placeholder references for build resolution; the example code doesn't call into them. Install the SPT family as a package — easier than picking individual libraries, and XAE resolves transitive deps for you.</p>
+<p>Source: <a href="https://github.com/Beckhoff-USA-Community/SPT-Libraries">https://github.com/Beckhoff-USA-Community/SPT-Libraries</a> (master repo + docs at <a href="https://beckhoff-usa-community.github.io/SPT-Libraries/">https://beckhoff-usa-community.github.io/SPT-Libraries/</a>)</p>
 <p>Distribution: typically via the <strong>Beckhoff USA Community NuGet feed</strong>. Add the feed in XAE under <code>Tools → NuGet Package Manager → Package Sources</code>:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>https://api.nuget.org/v3/index.json   (default)
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>https://nuget.beckhoff.com/v3/index.json   (Beckhoff Automation)
@@ -1435,13 +1428,17 @@
 <ul>
 <li><strong>Core</strong> — base interfaces (<code>I_Cyclic</code>, <code>I_Diagnostic</code>)</li>
 <li><strong>CoreComponents</strong> — component base classes</li>
-<li><strong>MechatronicsCore</strong> — mechatronics primitives (not used directly in the workshop)</li>
-<li><strong>CoreMotionMc3</strong> / <strong>CoreMotionNc2</strong> — motion (not used)</li>
 </ul>
-<p>Distribution: same feeds as SPT.</p>
+<p>Distribution: <strong>internal to Beckhoff USA today</strong> — not on the public USA Community NuGet feed. The workshop ships them in <code>_Libraries/</code> for offline build. Outside this workshop, treat them as internal-only.</p>
 <h3 id="you-dont-have-to-install-these-for-the-workshop">You don't have to install these for the workshop<a class="headerlink" href="#you-dont-have-to-install-these-for-the-workshop" title="Permanent link">&para;</a></h3>
-<p><code>NEM2026/FillingLine/_Libraries/</code> is <strong>committed</strong> to the repo. Every library any stage references is pre-resolved in there, so XAE can resolve placeholder references <strong>offline</strong>. The first time you open the project, XAE may complain it doesn't recognize the libraries — point it at <code>_Libraries/</code> (it should auto-detect) and click through.</p>
-<p>If you want to upgrade libraries later (or use them in your own projects), connect the NuGet feeds.</p>
+<p>Each PLC project has its own committed <code>_Libraries/</code> cache:</p>
+<ul>
+<li><code>NEM2026/FillingLine_Procedural/_Libraries/</code></li>
+<li><code>NEM2026/FillingLine_Inheritance/_Libraries/</code></li>
+<li><code>NEM2026/FillingLine_Composition/_Libraries/</code></li>
+</ul>
+<p>Every library any stage references is pre-resolved in there, so XAE can resolve placeholder references <strong>offline</strong>. The first time you open the solution, XAE may complain it doesn't recognize the libraries — point it at the appropriate <code>_Libraries/</code> and click through.</p>
+<p>If you want to upgrade libraries later (or use SPT in your own projects), connect the public NuGet feeds — Core / CoreComponents are not available there today.</p>
 <h2 id="knowledge-prerequisites">Knowledge prerequisites<a class="headerlink" href="#knowledge-prerequisites" title="Permanent link">&para;</a></h2>
 <p>The workshop assumes:</p>
 <ul>
@@ -1465,23 +1462,20 @@
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git clone https://github.com/Mark-Code-Cowboys/NEM_Workshop.git
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">cd</span> NEM_Workshop
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c"># 2. Switch through a few branches and verify file presence</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>git <span class="k">switch</span> stage-1-procedural
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>ls NEM2026/FillingLine/POUs/         <span class="c"># should see FB_Station* files</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>git <span class="k">switch</span> stage-3-composition
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>ls NEM2026/FillingLine/POUs/Stations/ <span class="c"># should see the four station FBs</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>git <span class="k">switch</span> main                      <span class="c"># back to neutral</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="c"># 3. Open the solution in XAE</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>explorer NEM2026/NEM2026.sln          <span class="c"># Windows</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c"># 2. Switch to the Release baseline and verify the three PLC projects are present</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>git <span class="k">switch</span> Release
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>ls NEM2026/                                         <span class="c"># should see FillingLine_Procedural / _Inheritance / _Composition</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>ls NEM2026/FillingLine_Procedural/POUs/             <span class="c"># should see flat FB_Station* files</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>ls NEM2026/FillingLine_Composition/POUs/Stations/   <span class="c"># should see the four station FBs (Stage 3 layout)</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c"># 3. Open the solution in XAE</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>explorer NEM2026/NEM2026.sln          <span class="c"># Windows</span>
 </span></code></pre></div>
 <p>When XAE loads:</p>
 <ul>
-<li>Solution Explorer should show <code>FillingLine</code> as the PLC project</li>
-<li><code>POUs/MAIN.TcPOU</code> should open without errors</li>
-<li><code>Build → Build Solution</code> should complete cleanly (warnings are OK; errors are not)</li>
+<li>Solution Explorer should show <strong>three PLC projects</strong>: <code>FillingLine_Procedural</code>, <code>FillingLine_Inheritance</code>, <code>FillingLine_Composition</code></li>
+<li>Each project's <code>POUs/MAIN.TcPOU</code> should open without errors</li>
+<li><code>Build → Build Solution</code> should compile all three cleanly (warnings are OK; errors are not)</li>
 </ul>
 <p>If any of those don't work, post the error message in your team chat / to the workshop organizer <strong>before the day</strong>. Day-of debugging eats discussion time.</p>
 <h2 id="optional-but-helpful">Optional but helpful<a class="headerlink" href="#optional-but-helpful" title="Permanent link">&para;</a></h2>
@@ -1489,12 +1483,13 @@
 <ul>
 <li><strong>Read the <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/blob/main/README.md">README</a></strong> — 10-minute overview of what we're building and why</li>
 <li><strong>Skim the <a href="../../patterns/">Patterns by name</a> page</strong> — gives you vocabulary in advance, makes the live discussion faster</li>
-<li><strong>Look at one <a href="https://github.com/Beckhoff-USA-Community/SPT_V4_Samples">VFFS_V4_Samples</a> project</strong> — the <code>SPT_Alarms</code> example shows production code that uses Stage 2 patterns</li>
-<li><strong>Browse the <a href="https://github.com/Beckhoff-USA-Community/PackML_PLC_Example">VFFS PackML Demo</a> repo</strong> — Stage 3 patterns in production. The interface-based <code>_Sealer</code>, <code>_Unwind</code>, <code>_PullWheels</code> composition is exactly what we build.</li>
+<li><strong>Look at one <a href="https://github.com/Beckhoff-USA-Community/SPT_V4_Samples">SPT_V4_Samples</a> project</strong> — the <code>SPT_Alarms</code> example shows production code that uses Stage 2 patterns</li>
 </ul>
-<p>If you've never touched TcUnit but want to see where Stage 3 leads:</p>
+<p>If you've never touched a PLC unit-testing framework but want to see where Stage 3 leads:</p>
 <ul>
-<li><strong><a href="https://github.com/tcunit/TcUnit">TcUnit</a></strong> — the de-facto unit-testing framework for TwinCAT. Stage 3's dependency injection is a prerequisite for testable PLC code; this is where it pays off.</li>
+<li><strong><a href="https://github.com/SimmelFlo/PlcTestSuite">PlcTestSuite</a></strong> — what we use in the workshop's testing extra-credit. Friendly TwinCAT 3 framework, lightest install. Stage 3's dependency injection is the prerequisite for any of these to work.</li>
+<li><strong><a href="https://github.com/tcunit/TcUnit">TcUnit</a></strong> — the older / better-known alternative. More setup; same architectural prerequisite.</li>
+<li><strong>A first-party Beckhoff test framework is in flight</strong> — worth tracking for shops standardizing on Beckhoff tooling.</li>
 </ul>
 <h2 id="what-to-bring-on-the-day">What to bring on the day<a class="headerlink" href="#what-to-bring-on-the-day" title="Permanent link">&para;</a></h2>
 <ul>
@@ -1524,7 +1519,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 7, 2026 16:49:52 UTC">May 7, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 22, 2026 19:15:43 UTC">May 22, 2026</span>
   </span>
 
     

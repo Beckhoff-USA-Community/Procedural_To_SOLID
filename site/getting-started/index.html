@@ -533,6 +533,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="First five minutes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gitkraken-workflow-if-you-prefer-a-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitKraken workflow (if you prefer a GUI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1125,6 +1142,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="First five minutes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gitkraken-workflow-if-you-prefer-a-gui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitKraken workflow (if you prefer a GUI)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1238,7 +1272,7 @@
 
 
   
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/main/docs/getting-started.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/Release/docs/getting-started.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1247,7 +1281,7 @@
     
       
     
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/main/docs/getting-started.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/Release/docs/getting-started.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
@@ -1259,34 +1293,43 @@
 <h2 id="first-five-minutes">First five minutes<a class="headerlink" href="#first-five-minutes" title="Permanent link">&para;</a></h2>
 <div class="language-fish highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git clone https://github.com/Mark-Code-Cowboys/NEM_Workshop.git
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">cd</span> NEM_Workshop
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git <span class="k">switch</span> stage-1-procedural
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>git <span class="k">switch</span> Release
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>explorer NEM2026/NEM2026.sln    <span class="c"># Windows; macOS: open / Linux: xdg-open</span>
 </span></code></pre></div>
-<p>When XAE loads:</p>
+<h3 id="gitkraken-workflow-if-you-prefer-a-gui">GitKraken workflow (if you prefer a GUI)<a class="headerlink" href="#gitkraken-workflow-if-you-prefer-a-gui" title="Permanent link">&para;</a></h3>
+<p>If you're using GitKraken instead of the command line:</p>
 <ol>
-<li>Solution Explorer (left) → expand <code>FillingLine</code> → <code>POUs/</code></li>
-<li>Double-click <code>MAIN.TcPOU</code></li>
-<li>Press <code>F7</code> (Build Solution) — should complete without errors</li>
-<li>Look at the four <code>FB_Station*</code> files — they're the stars of Stage 1</li>
+<li><strong>Close XAE</strong> before switching branches — the solution can't reload its underlying files while it's open.</li>
+<li>In the left panel, find the branch you want under <strong>Local</strong> or <strong>Remote</strong>.</li>
+<li><strong>If under Remote</strong> — right-click and select <strong>Checkout <code>origin/Release</code></strong> (substitute the branch name).<ul>
+<li>If GitKraken refuses because the working tree has uncommitted changes, <strong>revert them first</strong>: go to the unstaged area in the central panel and undo the file modifications.</li>
+</ul>
+</li>
+<li><strong>If under Local</strong> — right-click and select <strong>Checkout <code>Release</code></strong> (no <code>origin/</code> prefix).</li>
+<li>Optional but recommended: <strong>create your own branch off <code>Release</code></strong> (<code>Release-yourname</code>) so you can experiment freely without touching the canonical branches. In GitKraken: right-click <code>Release</code> → <strong>Create branch here</strong>.</li>
+<li><strong>Now open <code>NEM2026/NEM2026.sln</code></strong> in XAE.</li>
+</ol>
+<p>The same flow works for the CR branches — substitute <code>cr1-applied</code> / <code>cr2-applied</code> / <code>cr3-applied</code> / <code>complete</code> wherever <code>Release</code> appears.</p>
+<p>When XAE loads, you'll see <strong>three PLC projects</strong> side-by-side in Solution Explorer:</p>
+<ol>
+<li><code>FillingLine_Procedural</code> — Stage 1's plain-ST implementation</li>
+<li><code>FillingLine_Inheritance</code> — Stage 2's SPT-base-class implementation</li>
+<li><code>FillingLine_Composition</code> — Stage 3's interfaces + DI implementation</li>
+</ol>
+<p>For a quick sanity check:</p>
+<ol>
+<li>Expand any one project → <code>POUs/</code> → double-click <code>MAIN.TcPOU</code></li>
+<li>Press <code>F7</code> (Build Solution) — all three PLCs should compile without errors</li>
+<li>Compare the same station across the three projects (e.g. <code>FB_StationFill.TcPOU</code> in each) to see the architectural difference for yourself</li>
 </ol>
 <p>That's enough to confirm your setup works. Don't activate / login / run yet — we'll do that during the workshop.</p>
 <h2 id="branch-navigation">Branch navigation<a class="headerlink" href="#branch-navigation" title="Permanent link">&para;</a></h2>
-<p>Every workshop checkpoint is its own branch. Switching branches in TwinCAT XAE is the workshop's main interaction loop:</p>
-<div class="language-fish highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git <span class="k">switch</span> stage-1-procedural   <span class="c"># clean baseline</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git <span class="k">switch</span> stage-1-broken       <span class="c"># pedagogical broken state</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>git <span class="k">switch</span> stage-1-cr1-applied  <span class="c"># CR-1 alone</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>git <span class="k">switch</span> stage-1-complete     <span class="c"># all 3 CRs applied</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c"># Stage 2 family</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>git <span class="k">switch</span> stage-2-inheritance
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>git <span class="k">switch</span> stage-2-broken
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>git <span class="k">switch</span> stage-2-cr2-applied
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c"># ...</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="c"># Stage 3 family</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>git <span class="k">switch</span> stage-3-composition
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>git <span class="k">switch</span> stage-3-cr2-applied   <span class="c"># the headline swap demo</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>git <span class="k">switch</span> stage-3-complete
+<p>The workshop uses <strong>five branches</strong> — one baseline + three CR snapshots + a cumulative end-state. Each branch carries all three PLC projects; the difference between branches is which CRs have been applied to <em>each PLC</em>.</p>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git <span class="k">switch</span> Release        <span class="c"># pre-class baseline — three implementations, no CRs</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>git <span class="k">switch</span> cr1-applied    <span class="c"># CR-1 applied across all 3 PLC projects</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>git <span class="k">switch</span> cr2-applied    <span class="c"># CR-2 applied across all 3 PLC projects</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>git <span class="k">switch</span> cr3-applied    <span class="c"># CR-3 applied across all 3 PLC projects</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>git <span class="k">switch</span> <span class="nb">complete</span>       <span class="c"># all 3 CRs cumulative — post-class end state</span>
 </span></code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">XAE doesn't auto-reload on branch switch</p>
@@ -1294,78 +1337,79 @@
 </div>
 <h3 id="branch-tree">Branch tree<a class="headerlink" href="#branch-tree" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>gitGraph
-   commit id: "main"
-   branch stage-1-procedural
-   commit id: "drift baseline"
-   branch stage-1-broken
-   commit id: "CR-1 half"
-   checkout stage-1-procedural
-   branch stage-1-cr1-applied
-   commit id: "Pause only"
-   checkout stage-1-procedural
-   branch stage-1-complete
-   commit id: "all 3 CRs"
+   commit id: "Release"
+   branch cr1-applied
+   commit id: "CR-1 × 3 PLCs"
    checkout main
-   branch stage-2-inheritance
-   commit id: "FB_StationBase"
-   branch stage-2-broken
-   commit id: "Inspect override"
+   branch cr2-applied
+   commit id: "CR-2 × 3 PLCs"
    checkout main
-   branch stage-3-composition
-   commit id: "interfaces+DI"
-   branch stage-3-cr2-applied
-   commit id: "swap demo"
-   checkout stage-3-composition
-   branch stage-3-complete
-   commit id: "all 3 CRs"</code></pre>
+   branch cr3-applied
+   commit id: "CR-3 × 3 PLCs"
+   checkout main
+   branch complete
+   commit id: "all CRs × 3 PLCs"</code></pre>
 <h3 id="branch-role-table">Branch role table<a class="headerlink" href="#branch-role-table" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Pattern</th>
+<th>Branch</th>
 <th>What it shows</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>stage-X-{procedural,inheritance,composition}</code></td>
-<td>Clean baseline of each methodology</td>
+<td><code>Release</code></td>
+<td>Pre-class baseline. All three PLC projects in their initial methodology-pure state. No CRs applied.</td>
 </tr>
 <tr>
-<td><code>stage-X-broken</code></td>
-<td>Pedagogically-staged "half-applied" or wrong-way state</td>
+<td><code>cr1-applied</code></td>
+<td>CR-1 (Pause mode) applied to <strong>all three</strong> PLC projects independently. Diff vs. <code>Release</code> per PLC shows how each architecture absorbs the same CR.</td>
 </tr>
 <tr>
-<td><code>stage-X-crN-applied</code></td>
-<td>One CR applied in isolation — single-commit diff vs. baseline</td>
+<td><code>cr2-applied</code></td>
+<td>CR-2 (non-faulting alarms + parallel camera/reject) applied to all three PLC projects. The headline blast-radius comparison.</td>
 </tr>
 <tr>
-<td><code>stage-X-cr2-applied</code> <em>(stage 3 only)</em></td>
-<td>The architectural CR-2 answer key (alarm strategy + sequencer swap)</td>
+<td><code>cr3-applied</code></td>
+<td>CR-3 (cycle data logging in Fill + Inspect only) applied to all three PLC projects.</td>
 </tr>
 <tr>
-<td><code>stage-X-complete</code></td>
-<td>All 3 CRs applied — the methodology's final answer</td>
+<td><code>complete</code></td>
+<td>All three CRs cumulative. The post-class end state.</td>
 </tr>
 </tbody>
 </table>
+<p>The 20 <code>stage-*</code> branches from the previous workshop iteration are kept as a historical record — diff them if you want to see how the workshop evolved, but you can ignore them for active use.</p>
 <h2 id="inside-the-solution">Inside the solution<a class="headerlink" href="#inside-the-solution" title="Permanent link">&para;</a></h2>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>NEM2026/                            # TwinCAT project root
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── NEM2026.sln                     # ← open this in XAE
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── NEM2026.tspproj                 # TwinCAT system project (refs FillingLine.plcproj)
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>└── FillingLine/                    # the PLC project
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    ├── FillingLine.plcproj         # library refs (varies per branch family)
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    ├── PlcTask.TcTTO               # task: 10 ms cycle, priority 20
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    ├── POUs/                       # programs / FBs / methods
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    │   ├── Interfaces/             # Stage 3 only — SOLID contracts
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    │   ├── BuildingBlocks/         # Stage 3 only — composable primitives
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    │   ├── Stations/               # Stage 3 only — composed stations
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    │   ├── FB_Station*.TcPOU       # Stages 1 &amp; 2 — flat at this level
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    │   ├── FB_StationBase.TcPOU    # Stage 2 only
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    │   └── MAIN.TcPOU              # cyclic entry point
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    ├── DUTs/                       # struct types
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    └── _Libraries/                 # resolved library cache (committed for offline use)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>NEM2026/                                # TwinCAT solution root
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── NEM2026.sln                         # ← open this in XAE
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── NEM2026.tsproj                      # System project: 3 tasks, 3 &lt;Plc&gt; instances
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>├── FillingLine_Procedural/
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   ├── FillingLine_Procedural.plcproj  # Tc2_Standard + Tc3_Module — no framework
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   ├── PlcTask_Pr.TcTTO                # 10 ms / priority 20 / AmsPort 851
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   ├── POUs/
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│   │   ├── MAIN.TcPOU                  # cyclic entry — orchestrates 4 stations
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   │   └── FB_Station*.TcPOU           # 4 stations, flat (no shared base)
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   └── _Libraries/                     # library cache (committed for offline use)
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>├── FillingLine_Inheritance/
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│   ├── FillingLine_Inheritance.plcproj # + SPT-Libraries
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│   ├── PlcTask_In.TcTTO                # 10 ms / priority 21 / AmsPort 852
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>│   └── POUs/
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>│       ├── MAIN.TcPOU
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>│       ├── FB_StationBase.TcPOU        # SPT-derived station base class
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>│       └── FB_Station*.TcPOU           # 4 stations, all extend FB_StationBase
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>└── FillingLine_Composition/
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    ├── FillingLine_Composition.plcproj # + Core / CoreComponents
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    ├── PlcTask_Co.TcTTO                # 10 ms / priority 22 / AmsPort 853
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    ├── DUTs/                           # ST_LogEntry etc.
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    └── POUs/
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>        ├── MAIN.TcPOU
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>        ├── Interfaces/                 # SOLID contracts
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>        ├── BuildingBlocks/             # composable primitives (sequencer, alarm handler, …)
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>        └── Stations/                   # 4 stations composed from building blocks
 </span></code></pre></div>
+<p>Each PLC project is independent — its own task, its own AmsPort, its own library refs, its own POU tree. The same station name (e.g. <code>FB_StationFill</code>) appears in all three projects but is <em>not</em> shared between them; each is a separate file with the paradigm-specific implementation.</p>
 <h2 id="driving-the-code">Driving the code<a class="headerlink" href="#driving-the-code" title="Permanent link">&para;</a></h2>
 <p>When you're ready to <em>run</em> the line (not just compile):</p>
 <ol>
@@ -1414,14 +1458,18 @@
 </table>
 <p>Write <code>Execute := TRUE; ModeAuto := TRUE; PartFill := TRUE; FlowRate := 1.0; TargetVolume := 250.0</code> and you'll see Fill open its valve, accumulate, and complete.</p>
 <h2 id="reading-the-diffs">Reading the diffs<a class="headerlink" href="#reading-the-diffs" title="Permanent link">&para;</a></h2>
-<p>The scoreboard is generated from real <code>git diff --stat</code> output. To see any cell yourself:</p>
-<div class="language-fish highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git diff stage-1-procedural...stage-1-cr1-applied --stat
+<p>The scoreboard is generated from real <code>git diff --stat</code> output. To see any cell yourself, diff the CR branch against <code>Release</code> and filter to one PLC project:</p>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c"># CR-1&#39;s blast radius on the Procedural implementation</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Procedural/
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c"># Same CR on the Inheritance implementation</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Inheritance/
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c"># Same CR on the Composition implementation</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Composition/
 </span></code></pre></div>
-<p>For full file content:</p>
-<div class="language-fish highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>git diff stage-1-procedural...stage-1-cr1-applied
-</span></code></pre></div>
-<p>Or open the GitHub compare URL:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-1-procedural...stage-1-cr1-applied
+<p>For full file content drop the <code>--stat</code>. Or open the GitHub compare URL:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/Release...cr1-applied
 </span></code></pre></div>
 <p><a class="md-button md-button--primary" href="../workshop/scoreboard/">See all the cells →</a></p>
 <h2 id="building-these-docs-locally">Building these docs locally<a class="headerlink" href="#building-these-docs-locally" title="Permanent link">&para;</a></h2>
@@ -1429,26 +1477,26 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Linux/macOS</label><label for="__tabbed_1_2">Windows</label><label for="__tabbed_1_3">Manual setup</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-fish highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./serve-docs.sh
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c"># → http://localhost:8000</span>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>./serve-docs.sh
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c"># → http://localhost:8000</span>
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>serve-docs.cmd
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>REM → http://localhost:8000
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>serve-docs.cmd
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>REM → http://localhost:8000
 </span></code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="language-fish highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>python3 -m venv .venv-docs
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">source</span> .venv-docs/bin/activate.fish    <span class="c"># bash: .venv-docs/bin/activate</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>pip install -r requirements-docs.txt
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>mkdocs serve
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>python3 -m venv .venv-docs
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nb">source</span> .venv-docs/bin/activate.fish    <span class="c"># bash: .venv-docs/bin/activate</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>pip install -r requirements-docs.txt
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>mkdocs serve
 </span></code></pre></div>
 </div>
 </div>
 </div>
 <p>Pages auto-reload on save. To produce a static <code>site/</code> directory for sharing or hosting:</p>
-<div class="language-fish highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>./serve-docs.sh build       <span class="c"># or serve-docs.cmd build</span>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>./serve-docs.sh build       <span class="c"># or serve-docs.cmd build</span>
 </span></code></pre></div>
 <h2 id="when-something-doesnt-work">When something doesn't work<a class="headerlink" href="#when-something-doesnt-work" title="Permanent link">&para;</a></h2>
 <table>
@@ -1460,19 +1508,19 @@
 </thead>
 <tbody>
 <tr>
-<td>XAE complains about library versions on branch switch</td>
-<td>The placeholder refs differ between stage families. XAE may offer to download from the configured NuGet feeds, or use the bundled <code>_Libraries/</code>. Either is fine.</td>
+<td>XAE complains about library versions on solution open</td>
+<td>Library placeholder refs differ per PLC project (Procedural uses fewer libraries than Composition). XAE may offer to download from the configured NuGet feeds, or use the bundled per-project <code>_Libraries/</code>. Either is fine.</td>
 </tr>
 <tr>
 <td>Build error: "function block X not found"</td>
 <td>Branch swapped while solution was open. <strong>Close and re-open NEM2026.sln.</strong></td>
 </tr>
 <tr>
-<td>Build error: "ModePause is not an input variable"</td>
-<td>You're on <code>stage-1-broken</code> — that branch is intentionally broken. Switch to a working branch.</td>
+<td>Only one PLC project visible in Solution Explorer</td>
+<td>The <code>.sln</code> may have stale config. Verify <code>git status</code> is clean on the current branch and you opened <code>NEM2026/NEM2026.sln</code> (not <code>NEM2026.tspproj</code> directly).</td>
 </tr>
 <tr>
-<td><code>git switch stage-1-broken</code> fails with "destination is not a commit"</td>
+<td><code>git switch cr1-applied</code> fails with "destination is not a commit"</td>
 <td>Repo wasn't fetched after a recent push. <code>git fetch origin</code> then retry.</td>
 </tr>
 <tr>
@@ -1502,7 +1550,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 7, 2026 16:49:52 UTC">May 7, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 22, 2026 18:12:37 UTC">May 22, 2026</span>
   </span>
 
     

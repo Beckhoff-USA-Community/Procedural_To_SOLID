@@ -962,10 +962,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#library-policy-per-stage" class="md-nav__link">
+  <a href="#library-policy-per-plc-project" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Library policy per stage
+        Library policy per PLC project
       
     </span>
   </a>
@@ -1030,6 +1030,34 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Branch reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-branches-canonical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current branches (canonical)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-single-plc-branches-historical-preserved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy single-PLC branches (historical, preserved)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1117,10 +1145,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#library-policy-per-stage" class="md-nav__link">
+  <a href="#library-policy-per-plc-project" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Library policy per stage
+        Library policy per PLC project
       
     </span>
   </a>
@@ -1186,6 +1214,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Branch reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-branches-canonical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current branches (canonical)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#legacy-single-plc-branches-historical-preserved" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Legacy single-PLC branches (historical, preserved)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1216,7 +1272,7 @@
 
 
   
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/main/docs/reference.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/Release/docs/reference.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1225,7 +1281,7 @@
     
       
     
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/main/docs/reference.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/Release/docs/reference.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
@@ -1258,31 +1314,36 @@
 </span></code></pre></div>
 <p>The <code>_Libraries/</code> directory is committed deliberately. It contains pre-resolved copies of every library any stage references (Core, SPT, Mc3, XTS, Tc2, Tc3) so XAE can resolve placeholder references <strong>offline</strong> during the workshop without a NuGet feed. Don't delete entries from <code>_Libraries/</code> even when pruning placeholder references on a particular branch.</p>
 <hr />
-<h2 id="library-policy-per-stage">Library policy per stage<a class="headerlink" href="#library-policy-per-stage" title="Permanent link">&para;</a></h2>
-<p>Each stage branch carries only the placeholder references it actually needs. This keeps the project tree clean and makes the framework distinction visible at the project-properties level.</p>
+<h2 id="library-policy-per-plc-project">Library policy per PLC project<a class="headerlink" href="#library-policy-per-plc-project" title="Permanent link">&para;</a></h2>
+<p>Each PLC project carries only the placeholder references its code actually uses. This keeps each project's tree clean and makes the framework distinction visible at the project-properties level.</p>
 <table>
 <thead>
 <tr>
-<th>Branch family</th>
-<th>Required <code>&lt;PlaceholderReference&gt;</code> entries</th>
+<th>PLC project</th>
+<th>Libraries the example code uses</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>main</code>, <code>stage-1-*</code></td>
+<td><code>FillingLine_Procedural</code></td>
 <td><code>Tc2_Standard</code>, <code>Tc2_System</code>, <code>Tc3_Module</code></td>
 </tr>
 <tr>
-<td><code>stage-2-*</code></td>
-<td>above + <code>SPT Base Types</code>, <code>SPT Components</code>, <code>SPT Diagnostic</code>, <code>SPT Event Logger</code>, <code>SPT Utilities</code>, <code>Tc3_EventLogger</code>, <code>Tc3_PackML_V3</code></td>
+<td><code>FillingLine_Inheritance</code></td>
+<td>above + <code>SPT Components</code></td>
 </tr>
 <tr>
-<td><code>stage-3-*</code></td>
-<td>above-base + <code>Core</code>, <code>CoreComponents</code>, <code>Tc3_EventLogger</code></td>
+<td><code>FillingLine_Composition</code></td>
+<td>above-base + <code>Core</code>, <code>CoreComponents</code></td>
 </tr>
 </tbody>
 </table>
-<p>The actual library <em>files</em> are present on disk in <code>_Libraries/</code> regardless of which branch you're on — only the <code>plcproj</code> references differ.</p>
+<p><code>Core</code> and <code>CoreComponents</code> (<code>FillingLine_Composition</code>) are currently internal Beckhoff USA libraries — the lower-layer foundation that the public SPT-Libraries is built on top of. The workshop ships them in each PLC project's <code>_Libraries/</code> cache so attendees can read and build the Stage 3 code; they aren't on the public USA Community NuGet feed and aren't intended for general customer redistribution today. Stage 2 builds on the SPT layer; Stage 3 builds directly on Core's component model (<code>I_Cyclic</code>, <code>I_Diagnostic</code>).</p>
+<p>The actual library <em>files</em> are present on disk in each project's <code>_Libraries/</code> cache — only the <code>plcproj</code> placeholder references differ. (Legacy single-PLC branches use the same family policy expressed per-branch: <code>stage-1-*</code> matches Procedural, <code>stage-2-*</code> matches Inheritance, <code>stage-3-*</code> matches Composition.)</p>
+<div class="admonition note">
+<p class="admonition-title">Stale placeholder refs in plcproj</p>
+<p>Beyond the libraries above, the Inheritance plcproj also declares <code>Tc3_EventLogger</code>, <code>Tc3_PackML_V3</code>, <code>SPT Base Types</code>, <code>SPT Diagnostic</code>, <code>SPT Event Logger</code>, and <code>SPT Utilities</code>; the Composition plcproj also declares <code>Tc3_EventLogger</code>. The example code doesn't directly call into any of these — some (e.g. <code>SPT Base Types</code>) are transitive dependencies XAE resolves through <code>SPT Components</code>, others (<code>Tc3_EventLogger</code>, <code>Tc3_PackML_V3</code>) are dead refs that can be pruned independently.</p>
+</div>
 <hr />
 <h2 id="twincat-xml-envelope">TwinCAT XML envelope<a class="headerlink" href="#twincat-xml-envelope" title="Permanent link">&para;</a></h2>
 <p>Every <code>.TcPOU</code>, <code>.TcDUT</code>, <code>.TcGVL</code>, <code>.TcIO</code> file follows this shape:</p>
@@ -1369,7 +1430,45 @@
 <p>These are configured in <code>FillingLine.plcproj</code> under <code>DisabledWarningIds</code>.</p>
 <hr />
 <h2 id="branch-reference">Branch reference<a class="headerlink" href="#branch-reference" title="Permanent link">&para;</a></h2>
-<p>Quick-lookup of what each branch contains:</p>
+<h3 id="current-branches-canonical">Current branches (canonical)<a class="headerlink" href="#current-branches-canonical" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Branch</th>
+<th>Forks from</th>
+<th>Contains</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Release</code></td>
+<td><code>main</code></td>
+<td>Three PLC projects side-by-side: <code>FillingLine_Procedural</code>, <code>_Inheritance</code>, <code>_Composition</code>. Pre-class baseline — no CRs applied.</td>
+</tr>
+<tr>
+<td><code>cr1-applied</code></td>
+<td><code>Release</code></td>
+<td>CR-1 (Pause) applied to all 3 PLC projects</td>
+</tr>
+<tr>
+<td><code>cr2-applied</code></td>
+<td><code>Release</code></td>
+<td>CR-2 (Inspect quality + parallel) applied to all 3 PLC projects</td>
+</tr>
+<tr>
+<td><code>cr3-applied</code></td>
+<td><code>Release</code></td>
+<td>CR-3 (selective logging) applied to all 3 PLC projects</td>
+</tr>
+<tr>
+<td><code>complete</code></td>
+<td><code>Release</code></td>
+<td>All 3 CRs cumulative across all 3 PLC projects — post-class end state</td>
+</tr>
+</tbody>
+</table>
+<h3 id="legacy-single-plc-branches-historical-preserved">Legacy single-PLC branches (historical, preserved)<a class="headerlink" href="#legacy-single-plc-branches-historical-preserved" title="Permanent link">&para;</a></h3>
+<p>These predate the multi-PLC restructure. The same source content survives in the canonical branches' PLC project subfolders; these are kept as a historical record and as the source for some walkthrough exercises.</p>
 <table>
 <thead>
 <tr>
@@ -1481,7 +1580,6 @@
 <ul>
 <li><a href="https://beckhoff-usa-community.github.io/SPT-Libraries/">SPT-Libraries documentation</a> — Stage 2 framework canon</li>
 <li><a href="https://github.com/Beckhoff-USA-Community/SPT_V4_Samples">SPT_V4_Samples</a> — working SPT examples; <code>SPT_Alarms</code> was the grounding for Stage 2</li>
-<li><a href="https://github.com/Beckhoff-USA-Community/PackML_PLC_Example">VFFS PackML Demo</a> — production Core library usage; grounded Stage 3</li>
 <li><a href="https://infosys.beckhoff.com">Beckhoff TwinCAT 3 documentation</a> — language reference, FB_Init mechanics, attribute pragmas</li>
 </ul>
 
@@ -1504,7 +1602,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 7, 2026 15:30:02 UTC">May 7, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 22, 2026 19:15:43 UTC">May 22, 2026</span>
   </span>
 
     

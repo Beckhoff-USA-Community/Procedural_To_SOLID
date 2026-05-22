@@ -33,7 +33,12 @@
 }
 
 /* Branch labels — give them a translucent dark background instead of
-   the default near-white that vanishes against slate */
+   the default near-white that vanishes against slate.
+   Mermaid v11 gitGraph uses <rect class="branchLabelBkg labelN"> where
+   .labelN supplies a bright per-branch fill (yellow/cyan/lime/etc.) —
+   target .branchLabelBkg directly so we win regardless of which labelN
+   is also applied. .label-container / .edgeLabel cover flowcharts. */
+[data-md-color-scheme="slate"] .mermaid svg .branchLabelBkg,
 [data-md-color-scheme="slate"] .mermaid svg .branchLabel rect,
 [data-md-color-scheme="slate"] .mermaid svg .label-container,
 [data-md-color-scheme="slate"] .mermaid svg .edgeLabel rect {
@@ -41,8 +46,33 @@
     stroke: rgba(160, 170, 200, 0.6) !important;
 }
 
-/* Branch label text — explicitly bright against the new dark fill */
+/* gitGraph commit labels — Mermaid defaults the bkg to pale cream
+   (#ffffde) at 0.5 opacity with near-black text. Make the bkg fully
+   opaque dark so the rotated commit-id text on top is high contrast,
+   and use a tag-qualified selector so we beat the earlier
+   g.commit-labels rule (specificity 0,3,3) that would otherwise force
+   text to var(--md-default-fg-color) at only 0.82 alpha — which blended
+   into the rect and made the labels muddy/unreadable. */
+[data-md-color-scheme="slate"] .mermaid svg rect.commit-label-bkg {
+    fill: #1e293b !important;          /* slate-800, fully opaque */
+    stroke: rgba(160, 170, 200, 0.6) !important;
+    opacity: 1 !important;
+}
+
+/* Commit-id text — pure white, specificity (0,3,4) beats the earlier
+   g.commit-labels text rule (0,3,3) that forced low-alpha fg color. */
+[data-md-color-scheme="slate"] .mermaid svg g.commit-labels text.commit-label {
+    fill: #ffffff !important;
+}
+
+/* Branch label text — explicitly bright against the new dark fill.
+   Mermaid v11 uses <text class="branchLabel"> wrapped in
+   <g class="label branch-labelN"> where .branch-labelN alternates
+   black/white for contrast against the original bright fill. Override
+   both so all branch labels render light on our dark bkg. */
+[data-md-color-scheme="slate"] .mermaid svg .branchLabel,
 [data-md-color-scheme="slate"] .mermaid svg .branchLabel text,
+[data-md-color-scheme="slate"] .mermaid svg [class*="branch-label"],
 [data-md-color-scheme="slate"] .mermaid svg .label-container text {
     fill: rgba(255, 255, 255, 0.95) !important;
 }

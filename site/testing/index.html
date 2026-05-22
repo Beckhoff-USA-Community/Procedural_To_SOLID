@@ -1282,7 +1282,7 @@
 
 
   
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/main/docs/testing.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/edit/Release/docs/testing.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -1291,7 +1291,7 @@
     
       
     
-    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/main/docs/testing.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/Mark-Code-Cowboys/NEM_Workshop/raw/Release/docs/testing.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
@@ -1299,13 +1299,9 @@
 
 
 <h1 id="unit-testing-extra-credit">Unit testing — extra credit<a class="headerlink" href="#unit-testing-extra-credit" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p class="admonition-title">When to use this page</p>
-<p>This is <strong>bonus material for classes that finish early</strong>, or for self-paced learners who want to extend the workshop after attending. It is <strong>not</strong> part of the core 4-hour workshop schedule. Instructors should treat it as an <em>if-time-permits</em> segment — see the <a href="../instructor/#if-youre-ahead">Instructor's guide → If you're ahead</a> section for facilitation guidance.</p>
-<p>For attendees: feel free to read this any time. The architectural lesson lands fully without ever running a test.</p>
-</div>
 <p>The deepest payoff of Stage 3's composition isn't visible in the diff scoreboard. It's in <strong>testability</strong>. PLC code that depends on its dependencies via construction (instead of reaching for globals or instantiating its own actuators) is unit-testable in a way Stage 1 and Stage 2 code fundamentally cannot be.</p>
 <p>This page demonstrates that with a working test suite for <code>stage-3-complete</code>, built on top of <a href="https://github.com/SimmelFlo/PlcTestSuite">SimmelFlo's PlcTestSuite</a> — a friendly TwinCAT 3 testing framework that lowers the TDD barrier for control-code engineers.</p>
+<p>PlcTestSuite was picked because it's the <strong>lightest install</strong> — a single library file, demoable in a workshop slot. <a href="https://github.com/tcunit/TcUnit">TcUnit</a> is the older, better-known alternative; a <strong>first-party Beckhoff test framework is also in flight</strong> and will be worth tracking for shops standardizing on Beckhoff tooling. Whichever framework you pick later, the architectural prerequisite is the same: dependency injection. Stage 1 and Stage 2 stations don't have it, so none of these frameworks can test them in isolation.</p>
 <p>The branch <code>stage-3-complete-tests</code> carries the test suite. The mainline <code>stage-3-complete</code> branch deliberately does not — testing is extra credit, not a workshop prerequisite.</p>
 <h2 id="why-composition-is-testable">Why composition is testable<a class="headerlink" href="#why-composition-is-testable" title="Permanent link">&para;</a></h2>
 <p>A station in Stage 1 or Stage 2 is <strong>structurally tied to its environment</strong>:</p>
@@ -1504,7 +1500,7 @@
 <ul>
 <li><a href="https://github.com/SimmelFlo/PlcTestSuite">SimmelFlo/PlcTestSuite</a> — the framework's repo, including releases and CLAUDE.md</li>
 <li><a href="https://github.com/tcunit/TcUnit">TcUnit</a> — alternative TwinCAT testing framework, more established but heavier setup</li>
-<li><a href="https://github.com/Beckhoff-USA-Community">Beckhoff TC3 PLC Test Examples</a> — Beckhoff USA's own test examples in their sample repos</li>
+<li>A <strong>first-party Beckhoff test framework is in flight</strong> — no public link yet; track Beckhoff InfoSys for the announcement</li>
 <li>This repo's <code>stage-3-complete-tests</code> branch — <code>NEM2026/FillingLine/POUs/Tests/FB_TestRunner.TcPOU</code></li>
 </ul>
 
@@ -1527,7 +1523,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 7, 2026 17:21:42 UTC">May 7, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 22, 2026 19:15:43 UTC">May 22, 2026</span>
   </span>
 
     
