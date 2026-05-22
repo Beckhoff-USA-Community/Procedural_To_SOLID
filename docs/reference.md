@@ -39,7 +39,7 @@ Each PLC project carries only the placeholder references its code actually uses.
 | PLC project | Libraries the example code uses |
 |---|---|
 | `FillingLine_Procedural`  | `Tc2_Standard`, `Tc2_System`, `Tc3_Module` |
-| `FillingLine_Inheritance` | above + `SPT Base Types`, `SPT Components`, `SPT Diagnostic`, `SPT Event Logger`, `SPT Utilities` |
+| `FillingLine_Inheritance` | above + `SPT Components` |
 | `FillingLine_Composition` | above-base + `Core`, `CoreComponents` |
 
 `Core` and `CoreComponents` (`FillingLine_Composition`) are currently internal Beckhoff USA libraries — the lower-layer foundation that the public SPT-Libraries is built on top of. The workshop ships them in each PLC project's `_Libraries/` cache so attendees can read and build the Stage 3 code; they aren't on the public USA Community NuGet feed and aren't intended for general customer redistribution today. Stage 2 builds on the SPT layer; Stage 3 builds directly on Core's component model (`I_Cyclic`, `I_Diagnostic`).
@@ -47,7 +47,7 @@ Each PLC project carries only the placeholder references its code actually uses.
 The actual library *files* are present on disk in each project's `_Libraries/` cache — only the `plcproj` placeholder references differ. (Legacy single-PLC branches use the same family policy expressed per-branch: `stage-1-*` matches Procedural, `stage-2-*` matches Inheritance, `stage-3-*` matches Composition.)
 
 !!! note "Stale placeholder refs in plcproj"
-    The `Inheritance` and `Composition` plcprojs currently still declare `Tc3_EventLogger` and `Tc3_PackML_V3` as placeholder references, but no example code touches either. Dead refs — safe to prune. `MechatronicsCore` is not declared in any plcproj despite older docs suggesting it.
+    Beyond the libraries above, the Inheritance plcproj also declares `Tc3_EventLogger`, `Tc3_PackML_V3`, `SPT Base Types`, `SPT Diagnostic`, `SPT Event Logger`, and `SPT Utilities`; the Composition plcproj also declares `Tc3_EventLogger`. The example code doesn't directly call into any of these — some (e.g. `SPT Base Types`) are transitive dependencies XAE resolves through `SPT Components`, others (`Tc3_EventLogger`, `Tc3_PackML_V3`) are dead refs that can be pruned independently. `MechatronicsCore` is not declared in any plcproj despite older docs suggesting it.
 
 ---
 

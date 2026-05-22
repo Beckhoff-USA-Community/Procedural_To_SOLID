@@ -51,15 +51,9 @@ Two library families show up in the workshop:
 
 ### SPT-Libraries (used in Stage 2)
 
-The full set:
+Stage 2's `FB_StationBase` derives from **`FB_ComponentBase`** in **SPT Components** — the workshop's only direct use of SPT. The Inheritance plcproj also declares `SPT Base Types`, `SPT Diagnostic`, `SPT Event Logger`, and `SPT Utilities` as placeholder references for build resolution; the example code doesn't call into them. Install the SPT family as a package — easier than picking individual libraries, and XAE resolves transitive deps for you.
 
-- **SPT Base Types** — fundamental component types
-- **SPT Components** — `FB_ComponentBase` and friends (the inheritance base)
-- **SPT Diagnostic** — diagnostic interfaces
-- **SPT Event Logger** — event registration and routing
-- **SPT Utilities** — assorted helpers
-
-Source: <https://github.com/Beckhoff-USA-Community/SPT-Libraries> (the master repo with documentation at <https://beckhoff-usa-community.github.io/SPT-Libraries/>)
+Source: <https://github.com/Beckhoff-USA-Community/SPT-Libraries> (master repo + docs at <https://beckhoff-usa-community.github.io/SPT-Libraries/>)
 
 Distribution: typically via the **Beckhoff USA Community NuGet feed**. Add the feed in XAE under `Tools → NuGet Package Manager → Package Sources`:
 
