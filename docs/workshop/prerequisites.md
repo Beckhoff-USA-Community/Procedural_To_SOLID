@@ -73,10 +73,8 @@ https://beckhoff-usa-community.github.io/PackageRepository/index.json   (USA Com
 
 - **Core** — base interfaces (`I_Cyclic`, `I_Diagnostic`)
 - **CoreComponents** — component base classes
-- **MechatronicsCore** — mechatronics primitives (not used directly in the workshop)
-- **CoreMotionMc3** / **CoreMotionNc2** — motion (not used)
 
-Distribution: same feeds as SPT.
+Distribution: **internal to Beckhoff USA today** — not on the public USA Community NuGet feed. The workshop ships them in `_Libraries/` for offline build. Outside this workshop, treat them as internal-only.
 
 ### You don't have to install these for the workshop
 
@@ -88,7 +86,7 @@ Each PLC project has its own committed `_Libraries/` cache:
 
 Every library any stage references is pre-resolved in there, so XAE can resolve placeholder references **offline**. The first time you open the solution, XAE may complain it doesn't recognize the libraries — point it at the appropriate `_Libraries/` and click through.
 
-If you want to upgrade libraries later (or use them in your own projects), connect the NuGet feeds.
+If you want to upgrade libraries later (or use SPT in your own projects), connect the public NuGet feeds — Core / CoreComponents are not available there today.
 
 ## Knowledge prerequisites
 
