@@ -12,7 +12,7 @@ As of 2026-05-21, the workshop ships as a single TwinCAT solution containing thr
 
 - **`FillingLine_Procedural/` — Procedural / monolithic.** Plain ST + `Tc2_Standard` / `Tc2_System` / `Tc3_Module`. Each station is a standalone FB with deliberately copy-pasted drift (R_TRIG vs level alarm-ack, 0/100/200/300 vs 0/10/20 step numbering, dead `ManualStep` var) — the drift is pedagogical and must be preserved.
 - **`FillingLine_Inheritance/` — Inheritance.** Stations extend `FB_StationBase` and SPT base classes from the **SPT-Libraries** framework (Beckhoff Automation LLC — `SPT Base Types`, `SPT Components`, `SPT Diagnostic`, `SPT Event Logger`, `SPT Utilities`). Canonical design guide: **https://beckhoff-usa-community.github.io/SPT-Libraries/** — follow that style guide for FB/method naming, component lifecycle (`Cyclic`, `Init`/`Reset`), and diagnostic conventions.
-- **`FillingLine_Composition/` — SOLID / composition.** Stations are composed from small FBs wired via interfaces, on the **Core** libraries (`Core`, `CoreComponents`, `MechatronicsCore`) — `I_Cyclic`, `I_Diagnostic`, component pattern. No inheritance from station base classes; behavior varies by injecting different implementations of `I_AlarmHandler`, `I_DataLogger`, etc.
+- **`FillingLine_Composition/` — SOLID / composition.** Stations are composed from small FBs wired via interfaces, on the **Core** libraries (`Core`, `CoreComponents`) — currently internal Beckhoff USA libraries, the lower-layer foundation the public SPT-Libraries is built on top of. `I_Cyclic`, `I_Diagnostic`, component pattern. No inheritance from station base classes; behavior varies by injecting different implementations of `I_AlarmHandler`, `I_DataLogger`, etc.
 
 All three PLCs run concurrently on their own system task in the same runtime, so attendees can attach an online view / HMI to any of them. The Procedural → Inheritance → Composition progression is the whole point — keep state machines minimal and let the framework comparison do the teaching.
 
@@ -72,15 +72,19 @@ Don't regenerate these GUIDs casually — XAE keys off them for project identity
 
 ## Library reference policy (per PLC project)
 
-Each PLC project carries only the placeholder references it actually uses — keeps each PLC's project tree clean and makes the framework distinction visible across the solution:
+Each PLC project carries only the placeholder references its code actually uses — keeps each PLC's project tree clean and makes the framework distinction visible across the solution:
 
-| PLC project | Required `<PlaceholderReference>` entries |
+| PLC project | Libraries the example code uses |
 |---|---|
 | `FillingLine_Procedural`  | `Tc2_Standard`, `Tc2_System`, `Tc3_Module` |
-| `FillingLine_Inheritance` | above + `Tc3_EventLogger`, `Tc3_PackML_V3`, `SPT Base Types`, `SPT Components`, `SPT Diagnostic`, `SPT Event Logger`, `SPT Utilities` |
-| `FillingLine_Composition` | above-base + `Core`, `CoreComponents`, `MechatronicsCore` |
+| `FillingLine_Inheritance` | above + `SPT Base Types`, `SPT Components`, `SPT Diagnostic`, `SPT Event Logger`, `SPT Utilities` |
+| `FillingLine_Composition` | above-base + `Core`, `CoreComponents` |
 
-Each PLC project's `_Libraries/` on disk holds resolved copies of all the original libraries (Core/SPT/Mc3/XTS/Tc2/Tc3) so XAE can resolve placeholders offline — do not delete entries from `_Libraries/` even when pruning placeholder references.
+The Core / CoreComponents libraries (`FillingLine_Composition`) are currently internal Beckhoff USA libraries — the lower-layer foundation that the public SPT-Libraries is built on top of. The workshop ships them in each PLC project's committed `_Libraries/` cache so attendees can read and build the Stage 3 code; they aren't on the public USA Community NuGet feed and aren't intended for general customer redistribution today. Stage 2 builds on the SPT layer; Stage 3 builds directly on Core's component model (`I_Cyclic`, `I_Diagnostic`).
+
+The `Inheritance` and `Composition` plcprojs currently still declare `Tc3_EventLogger` and `Tc3_PackML_V3` as placeholder references, but no example code touches either — they're dead refs and can be pruned independently. `MechatronicsCore` is not declared in any plcproj despite older docs suggesting it.
+
+Each PLC project's `_Libraries/` on disk holds resolved copies of every library XAE may need (Core/SPT/Mc3/XTS/Tc2/Tc3) so placeholders resolve offline — do not delete entries from `_Libraries/` even when pruning placeholder references.
 
 ## Build / run
 

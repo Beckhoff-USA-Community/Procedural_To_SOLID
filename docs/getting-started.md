@@ -105,7 +105,7 @@ NEM2026/                                # TwinCAT solution root
 │       ├── FB_StationBase.TcPOU        # SPT-derived station base class
 │       └── FB_Station*.TcPOU           # 4 stations, all extend FB_StationBase
 └── FillingLine_Composition/
-    ├── FillingLine_Composition.plcproj # + Core / CoreComponents / MechatronicsCore
+    ├── FillingLine_Composition.plcproj # + Core / CoreComponents
     ├── PlcTask_Co.TcTTO                # 10 ms / priority 22 / AmsPort 853
     ├── DUTs/                           # ST_LogEntry etc.
     └── POUs/
