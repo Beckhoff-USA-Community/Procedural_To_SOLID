@@ -593,7 +593,7 @@ This document.
 
 ## Becoming a teacher of this material
 
-The bar for the FAE audience is: **become believers and teachers**. The "believer" part comes from doing the workshop. The "teacher" part requires three more things:
+The bar for the FAE audience is: **become practitioners and teachers**. The "practitioner" part comes from doing the workshop. The "teacher" part requires three more things:
 
 1. **Run a shorter version yourself** — within a month of attending, run the 1-hour or 2-hour version for your own team or one customer. The first time you teach it, you'll discover what you actually understood vs. what you only nodded along to.
 2. **Adapt the script to your audience** — the script in this document is calibrated for FAEs. If you're teaching controls engineers at a customer site, soften the pace; spend more time on the Stage 1 → Stage 2 transition (most controls engineers haven't deeply used inheritance). If you're teaching software engineers, skip the procedural-paradigm theory; jump to the patterns vocabulary in Stage 3.
