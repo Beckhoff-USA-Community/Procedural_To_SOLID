@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="FB_StationInspect" Id="{481745ee-e92b-4195-9be0-3514c520e3eb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
     CameraReady      : BOOL;
@@ -22,7 +22,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE State OF
+        <ST><![CDATA[SUPER^.ExecuteSequence();
+
+CASE State OF
     0:
         TriggerCamera := FALSE;
         RejectPusher  := FALSE;
