@@ -140,7 +140,7 @@ If you've never touched a PLC unit-testing framework but want to see where Stage
 
 - **[PlcTestSuite](https://github.com/SimmelFlo/PlcTestSuite)** — what we use in the workshop's testing extra-credit. Friendly TwinCAT 3 framework, lightest install. Stage 3's dependency injection is the prerequisite for any of these to work.
 - **[TcUnit](https://github.com/tcunit/TcUnit)** — the older / better-known alternative. More setup; same architectural prerequisite.
-- **A first-party Beckhoff test framework is in flight** — like TcUnit, expect a heavier lift than PlcTestSuite. Worth tracking for shops standardizing on Beckhoff tooling.
+- **A first-party Beckhoff test framework is in flight** — worth tracking for shops standardizing on Beckhoff tooling.
 
 ## What to bring on the day
 

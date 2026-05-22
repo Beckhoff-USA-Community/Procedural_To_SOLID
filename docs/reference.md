@@ -47,7 +47,7 @@ Each PLC project carries only the placeholder references its code actually uses.
 The actual library *files* are present on disk in each project's `_Libraries/` cache — only the `plcproj` placeholder references differ. (Legacy single-PLC branches use the same family policy expressed per-branch: `stage-1-*` matches Procedural, `stage-2-*` matches Inheritance, `stage-3-*` matches Composition.)
 
 !!! note "Stale placeholder refs in plcproj"
-    Beyond the libraries above, the Inheritance plcproj also declares `Tc3_EventLogger`, `Tc3_PackML_V3`, `SPT Base Types`, `SPT Diagnostic`, `SPT Event Logger`, and `SPT Utilities`; the Composition plcproj also declares `Tc3_EventLogger`. The example code doesn't directly call into any of these — some (e.g. `SPT Base Types`) are transitive dependencies XAE resolves through `SPT Components`, others (`Tc3_EventLogger`, `Tc3_PackML_V3`) are dead refs that can be pruned independently. `MechatronicsCore` is not declared in any plcproj despite older docs suggesting it.
+    Beyond the libraries above, the Inheritance plcproj also declares `Tc3_EventLogger`, `Tc3_PackML_V3`, `SPT Base Types`, `SPT Diagnostic`, `SPT Event Logger`, and `SPT Utilities`; the Composition plcproj also declares `Tc3_EventLogger`. The example code doesn't directly call into any of these — some (e.g. `SPT Base Types`) are transitive dependencies XAE resolves through `SPT Components`, others (`Tc3_EventLogger`, `Tc3_PackML_V3`) are dead refs that can be pruned independently.
 
 ---
 
