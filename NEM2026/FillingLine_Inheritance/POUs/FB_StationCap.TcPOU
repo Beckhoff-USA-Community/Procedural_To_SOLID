@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_StationCap" Id="{995aa1f9-2aab-436e-9cda-670bc81baac1}" SpecialFunc="None">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="FB_StationCap" Id="{23602e14-8620-4c58-a328-d1689581992a}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap EXTENDS FB_StationBase
 VAR_INPUT
     CapFeederReady   : BOOL;
