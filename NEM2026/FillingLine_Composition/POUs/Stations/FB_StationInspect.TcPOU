@@ -5,34 +5,36 @@
 // and a LineFault-style alarm injection (latching). The CR-2 swap exercise
 // in stage-3-composition replaces the alarm strategy with a QualityFlag and
 // the sequencer with FB_ParallelSequencer — without touching the other stations.
-FUNCTION_BLOCK FB_StationInspect IMPLEMENTS I_Sequenceable, I_HmiReportable
-VAR_INPUT
-    PartPresent   : BOOL;
-    CameraReady   : BOOL;
-    InspectResult : BOOL;
-END_VAR
-VAR_OUTPUT
-    TriggerCamera : BOOL;
-    RejectPusher  : BOOL;
-    PassResult    : BOOL;
-END_VAR
+FUNCTION_BLOCK FB_StationInspect IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Inspect
 VAR
     Mode      : I_ModeProvider;
     Alarm     : I_AlarmHandler;
     Sequencer : FB_StepSequencer;
     Watchdog  : FB_TimeoutWatchdog;
+
+	// inputs
+    _PartPresent   : BOOL;
+    _CameraReady   : BOOL;
+    _InspectResult : BOOL;
+
+	// outputs	
+    _TriggerCamera : BOOL;
+    _RejectPusher  : BOOL;
+    _PassResult    : BOOL;
+
     _CameraDelay : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="Station" Id="{c0ef751c-4760-4767-a9d5-413059894452}" />
     <Method Name="Abort" Id="{9c59d0aa-45c2-4395-865a-9de70bb0531d}">
       <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[TriggerCamera := FALSE;
-RejectPusher  := FALSE;
+        <ST><![CDATA[_TriggerCamera := FALSE;
+_RejectPusher  := FALSE;
 Sequencer.ResetSequencer();
 Watchdog.Reset();
 Abort := TRUE;
@@ -61,6 +63,17 @@ PROPERTY AlarmMessage : STRING(255)
         </Implementation>
       </Get>
     </Property>
+    <Property Name="CameraReady" Id="{35951283-7359-4b19-9e15-b39aa114201e}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY CameraReady : BOOL]]></Declaration>
+      <Set Name="Set" Id="{f92418bf-5dc9-49d4-8473-339c8b446756}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_CameraReady := CameraReady;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Execute" Id="{111cd733-a861-46ef-8e48-87b03c89d74c}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
@@ -74,41 +87,41 @@ END_IF
 
 CASE Sequencer.CurrentStep OF
     0:
-        TriggerCamera := FALSE;
-        RejectPusher  := FALSE;
-        PassResult    := FALSE;
+        _TriggerCamera := FALSE;
+        _RejectPusher  := FALSE;
+        _PassResult    := FALSE;
         Watchdog.Reset();
-        IF Mode.AllowRun AND PartPresent AND CameraReady THEN
+        IF Mode.AllowRun AND _PartPresent AND _CameraReady THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
             Watchdog.Duration := T#5S;
         END_IF
 
     10:
-        TriggerCamera := TRUE;
+        _TriggerCamera := TRUE;
         _CameraDelay(IN := TRUE, PT := T#200MS);
         IF _CameraDelay.Q THEN
             _CameraDelay(IN := FALSE);
-            TriggerCamera := FALSE;
+            _TriggerCamera := FALSE;
             Sequencer.TransitionTo(20);
         END_IF
 
     20:
-        IF InspectResult THEN
-            PassResult := TRUE;
+        IF _InspectResult THEN
+            _PassResult := TRUE;
             Sequencer.TransitionTo(30);
         ELSE
-            PassResult := FALSE;
+            _PassResult := FALSE;
             Alarm.RaiseAlarm(Code := 4001, Text := 'Inspect: Visual defect');
             Sequencer.TransitionTo(25);
         END_IF
 
     25:
-        RejectPusher := TRUE;
+        _RejectPusher := TRUE;
         _CameraDelay(IN := TRUE, PT := T#300MS);
         IF _CameraDelay.Q THEN
             _CameraDelay(IN := FALSE);
-            RejectPusher := FALSE;
+            _RejectPusher := FALSE;
             Sequencer.TransitionTo(30);
         END_IF
 
@@ -144,6 +157,17 @@ FB_Init := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="InspectResult" Id="{2eafb205-78d1-44c1-9a8f-7d3c0f3b95f6}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY InspectResult : BOOL]]></Declaration>
+      <Set Name="Set" Id="{336b9f3b-eae5-4b19-8530-0b6e0b2c3373}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_InspectResult := InspectResult;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="IsComplete" Id="{df6379f6-8829-4877-8e7f-1281544928e2}">
       <Declaration><![CDATA[PROPERTY IsComplete : BOOL
 ]]></Declaration>
@@ -164,6 +188,55 @@ FB_Init := TRUE;
         </Implementation>
       </Get>
     </Property>
+    <Property Name="PartPresent" Id="{1a951d45-4421-4606-8c3b-0a7a7e197f40}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY PartPresent : BOOL]]></Declaration>
+      <Set Name="Set" Id="{2cd7279e-d6c4-4457-bd52-ba29f49a16e2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_PartPresent := PartPresent;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PassResult" Id="{a5d0cc44-e145-49d3-943b-55e9c7c86091}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY PassResult : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3a5a235c-075b-4ae5-be52-ab00f6b43027}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PassResult := _PassResult;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{d1d865c2-ada2-4206-82ce-502d562530a3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[PassResult := _PassResult;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="RejectPusher" Id="{5692015f-c914-434e-9705-c50f783cf4de}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY RejectPusher : BOOL]]></Declaration>
+      <Get Name="Get" Id="{f2a12c4e-8f38-47a4-bf63-990c22d341e6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RejectPusher := _RejectPusher;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b83a1a0f-8236-42cb-8a88-9527c34390f1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RejectPusher := _RejectPusher;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Reset" Id="{be919567-ad02-446b-819f-43d8e21762c7}">
       <Declaration><![CDATA[METHOD Reset : BOOL
 ]]></Declaration>
@@ -171,9 +244,9 @@ FB_Init := TRUE;
         <ST><![CDATA[Sequencer.ResetSequencer();
 Watchdog.Reset();
 Alarm.Clear();
-TriggerCamera := FALSE;
-RejectPusher  := FALSE;
-PassResult    := FALSE;
+_TriggerCamera := FALSE;
+_RejectPusher  := FALSE;
+_PassResult    := FALSE;
 Reset := TRUE;
 ]]></ST>
       </Implementation>
@@ -209,6 +282,25 @@ PROPERTY StatusText : STRING(80)
           <ST><![CDATA[StatusText := Sequencer.StepName;]]></ST>
         </Implementation>
       </Get>
+    </Property>
+    <Property Name="TriggerCamera" Id="{a89e41fe-0410-42da-8d31-cfa9abe6dd47}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY TriggerCamera : BOOL]]></Declaration>
+      <Get Name="Get" Id="{8bf933da-385b-4980-96bc-17ecf0dd1025}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TriggerCamera := _TriggerCamera;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{99afb43a-908f-4139-9a29-cd7f1a6082b2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TriggerCamera := TriggerCamera;]]></ST>
+        </Implementation>
+      </Set>
     </Property>
   </POU>
 </TcPlcObject>

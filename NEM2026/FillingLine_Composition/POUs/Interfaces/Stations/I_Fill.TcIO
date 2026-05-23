@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <Itf Name="I_Fill" Id="{055a0dc6-6d03-4341-b896-69eb67a93334}">
+    <Declaration><![CDATA[INTERFACE I_Fill EXTENDS I_Station
+]]></Declaration>
+    <Property Name="FlowRate" Id="{764ed5f8-0a29-4859-9439-abad60f41b82}">
+      <Declaration><![CDATA[PROPERTY FlowRate : LREAL]]></Declaration>
+      <Set Name="Set" Id="{c198749f-fea6-4ad3-a594-8b95f0397dd7}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="OpenFillValve" Id="{1e84f56c-dd03-4f92-9892-64e3a9c6f62b}">
+      <Declaration><![CDATA[PROPERTY OpenFillValve : BOOL]]></Declaration>
+      <Get Name="Get" Id="{6376e4d4-fe0c-4275-888f-f265be65ca04}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{12065a64-46d2-40a4-bdb7-7d9d13d11081}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="TargetVolume" Id="{ccfc4f21-d004-451c-8a2b-81661bcd0094}">
+      <Declaration><![CDATA[PROPERTY TargetVolume : LREAL]]></Declaration>
+      <Set Name="Set" Id="{7f9c7104-d291-4886-9131-820342c72e13}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>
