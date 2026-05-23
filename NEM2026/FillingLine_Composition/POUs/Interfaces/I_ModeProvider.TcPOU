@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <Itf Name="I_ModeProvider" Id="{2dc23b51-a2b2-47d1-a42e-5650f2ad2c8a}">
     <Declaration><![CDATA[INTERFACE I_ModeProvider
 ]]></Declaration>
-    <Property Name="CurrentMode" Id="{0adc6758-8186-4c90-be8e-35cede23ba37}">
-      <Declaration><![CDATA[// 0 = Idle, 1 = Auto, 2 = Manual, 3 = Paused (added at CR-1)
-PROPERTY CurrentMode : INT
+    <Property Name="AllowJog" Id="{1d3aa30d-9b91-492d-b641-15ee60c38099}">
+      <Declaration><![CDATA[PROPERTY AllowJog : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{00a75fab-d1eb-41b6-b9e8-cba987909e02}">
+      <Get Name="Get" Id="{c932edbc-30b0-4102-b904-28af96c097ad}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
@@ -18,12 +17,25 @@ PROPERTY CurrentMode : INT
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Property Name="AllowJog" Id="{1d3aa30d-9b91-492d-b641-15ee60c38099}">
-      <Declaration><![CDATA[PROPERTY AllowJog : BOOL
+    <Property Name="CurrentMode" Id="{0adc6758-8186-4c90-be8e-35cede23ba37}">
+      <Declaration><![CDATA[// 0 = Idle, 1 = Auto, 2 = Manual, 3 = Paused (added at CR-1)
+PROPERTY CurrentMode : INT
 ]]></Declaration>
-      <Get Name="Get" Id="{c932edbc-30b0-4102-b904-28af96c097ad}">
+      <Get Name="Get" Id="{00a75fab-d1eb-41b6-b9e8-cba987909e02}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
+    </Property>
+    <Property Name="ModeAuto" Id="{6f487dc4-c533-4313-baf2-b39c93e15fac}">
+      <Declaration><![CDATA[PROPERTY ModeAuto : BOOL]]></Declaration>
+      <Set Name="Set" Id="{3627d3ea-f0a5-40a4-b8fb-887084be34ef}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="ModeManual" Id="{8965e37f-76d3-4194-977d-4ae8e274ee1d}">
+      <Declaration><![CDATA[PROPERTY ModeManual : BOOL]]></Declaration>
+      <Set Name="Set" Id="{1abf7c83-5288-45ed-95dd-0ed6124b7f50}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
     </Property>
   </Itf>
 </TcPlcObject>
