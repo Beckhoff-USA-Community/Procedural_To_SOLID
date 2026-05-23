@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <Itf Name="I_Inspect" Id="{f9c9848f-3caf-470a-ae2c-a2ec8d9c2942}">
+    <Declaration><![CDATA[INTERFACE I_Inspect EXTENDS I_Station
+]]></Declaration>
+    <Property Name="CameraReady" Id="{94922702-c636-4dd2-bc26-1c0df4d6f49f}">
+      <Declaration><![CDATA[PROPERTY CameraReady : BOOL]]></Declaration>
+      <Set Name="Set" Id="{3f382f95-7e39-4a2e-8bb0-e5e010fadcbc}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="InspectResult" Id="{2d5f57fe-c397-43bd-9da4-2c5613156fb7}">
+      <Declaration><![CDATA[PROPERTY InspectResult : BOOL]]></Declaration>
+      <Set Name="Set" Id="{48b1fbcf-bfd2-4caf-9673-ab70e60abc4e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="PassResult" Id="{8487e6a6-f8f1-4853-88d8-664c9e0ab868}">
+      <Declaration><![CDATA[PROPERTY PassResult : BOOL]]></Declaration>
+      <Get Name="Get" Id="{0b4a72dd-ae53-4eb8-9bc2-2f1396903c25}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{e3d3627a-7057-46b3-9348-169bf04a8553}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="RejectPusher" Id="{0e27574a-a696-40f6-aa1f-a9a21b75e289}">
+      <Declaration><![CDATA[PROPERTY RejectPusher : BOOL]]></Declaration>
+      <Get Name="Get" Id="{509a3110-49cf-4205-96b8-155fd675b435}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{7f633a45-531b-48ba-aff0-fd69e48f0ec3}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="TriggerCamera" Id="{611c71ff-ab3c-48d8-966b-425fcfb29d70}">
+      <Declaration><![CDATA[PROPERTY TriggerCamera : BOOL]]></Declaration>
+      <Get Name="Get" Id="{7beb7051-4681-4844-a092-db11ec6e5a1c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{e27226f7-16ad-464a-bd2f-634e9dbbb49d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

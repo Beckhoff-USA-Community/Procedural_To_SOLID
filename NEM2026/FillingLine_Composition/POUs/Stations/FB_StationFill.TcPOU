@@ -1,15 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationFill" Id="{cc1f58fd-8497-4a06-9c17-b82d512ff845}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill IMPLEMENTS I_Sequenceable, I_HmiReportable
-VAR_INPUT
-    PartPresent  : BOOL;
-    FlowRate     : LREAL;
-    TargetVolume : LREAL;
-END_VAR
-VAR_OUTPUT
-    OpenFillValve : BOOL;
-END_VAR
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Fill
 VAR
     // injected dependencies (set in FB_Init)
     Mode      : I_ModeProvider;
@@ -18,7 +10,15 @@ VAR
     // composed building blocks
     Sequencer : FB_StepSequencer;
     Watchdog  : FB_TimeoutWatchdog;
-
+	
+	// inputs
+    _PartPresent  : BOOL;
+    _FlowRate     : LREAL;
+    _TargetVolume : LREAL;
+	
+	// outputs
+    _OpenFillValve : BOOL;
+	
     // process-specific
     _Accumulated : LREAL;
 END_VAR
@@ -26,11 +26,12 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="Station" Id="{6522d23d-cb3c-4935-a3b2-076c9a80bea2}" />
     <Method Name="Abort" Id="{945337c6-5351-4dca-8618-6c7d17b38a42}">
       <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[OpenFillValve := FALSE;
+        <ST><![CDATA[_OpenFillValve := FALSE;
 Sequencer.ResetSequencer();
 Watchdog.Reset();
 Abort := TRUE;
@@ -72,27 +73,27 @@ END_IF
 
 CASE Sequencer.CurrentStep OF
     0:
-        OpenFillValve := FALSE;
+        _OpenFillValve := FALSE;
         _Accumulated  := 0.0;
         Watchdog.Reset();
-        IF Mode.AllowRun AND PartPresent THEN
+        IF Mode.AllowRun AND _PartPresent THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
             Watchdog.Duration := T#10S;
         END_IF
 
     10:
-        OpenFillValve := TRUE;
-        IF FlowRate < 0.1 THEN
+        _OpenFillValve := TRUE;
+        IF _FlowRate < 0.1 THEN
             Alarm.RaiseAlarm(Code := 1001, Text := 'Fill: No flow detected');
         END_IF
-        _Accumulated := _Accumulated + (FlowRate * 0.001);
-        IF _Accumulated >= TargetVolume THEN
+        _Accumulated := _Accumulated + (_FlowRate * 0.001);
+        IF _Accumulated >= _TargetVolume THEN
             Sequencer.TransitionTo(20);
         END_IF
 
     20:
-        OpenFillValve := FALSE;
+        _OpenFillValve := FALSE;
         Watchdog.Enable := FALSE;
         Sequencer.MarkComplete();
 END_CASE
@@ -122,6 +123,17 @@ FB_Init := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="FlowRate" Id="{f0045f3b-3db8-4f39-a38d-e4cecd96513f}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY FlowRate : LREAL]]></Declaration>
+      <Set Name="Set" Id="{6bf9353e-7f7f-485b-bcf0-d27f0f4857a8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_FlowRate := FlowRate;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="IsComplete" Id="{ad6e4427-3b43-475c-b72a-5166e1bb3983}">
       <Declaration><![CDATA[PROPERTY IsComplete : BOOL
 ]]></Declaration>
@@ -144,6 +156,36 @@ IsFaulted := Alarm.HasActiveAlarm AND Alarm.StopsLine;
         </Implementation>
       </Get>
     </Property>
+    <Property Name="OpenFillValve" Id="{682e108f-046e-4fcc-bb7e-d671e93fadc7}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY OpenFillValve : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9f50d6fc-311e-4288-ba15-a08f44215e1d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[OpenFillValve := _OpenFillValve;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{65cc33b7-7821-483a-be27-c3e313f02afb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_OpenFillValve := OpenFillValve;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PartPresent" Id="{c0c3f096-6b73-4ab8-b900-c6ad9e7b549e}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY PartPresent : BOOL]]></Declaration>
+      <Set Name="Set" Id="{fdfc5ef1-0411-4984-8a22-12fbb248c5d7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_PartPresent := PartPresent;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Reset" Id="{8c7da1e2-d9bb-4d8d-b5bf-4d2bcab1403b}">
       <Declaration><![CDATA[METHOD Reset : BOOL
 ]]></Declaration>
@@ -151,7 +193,7 @@ IsFaulted := Alarm.HasActiveAlarm AND Alarm.StopsLine;
         <ST><![CDATA[Sequencer.ResetSequencer();
 Watchdog.Reset();
 Alarm.Clear();
-OpenFillValve := FALSE;
+_OpenFillValve := FALSE;
 _Accumulated  := 0.0;
 Reset         := TRUE;
 ]]></ST>
@@ -188,6 +230,17 @@ PROPERTY StatusText : STRING(80)
           <ST><![CDATA[StatusText := Sequencer.StepName;]]></ST>
         </Implementation>
       </Get>
+    </Property>
+    <Property Name="TargetVolume" Id="{3727774a-68b8-43dc-b90f-d453a1200513}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY TargetVolume : LREAL]]></Declaration>
+      <Set Name="Set" Id="{ec52f456-79d6-41f2-9fd5-60e0fb035d11}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TargetVolume := TargetVolume;]]></ST>
+        </Implementation>
+      </Set>
     </Property>
   </POU>
 </TcPlcObject>

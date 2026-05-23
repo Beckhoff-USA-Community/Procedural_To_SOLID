@@ -1,33 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationLabel" Id="{f3ee44de-5d03-4f62-a530-f5976f241c48}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel IMPLEMENTS I_Sequenceable, I_HmiReportable
-VAR_INPUT
-    PartPresent   : BOOL;
-    LabelReady    : BOOL;
-    ApplyPressure : LREAL;
-END_VAR
-VAR_OUTPUT
-    ExtendApplicator : BOOL;
-    LabelVacuum      : BOOL;
-END_VAR
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Label
 VAR
     Mode      : I_ModeProvider;
     Alarm     : I_AlarmHandler;
     Sequencer : FB_StepSequencer;
     Watchdog  : FB_TimeoutWatchdog;
+	
+	// inputs
+    _PartPresent   : BOOL;
+    _LabelReady    : BOOL;
+    _ApplyPressure : LREAL;
+	
+	// outputs
+    _ExtendApplicator : BOOL;
+    _LabelVacuum      : BOOL;
+	
     _ApplySettle : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="Station" Id="{4a0ab884-455d-4391-bb66-b0bb00b7157e}" />
     <Method Name="Abort" Id="{faee233e-ed17-4745-b00d-ebe81d4bad87}">
       <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[LabelVacuum      := FALSE;
-ExtendApplicator := FALSE;
+        <ST><![CDATA[_LabelVacuum      := FALSE;
+_ExtendApplicator := FALSE;
 Sequencer.ResetSequencer();
 Watchdog.Reset();
 Abort := TRUE;
@@ -56,6 +58,17 @@ PROPERTY AlarmMessage : STRING(255)
         </Implementation>
       </Get>
     </Property>
+    <Property Name="ApplyPressure" Id="{087d3fb2-8274-49eb-bd79-9b0973e2bde2}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY ApplyPressure : LREAL]]></Declaration>
+      <Set Name="Set" Id="{56c89e9a-cb02-4b2d-b9db-4ddca3aff399}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_ApplyPressure := ApplyPressure;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Execute" Id="{830b91c4-4c5a-40e2-add0-929664a83c18}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
@@ -69,17 +82,17 @@ END_IF
 
 CASE Sequencer.CurrentStep OF
     0:
-        LabelVacuum      := FALSE;
-        ExtendApplicator := FALSE;
+        _LabelVacuum      := FALSE;
+        _ExtendApplicator := FALSE;
         Watchdog.Reset();
-        IF Mode.AllowRun AND PartPresent AND LabelReady THEN
+        IF Mode.AllowRun AND _PartPresent AND _LabelReady THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
             Watchdog.Duration := T#5S;
         END_IF
 
     10:
-        LabelVacuum := TRUE;
+        _LabelVacuum := TRUE;
         _ApplySettle(IN := TRUE, PT := T#300MS);
         IF _ApplySettle.Q THEN
             _ApplySettle(IN := FALSE);
@@ -87,16 +100,16 @@ CASE Sequencer.CurrentStep OF
         END_IF
 
     20:
-        ExtendApplicator := TRUE;
+        _ExtendApplicator := TRUE;
         _ApplySettle(IN := TRUE, PT := T#400MS);
         IF _ApplySettle.Q THEN
             _ApplySettle(IN := FALSE);
-            ExtendApplicator := FALSE;
+            _ExtendApplicator := FALSE;
             Sequencer.TransitionTo(30);
         END_IF
 
     30:
-        LabelVacuum := FALSE;
+        _LabelVacuum := FALSE;
         Watchdog.Enable := FALSE;
         Sequencer.MarkComplete();
 END_CASE
@@ -105,6 +118,25 @@ Execute := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="ExtendApplicator" Id="{178fe857-c537-47ca-ad0b-d0aa6ad8f27c}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY ExtendApplicator : BOOL]]></Declaration>
+      <Get Name="Get" Id="{a294b43b-f494-41c7-a95d-f571e2200ff4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ExtendApplicator := _ExtendApplicator;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{0bd6ba6f-7fc0-490d-9324-3854971b0040}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_ExtendApplicator := ExtendApplicator;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="FB_Init" Id="{a63f953d-2630-4355-bf11-72416dc95e7e}">
       <Declaration><![CDATA[METHOD FB_Init : BOOL
 VAR_INPUT
@@ -147,6 +179,47 @@ FB_Init := TRUE;
         </Implementation>
       </Get>
     </Property>
+    <Property Name="LabelReady" Id="{73eb628f-6afb-447d-bc89-58cc7b73953a}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY LabelReady : BOOL]]></Declaration>
+      <Set Name="Set" Id="{b2fccf87-9cab-492d-8ed5-2afb529740ea}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_LabelReady := LabelReady;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="LabelVacuum" Id="{0afca0de-e8d1-4fd8-ae36-6184aab487b1}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY LabelVacuum : BOOL]]></Declaration>
+      <Get Name="Get" Id="{c32ccf6c-4be7-401a-8e89-103968f7de4a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LabelVacuum := _LabelVacuum;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{d8f066df-38bf-4599-9928-b7f538274258}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LabelVacuum := _LabelVacuum;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="PartPresent" Id="{fa6caefe-ee21-4e62-986a-ea41d4ecd2c1}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY PartPresent : BOOL]]></Declaration>
+      <Set Name="Set" Id="{aa33884d-f41c-4d57-9dff-2b0f23f8f8c5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_PartPresent := PartPresent;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Reset" Id="{2e503d8f-854d-4aae-a37a-e1cebb19918f}">
       <Declaration><![CDATA[METHOD Reset : BOOL
 ]]></Declaration>
@@ -154,8 +227,8 @@ FB_Init := TRUE;
         <ST><![CDATA[Sequencer.ResetSequencer();
 Watchdog.Reset();
 Alarm.Clear();
-LabelVacuum      := FALSE;
-ExtendApplicator := FALSE;
+_LabelVacuum      := FALSE;
+_ExtendApplicator := FALSE;
 Reset := TRUE;
 ]]></ST>
       </Implementation>
