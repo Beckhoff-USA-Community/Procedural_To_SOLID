@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationCap" Id="{c02a0884-fe5f-4ce9-9dfb-dc42bc5c112b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap IMPLEMENTS I_Sequenceable, I_HmiReportable
 VAR_INPUT
@@ -13,7 +13,7 @@ VAR_OUTPUT
     CapPickCylinder : BOOL;
 END_VAR
 VAR
-    Mode      : REFERENCE TO FB_ModeManager;
+    Mode      : I_ModeProvider;
     Alarm     : I_AlarmHandler;
     Sequencer : FB_StepSequencer;
     Watchdog  : FB_TimeoutWatchdog;
@@ -23,28 +23,40 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="FB_Init" Id="{9247cdc9-c31f-4ca9-b83c-6f9b47f4f84f}">
-      <Declaration><![CDATA[METHOD FB_Init : BOOL
-VAR_INPUT
-    bInitRetains : BOOL;
-    bInCopyCode  : BOOL;
-    ModeRef      : REFERENCE TO FB_ModeManager;
-    AlarmHandler : I_AlarmHandler;
-END_VAR
+    <Method Name="Abort" Id="{047d863c-3951-4a3b-ba3f-e98a949848cf}">
+      <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Mode  REF= ModeRef;
-Alarm := AlarmHandler;
-
-Sequencer.SetStepName(0,  'Idle');
-Sequencer.SetStepName(10, 'Pick Cap');
-Sequencer.SetStepName(20, 'Torquing');
-Sequencer.SetStepName(30, 'Complete');
-
-FB_Init := TRUE;
+        <ST><![CDATA[RunCapMotor     := FALSE;
+CapPickCylinder := FALSE;
+Sequencer.ResetSequencer();
+Watchdog.Reset();
+Abort := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="AlarmActive" Id="{f28e1dc7-0bbe-4f6a-b015-79cfbeebf7e4}">
+      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
+PROPERTY AlarmActive : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{e111bfe9-4c54-4f5c-8e60-9994f99ab3ec}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AlarmActive := Alarm.HasActiveAlarm;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="AlarmMessage" Id="{667e334c-1485-4fad-ae56-7ddbd7e45ca4}">
+      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
+PROPERTY AlarmMessage : STRING(255)
+]]></Declaration>
+      <Get Name="Get" Id="{659930c2-cf60-4031-867b-7e714f0dcf13}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AlarmMessage := Alarm.AlarmText;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="Execute" Id="{608dcedc-4e88-4976-b35e-bbd937e8a684}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
@@ -92,28 +104,25 @@ Execute := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Reset" Id="{12622d66-cf02-49c5-a800-67dc94641700}">
-      <Declaration><![CDATA[METHOD Reset : BOOL
+    <Method Name="FB_Init" Id="{9247cdc9-c31f-4ca9-b83c-6f9b47f4f84f}">
+      <Declaration><![CDATA[METHOD FB_Init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL;
+    bInCopyCode  : BOOL;
+    Mode      : I_ModeProvider;
+    AlarmHandler : I_AlarmHandler;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Sequencer.ResetSequencer();
-Watchdog.Reset();
-Alarm.Clear();
-RunCapMotor     := FALSE;
-CapPickCylinder := FALSE;
-Reset := TRUE;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="Abort" Id="{047d863c-3951-4a3b-ba3f-e98a949848cf}">
-      <Declaration><![CDATA[METHOD Abort : BOOL
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[RunCapMotor     := FALSE;
-CapPickCylinder := FALSE;
-Sequencer.ResetSequencer();
-Watchdog.Reset();
-Abort := TRUE;
+        <ST><![CDATA[THIS^.Mode  := Mode;
+THIS^.Alarm := AlarmHandler;
+
+Sequencer.SetStepName(0,  'Idle');
+Sequencer.SetStepName(10, 'Pick Cap');
+Sequencer.SetStepName(20, 'Torquing');
+Sequencer.SetStepName(30, 'Complete');
+
+FB_Init := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
@@ -137,6 +146,19 @@ Abort := TRUE;
         </Implementation>
       </Get>
     </Property>
+    <Method Name="Reset" Id="{12622d66-cf02-49c5-a800-67dc94641700}">
+      <Declaration><![CDATA[METHOD Reset : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Sequencer.ResetSequencer();
+Watchdog.Reset();
+Alarm.Clear();
+RunCapMotor     := FALSE;
+CapPickCylinder := FALSE;
+Reset := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="StateName" Id="{777f412c-ef58-4406-aa2f-907e92cfc35e}">
       <Declaration><![CDATA[PROPERTY StateName : STRING(40)
 ]]></Declaration>
@@ -144,6 +166,17 @@ Abort := TRUE;
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StateName := Sequencer.StepName;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="StateNumber" Id="{20ed7096-5154-49b1-b0b7-51154d824fd7}">
+      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
+PROPERTY StateNumber : INT
+]]></Declaration>
+      <Get Name="Get" Id="{967e0be2-8c65-4e2f-bfde-3594f696d20b}">
+        <Declaration><![CDATA[]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[StateNumber := Sequencer.CurrentStep;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -155,39 +188,6 @@ PROPERTY StatusText : STRING(80)
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StatusText := Sequencer.StepName;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="StateNumber" Id="{c8b56ccb-9e54-404c-b28c-9e8f9a838929}">
-      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
-PROPERTY StateNumber : INT
-]]></Declaration>
-      <Get Name="Get" Id="{995aa1f9-2aab-436e-9cda-670bc81baac1}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[StateNumber := Sequencer.CurrentStep;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="AlarmActive" Id="{43aa657a-066e-45f8-a8e9-bdac046f77cf}">
-      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
-PROPERTY AlarmActive : BOOL
-]]></Declaration>
-      <Get Name="Get" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[AlarmActive := Alarm.HasActiveAlarm;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="AlarmMessage" Id="{667e334c-1485-4fad-ae56-7ddbd7e45ca4}">
-      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
-PROPERTY AlarmMessage : STRING(255)
-]]></Declaration>
-      <Get Name="Get" Id="{659930c2-cf60-4031-867b-7e714f0dcf13}">
-        <Declaration><![CDATA[]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[AlarmMessage := Alarm.AlarmText;]]></ST>
         </Implementation>
       </Get>
     </Property>

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}" SpecialFunc="None">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="MAIN" Id="{87cb9eef-b136-410f-bda7-6dab55fbd79e}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // ----- shared services -----
@@ -15,10 +15,10 @@ VAR
     InspectAlarm : FB_AlarmHandler_LineFault;
 
     // ----- stations composed via FB_Init dependency injection -----
-    StationFill    : FB_StationFill(ModeRef := ModeManager, AlarmHandler := FillAlarm);
-    StationCap     : FB_StationCap(ModeRef := ModeManager, AlarmHandler := CapAlarm);
-    StationLabel   : FB_StationLabel(ModeRef := ModeManager, AlarmHandler := LabelAlarm);
-    StationInspect : FB_StationInspect(ModeRef := ModeManager, AlarmHandler := InspectAlarm);
+    StationFill    : FB_StationFill(Mode := ModeManager, AlarmHandler := FillAlarm);
+    StationCap     : FB_StationCap(Mode := ModeManager, AlarmHandler := CapAlarm);
+    StationLabel   : FB_StationLabel(Mode := ModeManager, AlarmHandler := LabelAlarm);
+    StationInspect : FB_StationInspect(Mode := ModeManager, AlarmHandler := InspectAlarm);
 
     // ----- shared HMI inputs -----
     ModeAuto      : BOOL;
