@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <Itf Name="I_Cap" Id="{43c6303b-ed56-42cb-871a-4db0048de19f}">
+    <Declaration><![CDATA[INTERFACE I_Cap EXTENDS I_Station
+]]></Declaration>
+    <Property Name="CapFeederReady" Id="{9896c21c-a368-485d-8f3b-ac9e3b495c9f}">
+      <Declaration><![CDATA[PROPERTY CapFeederReady : BOOL]]></Declaration>
+      <Get Name="Get" Id="{ad855a5c-aac9-4ce9-a1e6-495b2b9a2804}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{63d9e3d8-1dff-44af-ae05-0573d9d7402a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="CapPickCylinder" Id="{89d8c905-cefd-4001-8181-c7f15d7aa80f}">
+      <Declaration><![CDATA[PROPERTY CapPickCylinder : BOOL]]></Declaration>
+      <Get Name="Get" Id="{7c376c83-d8b5-452c-98c7-09a2dfbc3d75}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{a7c20840-1d05-465a-a7c3-dfb0d439d115}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="RunCapMotor" Id="{3c86fb6e-0d28-414f-b25d-46d390bff3be}">
+      <Declaration><![CDATA[PROPERTY RunCapMotor : BOOL]]></Declaration>
+      <Get Name="Get" Id="{488e7190-f112-42e2-9a2e-6e4f7fbf75fd}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{673aa922-fdf7-40b5-8619-ea87f2bd1114}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="TorqueActual" Id="{45f7764a-16f4-4132-9504-4482aa9aea64}">
+      <Declaration><![CDATA[PROPERTY TorqueActual : LREAL]]></Declaration>
+      <Get Name="Get" Id="{e1bb9f7b-e5f8-4494-8760-43bf8f7d7830}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{d1b6021e-4feb-4220-87eb-8dcbed765306}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="TorqueLimit" Id="{96f94446-cc23-437d-a020-8b804abb5c7a}">
+      <Declaration><![CDATA[PROPERTY TorqueLimit : LREAL]]></Declaration>
+      <Get Name="Get" Id="{5eff9e58-e5ea-475c-9089-9ed25f0007f9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{31e50aca-c1b4-45bc-bd73-5e1e50e89f91}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

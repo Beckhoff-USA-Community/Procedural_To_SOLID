@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="MAIN" Id="{03461180-5cd9-4381-8d28-8c1758009ed3}" SpecialFunc="None">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="MAIN" Id="{cdd055d9-64d9-4bc7-ab8e-6be4692f1de7}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // shared HMI inputs
