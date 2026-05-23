@@ -12,12 +12,12 @@ VAR_OUTPUT
 END_VAR
 VAR
     // injected dependencies (set in FB_Init)
-    Mode      : REFERENCE TO FB_ModeManager;
-    Alarm     : I_AlarmHandler;
-	DataLogger : I_DataLogger;
+    Mode      	: I_ModeProvider;
+    Alarm     	: I_AlarmHandler;
+	DataLogger 	: I_DataLogger;
     // composed building blocks
-    Sequencer : FB_StepSequencer;
-    Watchdog  : FB_TimeoutWatchdog;
+    Sequencer 	: FB_StepSequencer;
+    Watchdog  	:	FB_TimeoutWatchdog;
     // process-specific
     _Accumulated : LREAL;
 END_VAR
@@ -105,14 +105,14 @@ Execute := TRUE;
 VAR_INPUT
     bInitRetains  : BOOL;
     bInCopyCode   : BOOL;
-    ModeRef       : REFERENCE TO FB_ModeManager;
+    Mode      	  : I_ModeProvider;
     AlarmHandler  : I_AlarmHandler;
 	DataLogger 	  : I_DataLogger;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Mode  REF= ModeRef;
-Alarm := AlarmHandler;
+        <ST><![CDATA[THIS^.Mode  := Mode;
+THIS^.Alarm := AlarmHandler;
 
 Sequencer.SetStepName(0,  'Idle');
 Sequencer.SetStepName(10, 'Filling');
