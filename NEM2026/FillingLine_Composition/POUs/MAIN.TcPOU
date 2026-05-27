@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="MAIN" Id="{d5384c2f-341a-4b19-8b28-ea186fb6d453}" SpecialFunc="None">
+  <POU Name="MAIN" Id="{a3aa8607-18b3-4790-8839-4a0181c990ad}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // ----- shared services -----
@@ -8,19 +8,24 @@ VAR
     CycleLogger : FB_CycleDataLogger;          // CR-3: shared by Fill + Inspect
 
     // ----- per-station alarm strategies -----
-    // stage-3-composition: Inspect now uses QualityFlag — defects flag but
-    // don't latch or stop the line. Fill/Cap/Label still use LineFault.
-    // Stations are unaware of the swap (interface-typed dependency).
     FillAlarm    : FB_AlarmHandler_LineFault;
     CapAlarm     : FB_AlarmHandler_LineFault;
     LabelAlarm   : FB_AlarmHandler_LineFault;
     InspectAlarm : FB_AlarmHandler_QualityFlag;
 
     // ----- stations composed via FB_Init dependency injection -----
-    StationFill    : FB_StationFill(Mode := ModeManager, AlarmHandler := FillAlarm);
-    StationCap     : FB_StationCap(Mode := ModeManager, AlarmHandler := CapAlarm);
-    StationLabel   : FB_StationLabel(Mode := ModeManager, AlarmHandler := LabelAlarm);
-    StationInspect : FB_StationInspect(Mode := ModeManager, AlarmHandler := InspectAlarm);
+    // CR-3: only Fill + Inspect carry DataLogger. Cap + Label have no logger
+    // dependency and don't pay the cost of carrying one.
+    StationFill    : FB_StationFill(Mode     	:= ModeManager,
+                                    AlarmHandler := FillAlarm,
+                                    DataLogger   := CycleLogger);
+    StationCap     : FB_StationCap(Mode		     := ModeManager,
+                                   AlarmHandler := CapAlarm);
+    StationLabel   : FB_StationLabel(Mode	     := ModeManager,
+                                     AlarmHandler := LabelAlarm);
+    StationInspect : FB_StationInspect(Mode	     := ModeManager,
+                                       AlarmHandler := InspectAlarm,
+                                       DataLogger   := CycleLogger);
 
     // ----- shared HMI inputs -----
     ModeAuto      : BOOL;

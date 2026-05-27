@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationBase" Id="{bc3c8fc6-ecac-4bf1-83f0-ca59597c7418}" SpecialFunc="None">
-    <Declaration><![CDATA[// Abstract station base — extends the SPT-Libraries FB_ComponentBase.
-// CR-1: ModePause + AllowPause() virtual (pollutes base for Fill's exception)
+    <Declaration><![CDATA[// Abstract station base. CR-3: LogBuffer/LogIndex carried by every child,
+// LoggingEnabled() virtual gates writes. Cap/Label inherit FALSE and pay
+// the storage cost without using it — the dead-weight cost of putting a
+// cross-cutting concern in a base class.
 FUNCTION_BLOCK FB_StationBase EXTENDS SPT_Components.FB_ComponentBase
 VAR_INPUT
     Execute      : BOOL;
@@ -56,7 +58,7 @@ METHOD PROTECTED AllowPause : BOOL
     RETURN;
 END_IF
 
-SUPER^.CyclicLogic();   // framework: invokes Monitoring (overridden below)
+SUPER^.CyclicLogic();
 
 THIS^.ExecuteSequence();
 THIS^.UpdateHmiStatus();
@@ -148,6 +150,69 @@ IF SUPER^.Reset() THEN
     _ErrorID := 0;
     Reset    := TRUE;
 END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ExecuteSequence" Id="{aa3954ba-3a32-43cc-b4df-4dc442e58804}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{54dac95f-0a58-4038-8bf2-f3f7d514eb79}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:   GetStepName := 'Idle';
+ELSE
+    GetStepName := 'Running';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LoggingEnabled" Id="{eb74bb54-65e7-46aa-b5e4-7cc3fd797b4c}">
+      <Declaration><![CDATA[// CR-3: virtual flag for selective cycle logging.
+// Default: FALSE. Fill and Inspect override to TRUE.
+// Cap and Label inherit FALSE — they still carry LogBuffer in the base.
+METHOD PROTECTED LoggingEnabled : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[LoggingEnabled := FALSE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogCycleData" Id="{08709f5f-c7f6-4893-8bc0-6b22f230d6a9}">
+      <Declaration><![CDATA[// CR-3: helper invoked by stations at cycle complete. Gated by
+// LoggingEnabled() so Cap and Label are silent.
+METHOD PROTECTED LogCycleData
+VAR_INPUT
+    Note : STRING(120);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT THIS^.LoggingEnabled() THEN
+    RETURN;
+END_IF
+LogBuffer[LogIndex] := Note;
+LogIndex := (LogIndex + 1) MOD 100;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RaiseStationAlarm" Id="{3ab655c1-5824-46b5-ae4f-940a438d0eb7}">
+      <Declaration><![CDATA[METHOD PROTECTED RaiseStationAlarm
+VAR_INPUT
+    Code : UDINT;
+    Text : STRING(255);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AlarmLatched := TRUE;
+AlarmCode    := Code;
+AlarmText    := Text;
+_Error       := TRUE;
+_ErrorID     := Code;
 ]]></ST>
       </Implementation>
     </Method>

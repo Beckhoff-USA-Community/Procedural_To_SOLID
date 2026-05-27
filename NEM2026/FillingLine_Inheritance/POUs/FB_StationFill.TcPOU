@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="FB_StationFill" Id="{4753414c-a703-4b45-97a6-136cea5a4edd}" SpecialFunc="None">
+  <POU Name="FB_StationFill" Id="{e5ab2bd0-bdac-4e24-9702-f2a699b53f7f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill EXTENDS FB_StationBase
 VAR_INPUT
     FlowRate         : LREAL;
@@ -75,17 +75,6 @@ END_CASE
 ELSE
     GetStepName := 'Unknown';
 END_CASE
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AllowPause" Id="{8ec93571-9f3f-4772-82c4-0f824c43364f}">
-      <Declaration><![CDATA[// CR-1 OVERRIDE: Fill must not be pausable mid-stroke.
-// Returns FALSE while State = 10 (filling) so the base's Monitoring
-// keeps ActiveMode at the prior value rather than going to 3 (Pause).
-METHOD PROTECTED AllowPause : BOOL
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[AllowPause := (State <> 10);
 ]]></ST>
       </Implementation>
     </Method>

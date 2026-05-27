@@ -42,8 +42,8 @@ VAR
     AlarmCode        : UDINT;
     ActiveMode       : INT;
     ManualStep       : INT;        // dead variable — legacy cruft
-    CameraDone       : BOOL;       // CR-2 parallel branch flag
-    RejectDone       : BOOL;       // CR-2 parallel branch flag
+    LogBuffer        : ARRAY[0..99] OF STRING(120);   // CR-3 (duplicated from Fill)
+    LogIndex         : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>

@@ -37,11 +37,11 @@ Abort := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="AlarmActive" Id="{3ab2d781-3b81-4ea6-8de5-9196e850a837}">
+    <Property Name="AlarmActive" Id="{cf3ab61e-d9da-4da8-a445-3c9d55aef079}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY AlarmActive : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{d349b408-8d94-4155-ac48-57fc8b8903fa}">
+      <Get Name="Get" Id="{7bb9d1c4-f835-44d7-b3cb-899d5fb77070}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AlarmActive := Alarm.HasActiveAlarm;]]></ST>
@@ -239,11 +239,11 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="StateNumber" Id="{f1929f6b-943f-4690-9773-2e19211c3039}">
+    <Property Name="StateNumber" Id="{d3fa4b4b-1f67-4793-b615-e6c2ec1dca14}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY StateNumber : INT
 ]]></Declaration>
-      <Get Name="Get" Id="{7af0a8c8-58bb-47ce-8ab0-6fba3a882312}">
+      <Get Name="Get" Id="{f9f4f7ab-1243-4f1e-b90d-32cdb460ee07}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StateNumber := Sequencer.CurrentStep;]]></ST>

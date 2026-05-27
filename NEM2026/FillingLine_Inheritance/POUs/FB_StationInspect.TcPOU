@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
-    <Declaration><![CDATA[// CR-2 applied via inheritance. Inspect overrides Monitoring with a
-// non-latching quality flag and jams parallel branches into ExecuteSequence
-// step 10. The override is architecturally fragile — every base-Monitoring
-// change must be re-mirrored here — but the requirement is met.
-FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="FB_StationInspect" Id="{481745ee-e92b-4195-9be0-3514c520e3eb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
     CameraReady          : BOOL;
     InspectResult        : BOOL;

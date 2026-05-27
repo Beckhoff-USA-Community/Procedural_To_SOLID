@@ -4,19 +4,18 @@
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Fill
 VAR
     // injected dependencies (set in FB_Init)
-    Mode      : I_ModeProvider;
-    Alarm     : I_AlarmHandler;
-    Logger    : I_DataLogger;            // CR-3: optional cycle data sink
-
+    Mode      	: I_ModeProvider;
+    Alarm     	: I_AlarmHandler;
+	DataLogger 	: I_DataLogger;
     // composed building blocks
-    Sequencer : FB_StepSequencer;
-    Watchdog  : FB_TimeoutWatchdog;
+    Sequencer 	: FB_StepSequencer;
+    Watchdog  	:	FB_TimeoutWatchdog;
 	
 	// inputs
     _PartPresent  : BOOL;
     _FlowRate     : LREAL;
     _TargetVolume : LREAL;
-	
+
 	// outputs
     _OpenFillValve : BOOL;
 	
@@ -111,10 +110,11 @@ Execute := TRUE;
     <Method Name="FB_Init" Id="{3b37575b-fc2a-45be-8da4-4fa0ac904ddd}">
       <Declaration><![CDATA[METHOD FB_Init : BOOL
 VAR_INPUT
-    bInitRetains  	: BOOL;
-    bInCopyCode   	: BOOL;
-    Mode       		: I_ModeProvider;
-    AlarmHandler  	: I_AlarmHandler;
+    bInitRetains  : BOOL;
+    bInCopyCode   : BOOL;
+    Mode      	  : I_ModeProvider;
+    AlarmHandler  : I_AlarmHandler;
+	DataLogger 	  : I_DataLogger;
 END_VAR
 ]]></Declaration>
       <Implementation>

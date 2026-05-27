@@ -12,7 +12,7 @@ VAR
     _PartPresent   : BOOL;
     _LabelReady    : BOOL;
     _ApplyPressure : LREAL;
-	
+
 	// outputs
     _ExtendApplicator : BOOL;
     _LabelVacuum      : BOOL;
@@ -36,22 +36,22 @@ Abort := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="AlarmActive" Id="{7e1b1249-9846-4d8e-bac6-7965406ba594}">
+    <Property Name="AlarmActive" Id="{9d6ee82e-131e-44b9-a5e1-7c54893c6b36}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY AlarmActive : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{bd778c0f-7cc1-42f7-b1c3-2436da6e85e1}">
+      <Get Name="Get" Id="{1e60f838-6f2a-424d-b88c-bc756a3f15d7}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AlarmActive := Alarm.HasActiveAlarm;]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <Property Name="AlarmMessage" Id="{c0ae0221-1fa0-4c37-99ca-1a86b24ba6a4}">
+    <Property Name="AlarmMessage" Id="{8545e9f4-dd3d-460e-8800-96cb46d0ea13}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY AlarmMessage : STRING(255)
 ]]></Declaration>
-      <Get Name="Get" Id="{eb820d54-616f-4497-9058-b943ca3ff302}">
+      <Get Name="Get" Id="{cb1f5464-6661-4e2e-ab4e-81426a366761}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AlarmMessage := Alarm.AlarmText;]]></ST>
@@ -142,8 +142,8 @@ END_VAR
 VAR_INPUT
     bInitRetains 	: BOOL;
     bInCopyCode  	: BOOL;
-    Mode      		: I_ModeProvider;
-    AlarmHandler 	: I_AlarmHandler;
+    Mode	      	: I_ModeProvider;
+    AlarmHandler	: I_AlarmHandler;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -247,7 +247,7 @@ Reset := TRUE;
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY StateNumber : INT
 ]]></Declaration>
-      <Get Name="Get" Id="{01e18ce0-1042-4b5f-ad15-b438f7e7d9d1}">
+      <Get Name="Get" Id="{450ee370-64c8-4a94-9b62-4f9b17b9276c}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StateNumber := Sequencer.CurrentStep;]]></ST>
