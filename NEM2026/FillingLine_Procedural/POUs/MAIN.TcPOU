@@ -4,12 +4,12 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // shared HMI inputs
-    Execute              : BOOL;
-    Reset                : BOOL;
-    ModeAuto             : BOOL;
-    ModeManual           : BOOL;
-    ModePause            : BOOL;       // CR-1
-    AlarmAck             : BOOL;
+    Execute         : BOOL;
+    Reset           : BOOL;
+    ModeAuto        : BOOL;
+    ModeManual      : BOOL;
+    ModePause       : BOOL;       // CR-1
+    AlarmAck        : BOOL;
 
     // station instances
     StationFill          : FB_StationFill;
@@ -71,16 +71,15 @@ StationLabel(
     ApplyPressure := ApplyPressure);
 
 StationInspect(
-    Execute              := Execute,
-    Reset                := Reset,
-    ModeAuto             := ModeAuto,
-    ModeManual           := ModeManual,
-    ModePause            := ModePause,
-    PartPresent          := PartInspect,
-    AlarmAck             := AlarmAck,
-    CameraReady          := CameraReady,
-    InspectResult        := InspectResult,
-    QualityIssueDetected := QualityIssueDetected);
+    Execute       := Execute,
+    Reset         := Reset,
+    ModeAuto      := ModeAuto,
+    ModeManual    := ModeManual,
+    ModePause     := ModePause,
+    PartPresent   := PartInspect,
+    AlarmAck      := AlarmAck,
+    CameraReady   := CameraReady,
+    InspectResult := InspectResult);
 ]]></ST>
     </Implementation>
   </POU>

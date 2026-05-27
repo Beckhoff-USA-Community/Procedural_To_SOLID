@@ -9,7 +9,7 @@
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
     <Name>FillingLine_Composition</Name>
-    <ProgramVersion>3.1.4026.22</ProgramVersion>
+    <ProgramVersion>3.1.4026.23</ProgramVersion>
     <Application>{af9fe3d6-5361-451e-8542-92d54fea695d}</Application>
     <TypeSystem>{b21a8988-5408-4322-a40f-fef16bea2b25}</TypeSystem>
     <Implicit_Task_Info>{f0b32665-cfac-4fd6-a22e-8bae5bbc6f99}</Implicit_Task_Info>
@@ -19,6 +19,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="PlcTask_Co.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\Stations\I_Cap.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\Stations\I_Fill.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\Stations\I_Inspect.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\Stations\I_Label.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\Interfaces\Stations\I_Station.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
@@ -79,6 +94,7 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
+    <Folder Include="POUs\Interfaces\Stations" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
     <Folder Include="POUs\Interfaces" />

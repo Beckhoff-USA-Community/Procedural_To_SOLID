@@ -72,6 +72,26 @@ IF Reset THEN
 END_IF
 
 CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Pick Cap';
+    20: StatusText := 'Torquing';
+    30: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
+
+// CR-1 Pause guard — Cap halts mid-cycle (no Fill-style exception)
+IF ActiveMode = 3 THEN
+	StatusText := 'Paused';
+    RETURN;
+END_IF
+
+// State machine
+CASE State OF
     0:
         RunCapMotor     := FALSE;
         CapPickCylinder := FALSE;

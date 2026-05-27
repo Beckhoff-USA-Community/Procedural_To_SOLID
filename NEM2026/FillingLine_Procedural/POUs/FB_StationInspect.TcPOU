@@ -5,18 +5,17 @@
 // composition equivalent — every CR adds inline state that bloats this FB.
 FUNCTION_BLOCK FB_StationInspect
 VAR_INPUT
-    Execute              : BOOL;
-    Reset                : BOOL;
-    ModeAuto             : BOOL;
-    ModeManual           : BOOL;
-    ModePause            : BOOL;          // CR-1
-    JogForward           : BOOL;
-    JogReverse           : BOOL;
-    PartPresent          : BOOL;
-    AlarmAck             : BOOL;
-    CameraReady          : BOOL;
-    InspectResult        : BOOL;
-    QualityIssueDetected : BOOL;          // CR-2 — non-faulting input
+    Execute          : BOOL;
+    Reset            : BOOL;
+    ModeAuto         : BOOL;
+    ModeManual       : BOOL;
+    ModePause        : BOOL;          // CR-1
+    JogForward       : BOOL;
+    JogReverse       : BOOL;
+    PartPresent      : BOOL;
+    AlarmAck         : BOOL;
+    CameraReady      : BOOL;
+    InspectResult    : BOOL;
 END_VAR
 VAR_OUTPUT
     Busy             : BOOL;
@@ -42,11 +41,7 @@ VAR
     AlarmLatched     : BOOL;
     AlarmCode        : UDINT;
     ActiveMode       : INT;
-    ManualStep       : INT;        // dead variable from earlier developer (legacy cruft)
-    CameraDone       : BOOL;       // CR-2 parallel branch flag
-    RejectDone       : BOOL;       // CR-2 parallel branch flag
-    LogBuffer        : ARRAY[0..99] OF STRING(120);   // CR-3 (duplicated from Fill)
-    LogIndex         : INT;
+    ManualStep       : INT;        // dead variable — legacy cruft
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -61,12 +56,7 @@ ELSE
     ActiveMode := 0;
 END_IF
 
-// CR-1 Pause guard
-IF ActiveMode = 3 THEN
-    RETURN;
-END_IF
-
-// alarm ack — LEVEL (drift)
+// alarm ack
 IF AlarmLatched AND AlarmAck THEN
     AlarmLatched := FALSE;
     AlarmCode    := 0;
@@ -97,6 +87,29 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
+// HMI Mapping
+StateDisplay := State;
+CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Inspecting';
+    20: StatusText := 'Evaluate';
+    25: StatusText := 'Rejecting';
+    30: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
+
+// CR-1 Pause guard — Inspect halts mid-cycle
+IF ActiveMode = 3 THEN
+	StatusText := 'Paused';
+    RETURN;
+END_IF
+
+// State machine
 CASE State OF
     0:
         TriggerCamera := FALSE;

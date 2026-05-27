@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
-    <Declaration><![CDATA[// Stage-2-complete: CR-2 fully applied (an evolved version of stage-2-broken).
-// Inspect now overrides Monitoring with a non-latching quality flag and
-// jams parallel branches into ExecuteSequence step 10. The override is
-// still architecturally fragile (every base-Monitoring change must be
-// re-mirrored here) but at least it's no longer half-finished with TODOs.
-FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <POU Name="FB_StationInspect" Id="{431db216-93ae-4b78-8ae2-f67bfb46cca8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
     CameraReady          : BOOL;
     InspectResult        : BOOL;
@@ -34,7 +29,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE State OF
+        <ST><![CDATA[SUPER^.ExecuteSequence();
+
+CASE State OF
     0:
         TriggerCamera := FALSE;
         RejectPusher  := FALSE;
