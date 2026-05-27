@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="MAIN" Id="{7e9e338c-119a-48cf-b02e-cf8c4e13598c}" SpecialFunc="None">
+  <POU Name="MAIN" Id="{d5384c2f-341a-4b19-8b28-ea186fb6d453}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // ----- shared services -----
@@ -8,6 +8,9 @@ VAR
     CycleLogger : FB_CycleDataLogger;          // CR-3: shared by Fill + Inspect
 
     // ----- per-station alarm strategies -----
+    // stage-3-composition: Inspect now uses QualityFlag — defects flag but
+    // don't latch or stop the line. Fill/Cap/Label still use LineFault.
+    // Stations are unaware of the swap (interface-typed dependency).
     FillAlarm    : FB_AlarmHandler_LineFault;
     CapAlarm     : FB_AlarmHandler_LineFault;
     LabelAlarm   : FB_AlarmHandler_LineFault;

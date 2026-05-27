@@ -1,11 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationLabel" Id="{f3ee44de-5d03-4f62-a530-f5976f241c48}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel IMPLEMENTS I_Sequenceable, I_HmiReportable
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Label
 VAR
     Mode      : I_ModeProvider;
     Alarm     : I_AlarmHandler;
@@ -16,11 +12,11 @@ VAR
     _PartPresent   : BOOL;
     _LabelReady    : BOOL;
     _ApplyPressure : LREAL;
-
-	// outputs	
+	
+	// outputs
     _ExtendApplicator : BOOL;
     _LabelVacuum      : BOOL;
-
+	
     _ApplySettle : TON;
 END_VAR
 ]]></Declaration>
@@ -40,22 +36,22 @@ Abort := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="AlarmActive" Id="{f4c47826-489d-4c3a-8a87-6acad2a6d157}">
+    <Property Name="AlarmActive" Id="{7e1b1249-9846-4d8e-bac6-7965406ba594}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY AlarmActive : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{ce66f9d9-240c-49d9-b6fd-a8005a959ea4}">
+      <Get Name="Get" Id="{bd778c0f-7cc1-42f7-b1c3-2436da6e85e1}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AlarmActive := Alarm.HasActiveAlarm;]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <Property Name="AlarmMessage" Id="{178c2ad6-4de1-4b76-87a1-fedda8c05d7c}">
+    <Property Name="AlarmMessage" Id="{c0ae0221-1fa0-4c37-99ca-1a86b24ba6a4}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY AlarmMessage : STRING(255)
 ]]></Declaration>
-      <Get Name="Get" Id="{d473b5f7-7673-4d8a-879f-713e3081fc44}">
+      <Get Name="Get" Id="{eb820d54-616f-4497-9058-b943ca3ff302}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AlarmMessage := Alarm.AlarmText;]]></ST>
@@ -251,7 +247,7 @@ Reset := TRUE;
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY StateNumber : INT
 ]]></Declaration>
-      <Get Name="Get" Id="{8c5cd33d-ed26-4294-8d8b-47ac9beb7d00}">
+      <Get Name="Get" Id="{01e18ce0-1042-4b5f-ad15-b438f7e7d9d1}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StateNumber := Sequencer.CurrentStep;]]></ST>

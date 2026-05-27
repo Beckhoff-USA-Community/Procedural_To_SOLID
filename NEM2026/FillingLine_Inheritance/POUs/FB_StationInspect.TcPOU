@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="FB_StationInspect" Id="{431db216-93ae-4b78-8ae2-f67bfb46cca8}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_StationInspect" Id="{91553ce4-5302-4417-b061-d593d00cc1c0}" SpecialFunc="None">
+    <Declaration><![CDATA[// CR-2 applied via inheritance. Inspect overrides Monitoring with a
+// non-latching quality flag and jams parallel branches into ExecuteSequence
+// step 10. The override is architecturally fragile — every base-Monitoring
+// change must be re-mirrored here — but the requirement is met.
+FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
     CameraReady          : BOOL;
     InspectResult        : BOOL;
@@ -97,17 +101,15 @@ END_CASE
     </Method>
     <Method Name="Monitoring" Id="{403b68d0-6e56-4bd1-8225-585d1f1754b1}">
       <Declaration><![CDATA[// CR-2 OVERRIDE: non-latching quality flag — does NOT call SUPER^.Monitoring()
-// because the base would latch the alarm and stop the line. The cost is
-// that this method must re-implement mode resolution and alarm-ack from
-// the base. If the base's Monitoring gets a new alarm condition added
-// later, it must be re-mirrored here too. Pure inheritance pain.
+// because the base latches the alarm and stops the line. The cost is that
+// this method must re-implement mode resolution and alarm-ack from the base.
+// If the base's Monitoring gets a new alarm condition added later, it must
+// be re-mirrored here too. Pure inheritance pain.
 METHOD PROTECTED Monitoring
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// duplicated from base — see method comment
-IF ModePause AND THIS^.AllowPause() THEN
-    ActiveMode := 3;
-ELSIF ModeAuto THEN
+IF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
     ActiveMode := 2;

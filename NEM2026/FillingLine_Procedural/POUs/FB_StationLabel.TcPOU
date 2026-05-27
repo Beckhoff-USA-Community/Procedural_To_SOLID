@@ -67,7 +67,8 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
-// state numbering 0/100/200/300 — drifts from other stations (kept)
+// HMI mapping
+StateDisplay := State;
 CASE State OF
     0:   StatusText := 'Idle';
     100: StatusText := 'Picking Label';

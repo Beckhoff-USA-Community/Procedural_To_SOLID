@@ -7,7 +7,6 @@ VAR
     Execute              : BOOL;
     ModeAuto             : BOOL;
     ModeManual           : BOOL;
-    ModePause            : BOOL;       // CR-1
     AlarmAck             : BOOL;
 
     // station instances — Name init is the SPT idiom
@@ -33,6 +32,7 @@ VAR
     PartInspect          : BOOL;
     CameraReady          : BOOL;
     InspectResult        : BOOL;
+    QualityIssueDetected : BOOL;       // CR-2
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -71,14 +71,14 @@ StationLabel(
 StationLabel.CyclicLogic();
 
 StationInspect(
-    Execute       := Execute,
-    ModeAuto      := ModeAuto,
-    ModeManual    := ModeManual,
-    ModePause     := ModePause,
-    PartPresent   := PartInspect,
-    AlarmAck      := AlarmAck,
-    CameraReady   := CameraReady,
-    InspectResult := InspectResult);
+    Execute              := Execute,
+    ModeAuto             := ModeAuto,
+    ModeManual           := ModeManual,
+    PartPresent          := PartInspect,
+    AlarmAck             := AlarmAck,
+    CameraReady          := CameraReady,
+    InspectResult        := InspectResult,
+    QualityIssueDetected := QualityIssueDetected);
 StationInspect.CyclicLogic();
 ]]></ST>
     </Implementation>

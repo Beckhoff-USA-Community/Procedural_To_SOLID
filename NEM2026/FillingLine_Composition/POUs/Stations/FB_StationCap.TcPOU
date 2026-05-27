@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationCap" Id="{c02a0884-fe5f-4ce9-9dfb-dc42bc5c112b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Cap
@@ -13,7 +13,7 @@ VAR
     _CapFeederReady : BOOL;
     _TorqueLimit    : LREAL;
     _TorqueActual   : LREAL;
-	
+
 	// outputs
     _RunCapMotor     : BOOL;
     _CapPickCylinder : BOOL;
@@ -37,11 +37,11 @@ Abort := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="AlarmActive" Id="{bcd54691-372a-4e5c-9f64-7599a3ed2c46}">
+    <Property Name="AlarmActive" Id="{3ab2d781-3b81-4ea6-8de5-9196e850a837}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY AlarmActive : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{b80c258f-5710-4bc7-91a5-744271f09251}">
+      <Get Name="Get" Id="{d349b408-8d94-4155-ac48-57fc8b8903fa}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AlarmActive := Alarm.HasActiveAlarm;]]></ST>
@@ -149,7 +149,7 @@ Execute := TRUE;
 VAR_INPUT
     bInitRetains 	: BOOL;
     bInCopyCode  	: BOOL;
-    Mode	      	: I_ModeProvider;
+    Mode      		: I_ModeProvider;
     AlarmHandler 	: I_AlarmHandler;
 END_VAR
 ]]></Declaration>
@@ -239,11 +239,11 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="StateNumber" Id="{8c794610-c6eb-4b14-bd81-962a0c4ee52b}">
+    <Property Name="StateNumber" Id="{f1929f6b-943f-4690-9773-2e19211c3039}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY StateNumber : INT
 ]]></Declaration>
-      <Get Name="Get" Id="{04bbda1d-00a8-4dbf-abdd-f42f7e1a1f25}">
+      <Get Name="Get" Id="{7af0a8c8-58bb-47ce-8ab0-6fba3a882312}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StateNumber := Sequencer.CurrentStep;]]></ST>

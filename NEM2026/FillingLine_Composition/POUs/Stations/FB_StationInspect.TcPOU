@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="FB_StationInspect" Id="{6d3fe22a-493f-4020-8c8e-a33324a46ae2}" SpecialFunc="None">
-    <Declaration><![CDATA[// Stage-3-exercise variant: Inspect uses a sequential FB_StepSequencer
-// and a LineFault-style alarm injection (latching). The CR-2 swap exercise
-// in stage-3-composition replaces the alarm strategy with a QualityFlag and
-// the sequencer with FB_ParallelSequencer — without touching the other stations.
+  <POU Name="FB_StationInspect" Id="{8fc7eee6-21b3-4289-a733-c36ecfab6895}" SpecialFunc="None">
+    <Declaration><![CDATA[// Stage-3-composition variant: Inspect now uses FB_ParallelSequencer to run
+// camera capture + reject pre-arm concurrently in step 10, and is wired with
+// FB_AlarmHandler_QualityFlag in MAIN (non-latching, StopsLine = FALSE).
+// The other stations are unchanged — that's the point of composition.
 FUNCTION_BLOCK FB_StationInspect IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Inspect
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
 VAR
     Mode      : I_ModeProvider;
     Alarm     : I_AlarmHandler;
@@ -19,11 +23,11 @@ VAR
     _CameraReady   : BOOL;
     _InspectResult : BOOL;
 
-	// outputs
+	// outputs	
     _TriggerCamera : BOOL;
     _RejectPusher  : BOOL;
     _PassResult    : BOOL;
-	
+
     _CameraDelay : TON;
     _RejectDelay : TON;
 END_VAR
@@ -32,13 +36,14 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Folder Name="Station" Id="{c0ef751c-4760-4767-a9d5-413059894452}" />
-    <Method Name="Abort" Id="{0a5fd28d-4d95-4382-9064-86a4ef5e3d8f}">
+    <Method Name="Abort" Id="{b5fc71d5-8ea1-4a0f-a9b8-71d9ecb8d4a2}">
       <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[_TriggerCamera := FALSE;
 _RejectPusher  := FALSE;
 Sequencer.ResetSequencer();
+Parallel.ResetAll();
 Watchdog.Reset();
 Abort := TRUE;
 ]]></ST>
@@ -77,7 +82,7 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="Execute" Id="{13aa25d0-210c-4aa1-abd0-c5ef56cf503c}">
+    <Method Name="Execute" Id="{ef49174c-1887-41a4-b170-b18da396bf13}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
       <Implementation>
@@ -94,18 +99,31 @@ CASE Sequencer.CurrentStep OF
         _RejectPusher  := FALSE;
         _PassResult    := FALSE;
         Watchdog.Reset();
+        Parallel.ResetAll();
         IF Mode.AllowRun AND _PartPresent AND _CameraReady THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
             Watchdog.Duration := T#5S;
         END_IF
 
-    10:
+    10: // PARALLEL: camera capture + reject pre-arm
+        // Branch 0 — camera
         _TriggerCamera := TRUE;
         _CameraDelay(IN := TRUE, PT := T#200MS);
         IF _CameraDelay.Q THEN
             _CameraDelay(IN := FALSE);
             _TriggerCamera := FALSE;
+            Parallel.MarkBranchDone(BranchIndex := 0);
+        END_IF
+        // Branch 1 — reject arm (move to ready position)
+        _RejectPusher := FALSE;
+        _RejectDelay(IN := TRUE, PT := T#150MS);
+        IF _RejectDelay.Q THEN
+            _RejectDelay(IN := FALSE);
+            Parallel.MarkBranchDone(BranchIndex := 1);
+        END_IF
+        // wait for both branches
+        IF Parallel.AllBranchesComplete THEN
             Sequencer.TransitionTo(20);
         END_IF
 
@@ -141,13 +159,13 @@ Execute := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="FB_Init" Id="{c0634f2a-96b3-4436-ad7f-d6a77cbcc0ce}">
+    <Method Name="FB_Init" Id="{26a0eccf-7e89-405d-9a05-5066ab230e5e}">
       <Declaration><![CDATA[METHOD FB_Init : BOOL
 VAR_INPUT
-    bInitRetains : BOOL;
-    bInCopyCode  : BOOL;
-    Mode      : I_ModeProvider;
-    AlarmHandler : I_AlarmHandler;
+    bInitRetains 	: BOOL;
+    bInCopyCode  	: BOOL;
+    Mode      		: I_ModeProvider;
+    AlarmHandler 	: I_AlarmHandler;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -155,10 +173,12 @@ END_VAR
 THIS^.Alarm := AlarmHandler;
 
 Sequencer.SetStepName(0,  'Idle');
-Sequencer.SetStepName(10, 'Inspecting');
+Sequencer.SetStepName(10, 'Inspecting (parallel)');
 Sequencer.SetStepName(20, 'Evaluate');
 Sequencer.SetStepName(25, 'Rejecting');
 Sequencer.SetStepName(30, 'Complete');
+
+Parallel.Configure(NumberOfBranches := 2);
 
 FB_Init := TRUE;
 ]]></ST>
@@ -175,20 +195,20 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Property Name="IsComplete" Id="{c072ab02-ced8-47dc-99ee-1c1afca6a322}">
+    <Property Name="IsComplete" Id="{4bae9c94-580e-4373-82e1-2ee2b5f57092}">
       <Declaration><![CDATA[PROPERTY IsComplete : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{12b813fd-8ca2-4b34-ba60-49b27e6890ee}">
+      <Get Name="Get" Id="{840bbd4b-50e6-45db-83be-6a746131a348}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[IsComplete := Sequencer.Complete;]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <Property Name="IsFaulted" Id="{47677a1a-bc87-43bb-98da-f3e1417d7686}">
+    <Property Name="IsFaulted" Id="{27c8425c-9989-4f95-a89e-cc7f7e5359d5}">
       <Declaration><![CDATA[PROPERTY IsFaulted : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{9de72941-7b0c-4f71-a93c-a551e191dee8}">
+      <Get Name="Get" Id="{b8490796-e780-4d48-9ac0-5e3a48fa947c}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[IsFaulted := Alarm.HasActiveAlarm AND Alarm.StopsLine;]]></ST>
@@ -244,11 +264,12 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="Reset" Id="{48e9d2fb-ac5d-4e32-a4e6-0d8d1b7b8f4d}">
+    <Method Name="Reset" Id="{955e4987-ee94-4bf5-928f-ab57a8fd0927}">
       <Declaration><![CDATA[METHOD Reset : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[Sequencer.ResetSequencer();
+Parallel.ResetAll();
 Watchdog.Reset();
 Alarm.Clear();
 _TriggerCamera := FALSE;
@@ -258,10 +279,10 @@ Reset := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="StateName" Id="{c8d4cc14-6335-42a8-885e-2df0de0c60d8}">
+    <Property Name="StateName" Id="{3db3d638-621b-446e-865f-6c69a049a971}">
       <Declaration><![CDATA[PROPERTY StateName : STRING(40)
 ]]></Declaration>
-      <Get Name="Get" Id="{fa055d10-5cf9-444e-a49f-0e181dab2805}">
+      <Get Name="Get" Id="{5a164edb-aa6c-4b52-a3b6-6d30fd0cf81b}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StateName := Sequencer.StepName;]]></ST>
@@ -279,7 +300,7 @@ PROPERTY StateNumber : INT
         </Implementation>
       </Get>
     </Property>
-    <Property Name="StatusText" Id="{f344b0f9-18ad-4c21-a8f5-39147d3c2281}">
+    <Property Name="StatusText" Id="{9e5b6ba9-7df3-41bb-b408-ccb7f5e41990}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY StatusText : STRING(80)
 ]]></Declaration>

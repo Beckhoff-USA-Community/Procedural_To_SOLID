@@ -16,10 +16,10 @@ VAR
     _PartPresent  : BOOL;
     _FlowRate     : LREAL;
     _TargetVolume : LREAL;
-
+	
 	// outputs
     _OpenFillValve : BOOL;
-		
+	
     // process-specific
     _Accumulated : LREAL;
 END_VAR
