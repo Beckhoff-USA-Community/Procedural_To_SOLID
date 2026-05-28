@@ -145,9 +145,9 @@ CASE Sequencer.CurrentStep OF
     30:
         Watchdog.Enable := FALSE;
         // CR-3: log cycle on completion.
-        Logger.LogCycleData(StationName := 'Inspect',
-                            StepNumber  := Sequencer.CurrentStep,
-                            CycleTimeMs := 0);
+        DataLogger.LogCycleData(StationName := 'Inspect',
+                                StepNumber  := Sequencer.CurrentStep,
+                                CycleTimeMs := 0);
         Sequencer.MarkComplete();
 END_CASE
 
@@ -166,8 +166,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.Mode  := Mode;
-THIS^.Alarm := AlarmHandler;
+        <ST><![CDATA[THIS^.Mode       := Mode;
+THIS^.Alarm      := AlarmHandler;
+THIS^.DataLogger := DataLogger;
 
 Sequencer.SetStepName(0,  'Idle');
 Sequencer.SetStepName(10, 'Inspecting (parallel)');

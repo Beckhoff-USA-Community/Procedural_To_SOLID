@@ -97,9 +97,9 @@ CASE Sequencer.CurrentStep OF
         Watchdog.Enable := FALSE;
         // CR-3: log cycle on completion. CycleTimeMs left at 0 here —
         // production code measures via Tc2_Utilities.F_GetCurDcTaskTime64.
-        Logger.LogCycleData(StationName := 'Fill',
-                            StepNumber  := Sequencer.CurrentStep,
-                            CycleTimeMs := 0);
+        DataLogger.LogCycleData(StationName := 'Fill',
+                                StepNumber  := Sequencer.CurrentStep,
+                                CycleTimeMs := 0);
         Sequencer.MarkComplete();
 END_CASE
 
@@ -118,8 +118,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.Mode  := Mode;
-THIS^.Alarm := AlarmHandler;
+        <ST><![CDATA[THIS^.Mode       := Mode;
+THIS^.Alarm      := AlarmHandler;
+THIS^.DataLogger := DataLogger;
 
 Sequencer.SetStepName(0,  'Idle');
 Sequencer.SetStepName(10, 'Filling');

@@ -8,6 +8,7 @@ VAR
     Reset                : BOOL;
     ModeAuto             : BOOL;
     ModeManual           : BOOL;
+    ModePause            : BOOL;       // CR-1
     AlarmAck             : BOOL;
 
     // station instances

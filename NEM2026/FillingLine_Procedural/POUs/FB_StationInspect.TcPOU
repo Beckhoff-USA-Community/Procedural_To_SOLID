@@ -38,6 +38,8 @@ VAR
     Timeout          : TON;
     CameraDelay      : TON;
     RejectDelay      : TON;               // CR-2 — second timer for parallel branch
+    CameraDone       : BOOL;              // CR-2 — parallel-branch completion flag
+    RejectDone       : BOOL;              // CR-2 — parallel-branch completion flag
     AlarmLatched     : BOOL;
     AlarmCode        : UDINT;
     ActiveMode       : INT;

@@ -7,6 +7,7 @@ VAR
     Execute              : BOOL;
     ModeAuto             : BOOL;
     ModeManual           : BOOL;
+    ModePause            : BOOL;       // CR-1
     AlarmAck             : BOOL;
 
     // station instances — Name init is the SPT idiom
