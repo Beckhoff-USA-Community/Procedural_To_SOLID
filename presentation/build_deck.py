@@ -20,7 +20,32 @@ Run:
 Output:
     NEM2026_workshop.pptx (sibling of this file)
 
-Source of truth for content: docs/instructor.md on `main`.
+Source of truth for content: docs/instructor.md on `Release`.
+
+----------------------------------------------------------------------
+WARNING — script and committed .pptx have DIVERGED as of 2026-05-21.
+
+The committed NEM2026_workshop.pptx (7.91 MB) contains hand-edits made
+directly in PowerPoint/Impress by a collaborator (Lauren). The version
+this script would currently generate (~2.58 MB before Lauren's edits)
+does NOT match what's committed.
+
+Branch references in this script have been updated to the new layout
+(`Release` baseline, `cr1-applied` / `cr2-applied` / `cr3-applied` /
+`complete` CR branches; three side-by-side PLC projects per branch).
+But running build_deck.py right now would OVERWRITE Lauren's hand-edited
+.pptx with a stale, mostly-blank-by-comparison regenerated version.
+
+Before regenerating:
+  1. Read the committed .pptx slide-by-slide (e.g. via python-pptx) to
+     identify what Lauren added or changed.
+  2. Port those changes back into this script's add_*_slide() calls.
+  3. Diff the regenerated .pptx against Lauren's version slide-by-slide.
+  4. Only then run build_deck.py to overwrite the committed .pptx.
+
+Until that reconciliation lands, treat this script as a structural
+reference + presenter-notes archive — not a regenerator.
+----------------------------------------------------------------------
 """
 
 from __future__ import annotations
@@ -910,7 +935,7 @@ def build_slides(prs):
         summary="The architecture you've been writing for 20 years.",
         accent=Theme.AMBER,
         notes="""
-[BEFORE] Switch presenter to `stage-1-procedural`. Open all four station FBs side by side: FB_StationFill, FB_StationCap, FB_StationLabel, FB_StationInspect.
+[BEFORE] Switch presenter to `Release`. In XAE, expand `FillingLine_Procedural` → POUs and open all four station FBs side by side: FB_StationFill, FB_StationCap, FB_StationLabel, FB_StationInspect. (Legacy single-PLC alternative: `git switch stage-1-procedural`.)
 
 [SAY — when you click forward]
 "This is the architecture you've been writing for 20 years. IEC 61131-3 was designed for it. There's nothing wrong with it. Today we feel where it stops scaling."
@@ -1137,7 +1162,7 @@ END_VAR
 [THE TRAP] Most attendees miss the Fill exception on first read and write a uniform Pause guard.
 
 [DO]
-1. Switch presenter to `stage-1-broken`. Show the compile error in MAIN.
+1. Switch presenter to `stage-1-broken` (this demo uses the legacy single-PLC branch — the broken state was deliberately preserved there). Show the compile error in MAIN.
 2. "30 seconds to read the broken state, then 15 minutes to fix it."
 3. Set the timer. Walk the room. DON'T HELP. Wait until people are ~10 minutes in before you interrupt for the reveal slide.
 """.strip(),
@@ -1168,7 +1193,7 @@ END_VAR
     add_diff_slide(
         prs,
         title="CR-1 result",
-        branch_compare="stage-1-procedural...stage-1-cr1-applied --stat",
+        branch_compare="Release...cr1-applied --stat -- NEM2026/FillingLine_Procedural/",
         headline_stat="5 files  ·  +50  −13",
         takeaways=[
             "Same 25 lines of guard logic, paid four times.",
@@ -1178,7 +1203,7 @@ END_VAR
         accent=Theme.AMBER,
         page=n(),
         notes="""
-[BEFORE] After attendees finish (or you call time): `git switch stage-1-cr1-applied` and `git diff stage-1-procedural --stat` on screen.
+[BEFORE] After attendees finish (or you call time): `git switch cr1-applied` and `git diff Release --stat -- NEM2026/FillingLine_Procedural/` on screen.
 
 [DO] Write the 5 / +50 / −13 number on the physical scoreboard whiteboard.
 
@@ -1231,7 +1256,7 @@ END_VAR
     add_diff_slide(
         prs,
         title="CR-2 result",
-        branch_compare="stage-1-procedural...stage-1-cr2-applied --stat",
+        branch_compare="Release...cr2-applied --stat -- NEM2026/FillingLine_Procedural/",
         headline_stat="2 files  ·  +92  −55",
         takeaways=[
             "Inspect's CASE machine rewritten end-to-end.",
@@ -1269,7 +1294,7 @@ END_VAR
     add_diff_slide(
         prs,
         title="CR-3 result — small, but defend it as fine?",
-        branch_compare="stage-1-procedural...stage-1-cr3-applied --stat",
+        branch_compare="Release...cr3-applied --stat -- NEM2026/FillingLine_Procedural/",
         headline_stat="2 files  ·  +13  −3",
         takeaways=[
             "Identical buffer code in two places.",
@@ -1301,7 +1326,7 @@ END_VAR
         page=n(),
         body_size=22,
         notes="""
-[BEFORE] Switch presenter to `stage-1-complete`. Show `git diff stage-1-procedural --stat` live.
+[BEFORE] Switch presenter to `complete`. Show `git diff Release --stat -- NEM2026/FillingLine_Procedural/` live.
 
 [SAY] "That's what your codebase looks like after a year of cross-cutting CRs. Five files modified, growth concentrated in Inspect, duplication on every cross-cutting concern."
 
@@ -1328,7 +1353,7 @@ END_VAR
         notes="""
 [DO NOT SHORTEN] Don't compress to 5 minutes — you'll pay for it in Block 2's CR-2 attention crash.
 
-[USE THE BREAK] Pull `stage-2-inheritance` on the presenter machine. Open FB_StationBase and FB_StationFill in side-by-side tabs.
+[USE THE BREAK] Make sure presenter is on `Release` (or stay there from Block 1). In XAE, expand `FillingLine_Inheritance` → POUs and open FB_StationBase and FB_StationFill in side-by-side tabs.
 """.strip(),
     )
 
@@ -1342,7 +1367,7 @@ END_VAR
         summary="The duplication evaporates.\nThen the base class becomes the constraint.",
         accent=Theme.TEAL,
         notes="""
-[BEFORE] Presenter on `stage-2-inheritance`. FB_StationBase and FB_StationFill side by side.
+[BEFORE] Presenter on `Release`, `FillingLine_Inheritance` expanded. FB_StationBase and FB_StationFill side by side.
 
 [FRAMING] Block 2 is the trickiest to facilitate. Inheritance has real wins; don't dismiss them. But the audience has to FEEL where it stops working, not just be told. Pace the CR-2 reveal carefully — that's the workshop's hardest moment (25 min).
 """.strip(),
@@ -1479,7 +1504,7 @@ THIS^.Name := Name;""",
     add_diff_slide(
         prs,
         title="CR-1 result — base-class pollution",
-        branch_compare="stage-2-inheritance...stage-2-cr1-applied --stat",
+        branch_compare="Release...cr1-applied --stat -- NEM2026/FillingLine_Inheritance/",
         headline_stat="3 files  ·  +65  −48",
         takeaways=[
             "Pollution lives on the base — every reader, every child pays.",
@@ -1545,7 +1570,7 @@ THIS^.Name := Name;""",
 [GATHER ATTENTION AND DELIVER]
 "There's no way to say 'inherit everything except the alarm policy.' Inheritance is all-or-nothing. Whatever the base does, every child gets — unless the child reimplements that behavior in an override."
 
-[DO] Show stage-2-broken: "This is what mid-fix looks like in real life — a partially overridden Monitoring with TODO comments." Leave the TODOs visible; they're the visual evidence of the design fight.
+[DO] Show stage-2-broken (legacy single-PLC branch — the half-finished override was preserved there): "This is what mid-fix looks like in real life — a partially overridden Monitoring with TODO comments." Leave the TODOs visible; they're the visual evidence of the design fight.
 """.strip(),
     )
 
@@ -1571,7 +1596,7 @@ THIS^.Name := Name;""",
     add_diff_slide(
         prs,
         title="CR-2 result — the override fight",
-        branch_compare="stage-2-inheritance...stage-2-cr2-applied --stat",
+        branch_compare="Release...cr2-applied --stat -- NEM2026/FillingLine_Inheritance/",
         headline_stat="2 files  ·  +121  −48",
         takeaways=[
             "Inspect overrides Monitoring without calling SUPER.",
@@ -1609,7 +1634,7 @@ THIS^.Name := Name;""",
     add_diff_slide(
         prs,
         title="CR-3 result — dead weight in unrelated children",
-        branch_compare="stage-2-inheritance...stage-2-cr3-applied --stat",
+        branch_compare="Release...cr3-applied --stat -- NEM2026/FillingLine_Inheritance/",
         headline_stat="3 files  ·  +64  −25",
         takeaways=[
             "LogBuffer + LoggingEnabled added to the base.",
@@ -1643,7 +1668,7 @@ THIS^.Name := Name;""",
         page=n(),
         body_size=22,
         notes="""
-[DO] Switch presenter to stage-2-complete. Show the diff stat live. Walk the FB_StationBase tab — point to each new accumulation: ModePause field, AllowPause virtual, LogBuffer, LoggingEnabled virtual, LogCycleData helper.
+[DO] Switch presenter to `complete`. Show `git diff Release --stat -- NEM2026/FillingLine_Inheritance/` live. Walk the FillingLine_Inheritance/POUs/FB_StationBase tab — point to each new accumulation: ModePause field, AllowPause virtual, LogBuffer, LoggingEnabled virtual, LogCycleData helper.
 
 [SAY] "It started clean. Now it's a junk drawer. Every CR added another carve-out the base wasn't designed for."
 
@@ -1666,7 +1691,7 @@ THIS^.Name := Name;""",
         accent=Theme.TEAL,
         page=n(),
         notes="""
-[USE THE BREAK] Pull `stage-3-composition` on the presenter machine. Open the file tree, then I_AlarmHandler.TcPOU and FB_AlarmHandler_LineFault.TcPOU side by side.
+[USE THE BREAK] Stay on `Release` for the presenter machine. In XAE, expand `FillingLine_Composition` and open its I_AlarmHandler.TcPOU and FB_AlarmHandler_LineFault.TcPOU side by side.
 
 [SECOND LAPTOP] If you have one: open MAIN.TcPOU on it. The MAIN swap demo in Block 3 is the workshop's emotional climax — preparing it now saves a switching delay later.
 """.strip(),
@@ -1682,7 +1707,7 @@ THIS^.Name := Name;""",
         summary="Build the line from interface-typed building blocks.\nCR-2 — the killer requirement — becomes a one-line swap.",
         accent=Theme.VIOLET,
         notes="""
-[BEFORE] Presenter on `stage-3-composition`. File tree visible — 18 files in three directories.
+[BEFORE] Presenter on `Release`, `FillingLine_Composition` expanded. File tree visible — 18 source files in three directories (Interfaces/, BuildingBlocks/, Stations/).
 
 [FRAMING] This block is the EMOTIONAL PAYOFF of the workshop. Pace it so the room has time to FEEL the win, not just observe it. Don't rush past CR-2.
 """.strip(),
@@ -1919,7 +1944,7 @@ END_VAR
     add_diff_slide(
         prs,
         title="CR-1 — the composition way (Fill's exception comes free)",
-        branch_compare="stage-3-composition...stage-3-cr1-applied --stat",
+        branch_compare="Release...cr1-applied --stat -- NEM2026/FillingLine_Composition/",
         headline_stat="2 files  ·  +19  −6",
         takeaways=[
             "Just modify FB_ModeManager. Stations are not touched.",
@@ -2032,7 +2057,7 @@ Inspect       : FB_StationInspect(
 
 [PATTERN] What they're applying: COMPOSE a new building block (FB_ParallelSequencer) alongside an existing one (FB_StepSequencer). Not rewriting; composing.
 
-[WHEN DONE] `git switch stage-3-cr2-applied` and show the diff. ~30 lines added in 2 files.
+[WHEN DONE] `git switch cr2-applied` and show `git diff Release --stat -- NEM2026/FillingLine_Composition/`. ~30 lines added in 2 files.
 
 [PACING] If behind, skip this hands-on. The reveal moment is the swap on the presenter screen — that's the lesson. The parallel sequencer is supplementary.
 """.strip(),
@@ -2041,7 +2066,7 @@ Inspect       : FB_StationInspect(
     add_diff_slide(
         prs,
         title="CR-3 — DI all the way",
-        branch_compare="stage-3-composition...stage-3-cr3-applied --stat",
+        branch_compare="Release...cr3-applied --stat -- NEM2026/FillingLine_Composition/",
         headline_stat="3 files  ·  +32  −11",
         takeaways=[
             "Add I_DataLogger field + FB_init param to Fill and Inspect only.",
@@ -2066,7 +2091,7 @@ Inspect       : FB_StationInspect(
         prs,
         title="Even composition can be applied poorly",
         bullets=[
-            "git switch stage-3-broken — Pause via per-station guards.",
+            "git switch stage-3-broken — Pause via per-station guards (legacy demo branch).",
             "Compiles. Runs. Halts Fill mid-cycle.",
             "The right architecture nudges, doesn't force.",
             "Right answer: 1-file diff. Wrong answer: 5-file diff.",
@@ -2076,7 +2101,7 @@ Inspect       : FB_StationInspect(
         page=n(),
         body_size=20,
         notes="""
-[DO] Show stage-3-broken on the projector. Walk the per-station guards. Then compare to stage-3-cr1-applied (FB_ModeManager-only).
+[DO] Show stage-3-broken on the projector (this demo uses the legacy single-PLC branch — the wrong-way state was preserved there). Walk the per-station guards. Then switch back to `cr1-applied` and show FillingLine_Composition's FB_ModeManager-only change.
 
 [LESSON] The right architecture makes the right thing easy and the wrong thing visible. Right answer is loud and small; wrong answer is loud and large.
 
@@ -2336,7 +2361,7 @@ Inspect       : FB_StationInspect(
         right_items=[
             "Block 4 4B — extend customer-conversation rehearsal.",
             "Show patterns.md — name Strategy / Template Method / DI.",
-            "Demo stage-3-broken — why wrong even though it compiles.",
+            "Demo stage-3-broken (legacy branch) — why wrong even though it compiles.",
             "PlcTestSuite demo — most powerful extension. See next slide.",
         ],
         accent=Theme.NAVY,
