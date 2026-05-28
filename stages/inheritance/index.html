@@ -1,0 +1,2224 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A 4-hour TwinCAT 3 workshop in object-oriented PLC design — NEM 2026">
+      
+      
+      
+        <link rel="canonical" href="https://beckhoff-usa-community.github.io/Procedural_To_SOLID/stages/inheritance/">
+      
+      
+        <link rel="prev" href="../procedural/">
+      
+      
+        <link rel="next" href="../composition/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Stage 2 — Inheritance - From Procedural to SOLID</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#stage-2-inheritance" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="From Procedural to SOLID" class="md-header__button md-logo" aria-label="From Procedural to SOLID" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            From Procedural to SOLID
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Stage 2 — Inheritance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Beckhoff-USA-Community/Procedural_To_SOLID
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../workshop/overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Workshop
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Stages
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../patterns/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Patterns
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../testing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing (extra credit)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../reference/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../instructor/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Instructor's guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="From Procedural to SOLID" class="md-nav__button md-logo" aria-label="From Procedural to SOLID" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    From Procedural to SOLID
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Beckhoff-USA-Community/Procedural_To_SOLID
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workshop
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workshop
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workshop/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workshop/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workshop/change-requests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../workshop/scoreboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scoreboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stages
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stages
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../procedural/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Procedural
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Inheritance
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Inheritance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-oop-inheritance-paradigm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The OOP-inheritance paradigm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The OOP-inheritance paradigm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#origin-and-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Origin and theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-inheritance-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The inheritance mental model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-twincat-inheritance-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where TwinCAT inheritance comes from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#critical-twincat-specific-mechanics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critical TwinCAT-specific mechanics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-inheritance-is-constructed-in-this-workshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How inheritance is constructed in this workshop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How inheritance is constructed in this workshop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-layout-6-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File layout (6 files)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fb_stationbase-the-template-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FB_StationBase — the Template Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fb_stationfill-example-child" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FB_StationFill — example child
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mains-invocation-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MAIN's invocation pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-benefit-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost / benefit analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cost / benefit analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-inheritance-is-the-right-answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When inheritance is the right answer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-inheritance-starts-to-hurt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When inheritance starts to hurt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-cr-2-reveals-about-inheritance-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What CR-2 reveals about inheritance limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-cr-3-reveals-about-inheritance-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What CR-3 reveals about inheritance limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-diff-numbers-your-blast-radius-scoreboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The diff numbers (your blast radius scoreboard)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-how-to-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete how-to walkthrough
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete how-to walkthrough">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-survey-the-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Survey the refactor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-run-the-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Run the line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-apply-cr-1-the-inheritance-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Apply CR-1 the inheritance way
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-apply-cr-2-feel-inheritance-break" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Apply CR-2 — feel inheritance break
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-apply-cr-3-the-inheritance-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — Apply CR-3 the inheritance way
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-see-the-all-3-crs-end-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — See the all-3-CRs end state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-reflect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7 — Reflect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branches-in-this-stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branches in this stage
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../composition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Composition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing (extra credit)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instructor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instructor's guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-oop-inheritance-paradigm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The OOP-inheritance paradigm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The OOP-inheritance paradigm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#origin-and-theory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Origin and theory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-inheritance-mental-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The inheritance mental model
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-twincat-inheritance-comes-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where TwinCAT inheritance comes from
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#critical-twincat-specific-mechanics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Critical TwinCAT-specific mechanics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-inheritance-is-constructed-in-this-workshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How inheritance is constructed in this workshop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How inheritance is constructed in this workshop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-layout-6-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File layout (6 files)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fb_stationbase-the-template-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FB_StationBase — the Template Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fb_stationfill-example-child" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FB_StationFill — example child
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mains-invocation-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MAIN's invocation pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-benefit-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost / benefit analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cost / benefit analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-inheritance-is-the-right-answer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When inheritance is the right answer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-inheritance-starts-to-hurt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When inheritance starts to hurt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-cr-2-reveals-about-inheritance-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What CR-2 reveals about inheritance limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-cr-3-reveals-about-inheritance-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What CR-3 reveals about inheritance limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-diff-numbers-your-blast-radius-scoreboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The diff numbers (your blast radius scoreboard)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-how-to-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete how-to walkthrough
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete how-to walkthrough">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-survey-the-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Survey the refactor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-run-the-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Run the line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-apply-cr-1-the-inheritance-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Apply CR-1 the inheritance way
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-apply-cr-2-feel-inheritance-break" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Apply CR-2 — feel inheritance break
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-apply-cr-3-the-inheritance-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — Apply CR-3 the inheritance way
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-see-the-all-3-crs-end-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — See the all-3-CRs end state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-reflect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7 — Reflect
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branches-in-this-stage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branches in this stage
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/edit/main/docs/stages/inheritance.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/raw/main/docs/stages/inheritance.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="stage-2-inheritance">Stage 2 — Inheritance<a class="headerlink" href="#stage-2-inheritance" title="Permanent link">&para;</a></h1>
+<p><strong>Branches:</strong> <code>stage-2-inheritance</code>, <code>stage-2-broken</code>, <code>stage-2-cr1-applied</code>, <code>stage-2-cr2-applied</code>, <code>stage-2-cr3-applied</code>, <code>stage-2-complete</code></p>
+<hr />
+<h2 id="the-oop-inheritance-paradigm">The OOP-inheritance paradigm<a class="headerlink" href="#the-oop-inheritance-paradigm" title="Permanent link">&para;</a></h2>
+<h3 id="origin-and-theory">Origin and theory<a class="headerlink" href="#origin-and-theory" title="Permanent link">&para;</a></h3>
+<p>Object-oriented programming was conceived in <strong>Simula 67</strong> at the Norwegian Computing Center in the late 1960s. Ole-Johan Dahl and Kristen Nygaard introduced the concept of a <strong>class</strong> as a template for objects, and <strong>inheritance</strong> as a way for one class to be a "kind of" another. <strong>Smalltalk</strong> at Xerox PARC in the 1970s formalized message-passing and dynamic dispatch. C++ (1985) and Java (1995) brought OOP to mainstream industry.</p>
+<p>The core inheritance idea is the <strong>IS-A relationship</strong>:</p>
+<blockquote>
+<p><em>"A <code>FB_StationFill</code> IS-A <code>FB_StationBase</code>. So everything <code>FB_StationBase</code> knows how to do, <code>FB_StationFill</code> also knows how to do — except where it overrides specifically."</em></p>
+</blockquote>
+<p>This is enormously powerful. If you have a hundred objects that share 80% of their behavior and differ in 20%, inheritance lets you write the 80% once on a base class and the 20% on derived classes. Polymorphism (specifically <strong>late binding</strong> via virtual methods) means a caller holding a <code>FB_StationBase</code> reference can invoke methods that automatically resolve to the right derived implementation at runtime.</p>
+<p>The 1994 <em>"Design Patterns"</em> book by the <strong>Gang of Four</strong> codified the <em>Template Method</em> pattern — base class defines the algorithm skeleton, subclasses fill in the gaps via virtual hooks. That's the canonical inheritance use, and it's exactly what <code>FB_StationBase</code> does in this stage.</p>
+<h3 id="the-inheritance-mental-model">The inheritance mental model<a class="headerlink" href="#the-inheritance-mental-model" title="Permanent link">&para;</a></h3>
+<p>When you write inheritance code, you're thinking:</p>
+<blockquote>
+<p><em>"Same shape, different details. Capture the shape on the base; let children specialize the details. The framework calls the right method at the right time."</em></p>
+</blockquote>
+<p>In Stage 2, the "shape" is the lifecycle — initialize → cyclic check → execute sequence → reset. Every station shares this shape. The "details" are the specific sequence each station runs. So <code>FB_StationBase</code> defines the shape (<code>CyclicLogic</code> is the template), and <code>FB_StationFill</code> / <code>FB_StationCap</code> / <code>FB_StationLabel</code> / <code>FB_StationInspect</code> fill in the blanks via <code>ExecuteSequence</code> and <code>GetStepName</code>.</p>
+<h3 id="where-twincat-inheritance-comes-from">Where TwinCAT inheritance comes from<a class="headerlink" href="#where-twincat-inheritance-comes-from" title="Permanent link">&para;</a></h3>
+<p>TwinCAT 3 added OOP to IEC 61131-3 in the 2010s — <code>EXTENDS</code>, <code>IMPLEMENTS</code>, <code>METHOD</code>, <code>PROPERTY</code>, <code>THIS^</code>, <code>SUPER^</code>. <strong>All methods are virtual by default</strong> unless declared <code>FINAL</code>. Visibility is controlled by <code>PUBLIC</code> / <code>PROTECTED</code> / <code>PRIVATE</code> / <code>INTERNAL</code>. The framework can layer on top: SPT-Libraries (Beckhoff USA Community), the older <code>FB_PackML_BaseModule</code> from Tc3_PackML_V3, custom shop-specific bases.</p>
+<p>The Stage 2 of this workshop sits on top of the <strong>SPT-Libraries' <code>FB_ComponentBase</code></strong>, which is itself a Template Method base. The SPT framework defines:</p>
+<ul>
+<li><strong><code>Initialize</code></strong> — called once on first scan, returns <code>BOOL</code> (multi-cycle init pattern)</li>
+<li><strong><code>CyclicLogic</code></strong> — the cyclic entry point; calls <code>Initialize</code> then <code>Monitoring</code> then user-overrides</li>
+<li><strong><code>Monitoring</code></strong> — for raising alarms based on conditions</li>
+<li><strong><code>Reset</code></strong> — clears errors, multi-cycle</li>
+<li><strong><code>CreateEvents</code></strong> — initialization of <code>FB_TcAlarm</code> arrays for production alarm wiring</li>
+<li>Built-in fields: <code>_InitComplete</code>, <code>_Error</code>, <code>_ErrorID</code>, <code>_Busy</code>, <code>_CurrentAlarmSeverity</code>, <code>Name</code></li>
+</ul>
+<p>Our <code>FB_StationBase</code> extends this and adds station-specific shape: a <code>State</code> integer, a <code>Timeout</code> TON, alarm latching, mode resolution, an <code>ExecuteSequence</code> virtual hook, a <code>GetStepName</code> virtual hook.</p>
+<h3 id="critical-twincat-specific-mechanics">Critical TwinCAT-specific mechanics<a class="headerlink" href="#critical-twincat-specific-mechanics" title="Permanent link">&para;</a></h3>
+<p>Three idioms you must understand to read Stage 2:</p>
+<p><strong>1. <code>THIS^</code> and <code>SUPER^</code></strong> — method calls inside an FB</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>THIS^.ExecuteSequence();   // calls THIS instance&#39;s ExecuteSequence
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                           // — virtual dispatch, finds the most-derived override
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>SUPER^.CyclicLogic();      // calls the BASE class&#39;s CyclicLogic explicitly
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                           // — bypasses virtual dispatch, used to call up the chain
+</span></code></pre></div>
+<p>If <code>FB_StationBase</code> overrides <code>Monitoring</code> and <code>FB_StationInspect</code> overrides <code>Monitoring</code> further, then <code>THIS^.Monitoring()</code> from anywhere calls Inspect's version. <code>SUPER^.Monitoring()</code> from inside Inspect's override calls <code>FB_StationBase</code>'s version. The <code>^</code> is dereference (these are pointers to the FB instance).</p>
+<p><strong>2. The Initialize idiom</strong> — multi-cycle init</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>METHOD PUBLIC CyclicLogic
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    IF NOT _InitComplete THEN
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        _InitComplete := Initialize();   // returns FALSE while still initializing
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        RETURN;                          // skip cyclic logic until init done
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    END_IF
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    SUPER^.CyclicLogic();
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    THIS^.ExecuteSequence();
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>END_METHOD
+</span></code></pre></div>
+<p><code>Initialize</code> may need multiple scans to complete (registering child components, setting up alarms, etc.). The <code>_InitComplete</code> gate ensures we don't run cyclic logic until initialization is fully done.</p>
+<p><strong>3. The <code>(Name := 'X')</code> instantiation idiom</strong> — extended <code>FB_init</code></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>StationFill : FB_StationFill := (Name := &#39;Fill&#39;);
+</span></code></pre></div>
+<p>This passes <code>'Fill'</code> to <code>FB_StationFill</code>'s extended <code>FB_init</code> method. The SPT base uses <code>Name</code> for diagnostic prefixes ("Fill: Timeout") and event-logger string parameters. <strong>Every station instance gets a unique name</strong> so its alarm events are distinguishable in the event log.</p>
+<hr />
+<h2 id="how-inheritance-is-constructed-in-this-workshop">How inheritance is constructed in this workshop<a class="headerlink" href="#how-inheritance-is-constructed-in-this-workshop" title="Permanent link">&para;</a></h2>
+<h3 id="file-layout-6-files">File layout (6 files)<a class="headerlink" href="#file-layout-6-files" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>NEM2026/FillingLine/POUs/
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── FB_StationBase.TcPOU       ~165 lines — abstract base
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├── FB_StationFill.TcPOU       ~65 lines — extends Base
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── FB_StationCap.TcPOU        ~75 lines — extends Base
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>├── FB_StationLabel.TcPOU      ~75 lines — extends Base
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>├── FB_StationInspect.TcPOU    ~85 lines — extends Base
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>└── MAIN.TcPOU                 ~80 lines — instantiates and drives all four
+</span></code></pre></div>
+<p>Total: ~545 lines. Roughly the same as Stage 1 — the inheritance refactor compresses duplication but introduces the base class. <strong>The win isn't in lines; the win is in eliminating the cross-station drift.</strong></p>
+<h3 id="fb_stationbase-the-template-method"><code>FB_StationBase</code> — the Template Method<a class="headerlink" href="#fb_stationbase-the-template-method" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>FUNCTION_BLOCK FB_StationBase EXTENDS SPT_Components.FB_ComponentBase
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>VAR_INPUT
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    Execute      : BOOL;
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    ModeAuto     : BOOL;
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    ModeManual   : BOOL;
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    PartPresent  : BOOL;
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    AlarmAck     : BOOL;
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>END_VAR
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>VAR_OUTPUT
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    Done         : BOOL;
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    StatusText   : STRING(80);
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    StateDisplay : INT;
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    AlarmActive  : BOOL;
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    AlarmText    : STRING(255);
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>END_VAR
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>VAR
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>    State        : INT;
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    Timeout      : TON;
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>    AlarmLatched : BOOL;
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>    AlarmAckEdge : R_TRIG;            // standardized for everyone — drift fixed
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>    AlarmCode    : UDINT;
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>    ActiveMode   : INT;
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>END_VAR
+</span></code></pre></div>
+<p>The methods, with their roles:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Visibility</th>
+<th>Override expectation</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CyclicLogic</code></td>
+<td>PUBLIC</td>
+<td>Children may override but usually shouldn't</td>
+<td>The cyclic entry point — calls Initialize, then framework chain (Monitoring etc), then ExecuteSequence + UpdateHmiStatus</td>
+</tr>
+<tr>
+<td><code>Monitoring</code></td>
+<td>PROTECTED</td>
+<td>Children may override to add station-specific alarm conditions; should call <code>SUPER^.Monitoring()</code></td>
+<td>Mode resolution + alarm-ack (lives here once, instead of in every station)</td>
+</tr>
+<tr>
+<td><code>Reset</code></td>
+<td>PUBLIC</td>
+<td>Children may override to add station-specific reset behavior; should call <code>SUPER^.Reset()</code></td>
+<td>Multi-cycle clear of state + alarms</td>
+</tr>
+<tr>
+<td><code>ExecuteSequence</code></td>
+<td>PROTECTED</td>
+<td><strong>Children must override</strong></td>
+<td>Empty default — concrete station provides the CASE state machine</td>
+</tr>
+<tr>
+<td><code>GetStepName</code></td>
+<td>PROTECTED</td>
+<td><strong>Children should override</strong></td>
+<td>Returns 'Idle' / 'Running' generically; child returns step-specific names</td>
+</tr>
+<tr>
+<td><code>RaiseStationAlarm(Code, Text)</code></td>
+<td>PROTECTED</td>
+<td>Helper — children call it</td>
+<td>Latches alarm, sets <code>_Error</code></td>
+</tr>
+<tr>
+<td><code>TransitionTo(NextStep)</code></td>
+<td>PROTECTED</td>
+<td>Helper — children call it</td>
+<td>Single point for state transitions</td>
+</tr>
+<tr>
+<td><code>UpdateHmiStatus</code></td>
+<td>PROTECTED</td>
+<td>Children rarely override</td>
+<td>HMI string mapping using <code>GetStepName</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="fb_stationfill-example-child"><code>FB_StationFill</code> — example child<a class="headerlink" href="#fb_stationfill-example-child" title="Permanent link">&para;</a></h3>
+<p>The child is now tiny:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>FUNCTION_BLOCK FB_StationFill EXTENDS FB_StationBase
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>VAR_INPUT
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    FlowRate     : LREAL;
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    TargetVolume : LREAL;
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>END_VAR
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>VAR_OUTPUT
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    OpenFillValve : BOOL;
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>END_VAR
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>VAR
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    Accumulated  : LREAL;
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>END_VAR
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>METHOD PROTECTED ExecuteSequence    // OVERRIDE — the only thing Fill does differently
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>    CASE State OF
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>        0:
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>            OpenFillValve := FALSE;
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>            Accumulated   := 0.0;
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>            IF Execute AND PartPresent AND ActiveMode = 1 THEN
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>                THIS^.TransitionTo(10);
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>            END_IF
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        10:
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a>            OpenFillValve := TRUE;
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a>            Timeout(IN := TRUE, PT := T#10S);
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>            IF Timeout.Q THEN
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>                THIS^.RaiseStationAlarm(1000, &#39;Fill: Timeout&#39;);
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>            END_IF
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a>            IF FlowRate &lt; 0.1 THEN
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>                THIS^.RaiseStationAlarm(1001, &#39;Fill: No flow detected&#39;);
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>            END_IF
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>            Accumulated := Accumulated + (FlowRate * 0.001);
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>            IF Accumulated &gt;= TargetVolume THEN
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a>                THIS^.TransitionTo(20);
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>            END_IF
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a>        20:
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a>            OpenFillValve := FALSE;
+</span><span id="__span-5-36"><a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a>            Timeout(IN := FALSE);
+</span><span id="__span-5-37"><a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>            Done := TRUE;
+</span><span id="__span-5-38"><a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a>    END_CASE
+</span><span id="__span-5-39"><a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a>END_METHOD
+</span><span id="__span-5-40"><a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a>
+</span><span id="__span-5-41"><a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a>METHOD PROTECTED GetStepName : STRING(40)    // OVERRIDE
+</span><span id="__span-5-42"><a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a>    CASE State OF
+</span><span id="__span-5-43"><a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a>        0:  GetStepName := &#39;Idle&#39;;
+</span><span id="__span-5-44"><a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a>        10: GetStepName := &#39;Filling&#39;;
+</span><span id="__span-5-45"><a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a>        20: GetStepName := &#39;Complete&#39;;
+</span><span id="__span-5-46"><a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a>    ELSE
+</span><span id="__span-5-47"><a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a>        GetStepName := &#39;Unknown&#39;;
+</span><span id="__span-5-48"><a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a>    END_CASE
+</span><span id="__span-5-49"><a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a>END_METHOD
+</span></code></pre></div>
+<p>Just 65 lines. Mode logic, alarm acknowledgment, HMI mapping, the lifecycle — all inherited. <strong>The state machine is the only thing that varies.</strong> That's the inheritance win.</p>
+<h3 id="mains-invocation-pattern">MAIN's invocation pattern<a class="headerlink" href="#mains-invocation-pattern" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>StationFill    : FB_StationFill    := (Name := &#39;Fill&#39;);
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>StationCap     : FB_StationCap     := (Name := &#39;Cap&#39;);
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>StationLabel   : FB_StationLabel   := (Name := &#39;Label&#39;);
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>StationInspect : FB_StationInspect := (Name := &#39;Inspect&#39;);
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>(* in Implementation: *)
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>StationFill(
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    Execute      := Execute,
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    ModeAuto     := ModeAuto,
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    ModeManual   := ModeManual,
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    PartPresent  := PartFill,
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    AlarmAck     := AlarmAck,
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    FlowRate     := FlowRate,
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    TargetVolume := TargetVolume);
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>StationFill.CyclicLogic();
+</span></code></pre></div>
+<p><strong>Two-step station call:</strong> the FB body call (which populates <code>VAR_INPUT</code>s) and then <code>.CyclicLogic()</code> (which runs the framework lifecycle). This is a standard SPT pattern.</p>
+<hr />
+<h2 id="cost-benefit-analysis">Cost / benefit analysis<a class="headerlink" href="#cost-benefit-analysis" title="Permanent link">&para;</a></h2>
+<h3 id="when-inheritance-is-the-right-answer">When inheritance is the right answer<a class="headerlink" href="#when-inheritance-is-the-right-answer" title="Permanent link">&para;</a></h3>
+<p>Inheritance is <strong>the correct architectural choice</strong> when:</p>
+<ul>
+<li><strong>Stations form a homogeneous family</strong> — every station does the same shape of work, with only data differences</li>
+<li><strong>The lifecycle is genuinely shared</strong> — every station has the same <code>init / cycle / monitor / reset</code> rhythm</li>
+<li><strong>The base class can be authored once and rarely change</strong> — adding capability happens via new overrides, not base modifications</li>
+<li><strong>Cross-cutting concerns are <em>additive<em>, not </em>exceptional</em></strong> — every station should get the new feature; none should opt out</li>
+<li><strong>Your team is medium-sized</strong> (3-10 engineers) and you want the consistency that a shared base enforces</li>
+<li><strong>The codebase will be maintained 3-10 years</strong> — long enough that the consistency win compounds</li>
+</ul>
+<p>If those are true, inheritance gives you <strong>real wins</strong>:</p>
+<ul>
+<li><strong>Drift elimination</strong> — base-class shared logic can't drift between stations because it's the same code</li>
+<li><strong>Easier onboarding</strong> — a new engineer reads the base, then reads a child, and understands a station in 20 minutes</li>
+<li><strong>Consistency enforcement</strong> — every station has the same shape because it inherits the shape</li>
+<li><strong>Reasonable testability</strong> — you can subclass the base for tests, override the work-doing methods, and exercise the lifecycle (better than Stage 1, worse than Stage 3)</li>
+</ul>
+<h3 id="when-inheritance-starts-to-hurt">When inheritance starts to hurt<a class="headerlink" href="#when-inheritance-starts-to-hurt" title="Permanent link">&para;</a></h3>
+<p>Inheritance breaks down when <strong>any</strong> of the following stops being true:</p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Root cause</th>
+<th>What you're feeling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Adding a feature for this <em>one</em> station forces a virtual flag on the base"</td>
+<td>The base class becomes the dumping ground for per-child exceptions</td>
+<td>Inheritance pollution — <code>AllowPause()</code> exists for one child but lives on the base forever</td>
+</tr>
+<tr>
+<td>"I had to override <code>Monitoring</code> without calling <code>SUPER</code> because the base does the wrong thing"</td>
+<td>The base's behavior contradicts a specific child's needs</td>
+<td>The Liskov Substitution Principle is violated: this child is <em>not</em> substitutable for the base</td>
+</tr>
+<tr>
+<td>"Every change to the base requires re-checking every child"</td>
+<td>Coupling between base and children is bidirectional</td>
+<td>The base class is a single point of failure — and a single point of consideration</td>
+</tr>
+<tr>
+<td>"Two stations want to share half a feature, but inherit different bases"</td>
+<td>Single-inheritance can't combine traits</td>
+<td>TwinCAT (and most OOP languages) only allow one base class — this corner is permanent</td>
+</tr>
+<tr>
+<td>"I want to test stations with mocked alarms but I can't"</td>
+<td>Alarm strategy is hardcoded into base behavior</td>
+<td>No seam for injecting different implementations at runtime</td>
+</tr>
+</tbody>
+</table>
+<p>The first symptom — the <strong>virtual-flag-pollution</strong> smell — is the canonical inheritance breakdown. It's what CR-1 demonstrates. The second — the <strong><code>SUPER</code>-can't-be-called</strong> problem — is the harder breakdown that CR-2 demonstrates.</p>
+<h3 id="what-cr-2-reveals-about-inheritance-limits">What CR-2 reveals about inheritance limits<a class="headerlink" href="#what-cr-2-reveals-about-inheritance-limits" title="Permanent link">&para;</a></h3>
+<p>CR-2 has two axes of variation that hit Inspect simultaneously:</p>
+<ol>
+<li><strong>Different alarm policy</strong> (non-latching, doesn't stop the line)</li>
+<li><strong>Different sequencing topology</strong> (parallel branches in step 10)</li>
+</ol>
+<p>Inheritance can handle one of these. Both at once <em>forces</em> the override of <code>Monitoring</code> to drop <code>SUPER</code> (because <code>SUPER</code> would do the wrong thing on the alarm policy), which means duplicating mode resolution and alarm-ack from the base into Inspect's override.</p>
+<p>The cost compounds permanently:</p>
+<ul>
+<li><strong>Every future addition to base <code>Monitoring</code> must be manually mirrored</strong> into Inspect's override, or Inspect silently misses it</li>
+<li><strong>HMI consumers need station-aware logic</strong> because Inspect now exposes <code>QualityFlag</code> / <code>QualityCode</code> / <code>QualityText</code> parallel to the base's alarm fields</li>
+<li><strong>Inspect is no longer Liskov-substitutable for the base</strong> — code that operates on <code>FB_StationBase</code> references can't safely call <code>.Monitoring()</code> and expect the documented behavior</li>
+</ul>
+<p>This is <strong>the fundamental limit of single inheritance</strong>: you can't carve out arbitrary subsets of base behavior to keep, drop, or replace without violating substitutability. The base either does what every child needs, or it does the wrong thing for some child.</p>
+<h3 id="what-cr-3-reveals-about-inheritance-limits">What CR-3 reveals about inheritance limits<a class="headerlink" href="#what-cr-3-reveals-about-inheritance-limits" title="Permanent link">&para;</a></h3>
+<p>CR-3 — selective logging in Fill and Inspect only — exposes a different inheritance smell: <strong>the base accumulating dead weight</strong>.</p>
+<p>To make selective logging work via inheritance, you put <code>LogBuffer</code> and <code>LogIndex</code> on the base, plus a virtual <code>LoggingEnabled : BOOL</code> flag (default <code>FALSE</code>). Fill and Inspect override <code>LoggingEnabled</code> to return <code>TRUE</code>. <strong>Cap and Label inherit storage they never use.</strong></p>
+<p>This is a memory cost (100 × 120 bytes per Cap and Label instance) and a cognitive cost (every reader of <code>FB_StationBase</code> has to understand why those fields exist when they don't apply to two of the four children). It compounds: the next selective-feature CR adds another field to the base, another virtual flag, another piece of dead weight in unrelated children.</p>
+<p>This is <strong>a fundamental limit of inheritance for cross-cutting features that don't apply uniformly</strong>: the base ends up as the union of every child's needs, even when no single child needs everything.</p>
+<h3 id="the-diff-numbers-your-blast-radius-scoreboard">The diff numbers (your blast radius scoreboard)<a class="headerlink" href="#the-diff-numbers-your-blast-radius-scoreboard" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>CR</th>
+<th>Files</th>
+<th>Lines added</th>
+<th>Lines removed</th>
+<th>What it touched</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CR-1 Pause</strong></td>
+<td>3</td>
+<td>65</td>
+<td>48</td>
+<td>Base + <code>AllowPause</code> virtual + Fill override + MAIN</td>
+</tr>
+<tr>
+<td><strong>CR-2 Inspect quality + parallel</strong></td>
+<td>2</td>
+<td>121</td>
+<td>48</td>
+<td>Inspect <code>Monitoring</code> override (no SUPER) + parallel hack</td>
+</tr>
+<tr>
+<td><strong>CR-3 Selective logging</strong></td>
+<td>3</td>
+<td>64</td>
+<td>25</td>
+<td>Base storage (dead weight in 2 children) + 2 child overrides</td>
+</tr>
+</tbody>
+</table>
+<p>Compared to Stage 1:</p>
+<ul>
+<li><strong>CR-1</strong> is <strong>slightly more</strong> lines than Stage 1 (3 files vs 5, but the 65 vs 50 line count is similar) — the inheritance pollution shows up in <em>kind</em> (a virtual flag the base doesn't need) more than <em>quantity</em></li>
+<li><strong>CR-2</strong> is <strong>more</strong> lines than Stage 1 (121 vs 92) because the <code>Monitoring</code> override duplicates base behavior — and far more fragile because future base changes won't propagate</li>
+<li><strong>CR-3</strong> is roughly <strong>2x</strong> lines than Stage 1 (64 vs 13), but the cost is now spread: real code on the base + dead weight in unrelated children</li>
+</ul>
+<p>The inheritance scoreboard tells a more nuanced story than the procedural one. <strong>Inheritance fixes some problems Stage 1 has (drift, duplication of mode/alarm/HMI) and creates new ones (pollution, fragility, dead weight in unrelated children).</strong></p>
+<hr />
+<h2 id="complete-how-to-walkthrough">Complete how-to walkthrough<a class="headerlink" href="#complete-how-to-walkthrough" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-survey-the-refactor">Step 1 — Survey the refactor<a class="headerlink" href="#step-1-survey-the-refactor" title="Permanent link">&para;</a></h3>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>git <span class="k">switch</span> stage-2-inheritance
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>explorer NEM2026/NEM2026.sln
+</span></code></pre></div>
+<p>Open <code>FB_StationBase</code> first. Read it top-to-bottom. <strong>Notice the variables that used to be in every Stage 1 station are now here once.</strong> That's the duplication-elimination win, made physical.</p>
+<p>Now open <code>FB_StationFill</code>. Notice it's tiny — ~65 lines vs. ~110 in Stage 1. The <code>EXTENDS FB_StationBase</code> line on the FB declaration is the link. The two methods (<code>ExecuteSequence</code>, <code>GetStepName</code>) are the only things Fill does differently.</p>
+<p>Cap, Label, Inspect — same shape. Read all four side-by-side and notice the <strong>structural symmetry</strong>. Stage 1's drift between stations is gone because the shared parts are inherited, not copy-pasted.</p>
+<div class="admonition tip">
+<p class="admonition-title">Pause and ask yourself</p>
+<p>What if you wanted to add a 5th station now? You'd write a new FB extending the base, override <code>ExecuteSequence</code> and <code>GetStepName</code>, done. <strong>The 5th station costs maybe 60 lines of new code</strong> — not 110+ of mostly-duplicated boilerplate. <em>That's the inheritance win.</em></p>
+</div>
+<h3 id="step-2-run-the-line">Step 2 — Run the line<a class="headerlink" href="#step-2-run-the-line" title="Permanent link">&para;</a></h3>
+<p><code>F7</code> to build, then activate / login / start as in Stage 1. Drive the same inputs. The behavior should be identical to Stage 1's behavior — same outputs, same timing, same alarms.</p>
+<p>The architectural change doesn't change runtime behavior in this clean baseline. <strong>It only changes what happens next</strong>, when CRs land.</p>
+<h3 id="step-3-apply-cr-1-the-inheritance-way">Step 3 — Apply CR-1 the inheritance way<a class="headerlink" href="#step-3-apply-cr-1-the-inheritance-way" title="Permanent link">&para;</a></h3>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>git <span class="k">switch</span> stage-2-broken
+</span></code></pre></div>
+<p>Open <code>FB_StationInspect</code>. <strong>Notice the override of <code>Monitoring</code></strong> with its non-latching quality-flag logic and the half-finished TODO comments. This is what CR-2 looks like half-applied — and it compiles, unlike Stage 1's broken state. <strong>The room can run this code; the smell isn't a compile error, it's an architectural smell.</strong></p>
+<p>But first, CR-1. Switch to:</p>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>git <span class="k">switch</span> stage-2-inheritance
+</span></code></pre></div>
+<p><strong>Exercise:</strong> add <code>ModePause</code> to the base. Update <code>Monitoring</code> to handle Pause (<code>IF ModePause THEN ActiveMode := 3 ...</code>). Now: how do you make Fill ignore Pause mid-cycle?</p>
+<p>Two options surface naturally:</p>
+<ul>
+<li><strong>Option A (cleaner)</strong> — add a virtual <code>AllowPause()</code> method to the base. Default returns <code>TRUE</code>. <code>FB_StationFill</code> overrides to return <code>(State &lt;&gt; 10)</code>. The base's <code>Monitoring</code> becomes <code>IF ModePause AND THIS^.AllowPause() THEN ActiveMode := 3 END_IF</code>.</li>
+<li><strong>Option B (uglier)</strong> — Fill overrides the <em>entire</em> <code>Monitoring</code> method, duplicating base mode logic.</li>
+</ul>
+<p>Pick A — write it. When done:</p>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>git <span class="k">switch</span> stage-2-cr1-applied
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>git diff stage-2-inheritance --stat
+</span></code></pre></div>
+<p>3 files, +65/-48. <strong>Notice the pollution:</strong> <code>AllowPause</code> exists for Fill's exception, but Cap, Label, Inspect inherit it forever, never override it, never need it. The base's interface has grown by one method that serves one child.</p>
+<h3 id="step-4-apply-cr-2-feel-inheritance-break">Step 4 — Apply CR-2 — feel inheritance break<a class="headerlink" href="#step-4-apply-cr-2-feel-inheritance-break" title="Permanent link">&para;</a></h3>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>git <span class="k">switch</span> stage-2-inheritance
+</span></code></pre></div>
+<p>CR-2 — Inspect needs non-faulting alarms AND parallel state-10.</p>
+<p><strong>Exercise:</strong> modify <code>FB_StationInspect</code> only. The non-faulting alarm has to bypass the base's latching <code>Monitoring</code> behavior. <strong>Try to extend Monitoring properly first</strong> — add the quality-flag logic <em>after</em> <code>SUPER^.Monitoring()</code> runs:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>METHOD PROTECTED Monitoring   // OVERRIDE
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    SUPER^.Monitoring();      // base latches alarms — wait
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>    // now add quality flag logic ...
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>END_METHOD
+</span></code></pre></div>
+<p>You'll discover this doesn't work. The base latches <code>AlarmLatched := TRUE</code> when <code>RaiseStationAlarm</code> is called, and the quality flag <em>should not latch</em>. To override the policy, you must NOT call <code>SUPER^.Monitoring()</code>. Which means you must <em>re-implement</em> mode resolution and alarm-ack from scratch in your override.</p>
+<p>You've now hit the <strong>inheritance breaking point.</strong> Reach for <code>stage-2-broken</code> to see what this state looks like with TODOs in place. Then look at the answer:</p>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>git <span class="k">switch</span> stage-2-cr2-applied
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>git diff stage-2-inheritance --stat
+</span></code></pre></div>
+<p>2 files, +121/-48. <strong>Notice the cost is invisible in the line count.</strong> The override duplicates 8 lines of base mode logic. Future base changes won't propagate to Inspect's override. <strong>Every code review on the base now needs an explicit "did we mirror this into Inspect?" step.</strong></p>
+<p>This is the moment that justifies Stage 3.</p>
+<h3 id="step-5-apply-cr-3-the-inheritance-way">Step 5 — Apply CR-3 the inheritance way<a class="headerlink" href="#step-5-apply-cr-3-the-inheritance-way" title="Permanent link">&para;</a></h3>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>git <span class="k">switch</span> stage-2-inheritance
+</span></code></pre></div>
+<p>CR-3: selective logging in Fill and Inspect only.</p>
+<p><strong>Exercise:</strong> add <code>LogBuffer</code> and <code>LogIndex</code> to the base. Add a virtual <code>LoggingEnabled : BOOL</code> (default FALSE). Fill and Inspect override to return TRUE. Add a <code>LogCycleData(Note)</code> helper to the base that's gated on <code>LoggingEnabled()</code>.</p>
+<p>When done:</p>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>git <span class="k">switch</span> stage-2-cr3-applied
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>git diff stage-2-inheritance --stat
+</span></code></pre></div>
+<p>3 files, +64/-25. <strong>Notice the dead weight:</strong> every <code>FB_StationCap</code> and <code>FB_StationLabel</code> instance now carries 100 × 120 = 12000 bytes of <code>LogBuffer</code> storage that will never be written. The cost is invisible at compile time but real at runtime memory.</p>
+<h3 id="step-6-see-the-all-3-crs-end-state">Step 6 — See the all-3-CRs end state<a class="headerlink" href="#step-6-see-the-all-3-crs-end-state" title="Permanent link">&para;</a></h3>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>git <span class="k">switch</span> stage-2-complete
+</span></code></pre></div>
+<p>Compare to baseline:</p>
+<div class="language-fish highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>git diff stage-2-inheritance stage-2-complete --stat
+</span></code></pre></div>
+<p>4 files modified, +224/-65. The base has accumulated <code>ModePause</code> + <code>AllowPause</code> virtual + <code>LogBuffer</code> + <code>LogIndex</code> + <code>LoggingEnabled</code> virtual + <code>LogCycleData</code> helper. <strong>The base is no longer a clean abstraction — it's a junk drawer of cross-cutting concerns.</strong></p>
+<h3 id="step-7-reflect">Step 7 — Reflect<a class="headerlink" href="#step-7-reflect" title="Permanent link">&para;</a></h3>
+<p>Before moving to Stage 3, ask yourself:</p>
+<ol>
+<li><strong>Did CR-1's <code>AllowPause</code> virtual feel right?</strong> It works, but Cap / Label / Inspect inherit it forever for no reason.</li>
+<li><strong>What would a 4th alarm policy do to the base?</strong> (E.g., a stop-then-restart-after-confirm policy.) Probably another override in the relevant child, with another duplication of base behavior.</li>
+<li><strong>What's the testability story now?</strong> You can subclass the base in a PlcTestSuite test — better than Stage 1 — but you can't swap alarm policies at runtime; that's still hardcoded into base + override structure.</li>
+</ol>
+<p>The transition to Stage 3 is justified when you can articulate why CR-2's <code>SUPER</code>-can't-be-called and CR-3's dead-weight-in-base feel like <em>fundamental</em> limits, not just inconveniences.</p>
+<hr />
+<h2 id="branches-in-this-stage">Branches in this stage<a class="headerlink" href="#branches-in-this-stage" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Branch</th>
+<th>Role</th>
+<th>Forks from</th>
+<th>One-line summary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stage-2-inheritance</code></td>
+<td>Clean baseline</td>
+<td><code>main</code></td>
+<td><code>FB_StationBase</code> extending <code>SPT_Components.FB_ComponentBase</code> + 4 children</td>
+</tr>
+<tr>
+<td><code>stage-2-broken</code></td>
+<td>Pedagogical CR-2 half-applied</td>
+<td><code>stage-2-inheritance</code></td>
+<td>Inspect's <code>Monitoring</code> override is mid-rewrite with TODOs — compiles but unfinished</td>
+</tr>
+<tr>
+<td><code>stage-2-cr1-applied</code></td>
+<td>CR-1 answer key</td>
+<td><code>stage-2-inheritance</code></td>
+<td><code>AllowPause</code> virtual added to base + Fill override</td>
+</tr>
+<tr>
+<td><code>stage-2-cr2-applied</code></td>
+<td>CR-2 answer key</td>
+<td><code>stage-2-inheritance</code></td>
+<td>Inspect overrides <code>Monitoring</code> without SUPER + parallel hack in <code>ExecuteSequence</code></td>
+</tr>
+<tr>
+<td><code>stage-2-cr3-applied</code></td>
+<td>CR-3 answer key</td>
+<td><code>stage-2-inheritance</code></td>
+<td>Base gets <code>LogBuffer</code> + <code>LoggingEnabled</code> virtual + Fill/Inspect overrides</td>
+</tr>
+<tr>
+<td><code>stage-2-complete</code></td>
+<td>All 3 CRs end state</td>
+<td><code>stage-2-inheritance</code></td>
+<td>The inheritance endgame — base is now a junk drawer</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 13, 2026 20:32:09 UTC">May 13, 2026</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Workshop material &copy; Beckhoff Automation LLC. Framework libraries — TwinCAT 3, SPT-Libraries, Core / CoreComponents — &copy; Beckhoff Automation. <a href="https://beckhoff-usa-community.github.io/SPT-Libraries/">SPT-Libraries documentation</a>.
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.instant", "navigation.indexes", "search.highlight", "search.share", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.action.edit", "content.action.view", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

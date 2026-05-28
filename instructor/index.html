@@ -1,0 +1,2716 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A 4-hour TwinCAT 3 workshop in object-oriented PLC design — NEM 2026">
+      
+      
+      
+        <link rel="canonical" href="https://beckhoff-usa-community.github.io/Procedural_To_SOLID/instructor/">
+      
+      
+        <link rel="prev" href="../reference/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Instructor's guide - From Procedural to SOLID</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#instructors-guide-guided-tour" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="From Procedural to SOLID" class="md-header__button md-logo" aria-label="From Procedural to SOLID" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            From Procedural to SOLID
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Instructor's guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Beckhoff-USA-Community/Procedural_To_SOLID
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../workshop/overview/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Workshop
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../stages/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Stages
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../patterns/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Patterns
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../testing/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Testing (extra credit)
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reference/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Instructor's guide
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="From Procedural to SOLID" class="md-nav__button md-logo" aria-label="From Procedural to SOLID" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    From Procedural to SOLID
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Beckhoff-USA-Community/Procedural_To_SOLID
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workshop
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Workshop
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workshop/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workshop/prerequisites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prerequisites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workshop/change-requests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Change Requests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workshop/scoreboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scoreboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stages/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stages
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Stages
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stages/procedural/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 1 — Procedural
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stages/inheritance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 2 — Inheritance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stages/composition/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stage 3 — Composition
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing (extra credit)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instructor's guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instructor's guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-workshop-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-workshop preparation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-workshop preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-week-before" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One week before
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-before" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day before
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-minutes-before" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30 minutes before
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-workshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the workshop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running the workshop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#block-0-welcome-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 0 — Welcome (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-1-stage-1-procedural-85-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 1 — Stage 1 — Procedural (85 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 1 — Stage 1 — Procedural (85 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1a-walkthrough-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1A — Walkthrough (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1b-cr-1-hands-on-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1B — CR-1 hands-on (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1c-cr-2-hands-on-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1C — CR-2 hands-on (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1d-cr-3-hands-on-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1D — CR-3 hands-on (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1e-block-1-debrief-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1E — Block 1 debrief (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#break-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Break (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-2-stage-2-inheritance-70-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 2 — Stage 2 — Inheritance (70 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 2 — Stage 2 — Inheritance (70 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2a-refactor-walkthrough-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2A — Refactor walkthrough (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2b-cr-1-hands-on-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2B — CR-1 hands-on (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2c-cr-2-hands-on-the-breaking-point-25-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2C — CR-2 hands-on — the breaking point (25 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2d-cr-3-hands-on-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2D — CR-3 hands-on (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2e-block-2-debrief-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2E — Block 2 debrief (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#break-10-min_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Break (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-3-stage-3-composition-70-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 3 — Stage 3 — Composition (70 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 3 — Stage 3 — Composition (70 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3a-architecture-walkthrough-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3A — Architecture walkthrough (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3b-cr-1-hands-on-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3B — CR-1 hands-on (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3c-cr-2-the-headline-swap-demo-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3C — CR-2 — the headline swap demo (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-cr-3-hands-on-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D — CR-3 hands-on (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3e-the-wrong-way-branch-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3E — The wrong-way branch (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-4-scoreboard-discussion-take-home-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 4 — Scoreboard, discussion, take-home (20 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 4 — Scoreboard, discussion, take-home (20 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4a-scoreboard-fill-in-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4A — Scoreboard fill-in (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4b-customer-conversation-rehearsal-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4B — Customer-conversation rehearsal (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4c-continuation-kit-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4C — Continuation kit (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pacing-and-contingency-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pacing and contingency planning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pacing and contingency planning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#if-youre-15-minutes-behind-by-block-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you're 15 minutes behind by Block 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-youre-15-minutes-behind-by-block-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you're 15 minutes behind by Block 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-youre-ahead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you're ahead
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bonus-running-the-unit-test-demo-only-if-class-finishes-early" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bonus — running the unit-test demo (only if class finishes early)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-a-discussion-is-going-long-but-is-gold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If a discussion is going long but is gold
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#materials-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Materials checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-shorter-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running shorter versions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running shorter versions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minutes-the-one-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30 minutes — "the one demo"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-hour-the-methodology-compare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 hour — "the methodology compare"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-hours-the-workshop-compressed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 hours — "the workshop, compressed"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-hours-the-full-workshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4 hours — "the full workshop"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#becoming-a-teacher-of-this-material" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Becoming a teacher of this material
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-workshop-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-workshop preparation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-workshop preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-week-before" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One week before
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#day-before" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day before
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#30-minutes-before" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30 minutes before
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-workshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the workshop
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running the workshop">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#block-0-welcome-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 0 — Welcome (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-1-stage-1-procedural-85-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 1 — Stage 1 — Procedural (85 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 1 — Stage 1 — Procedural (85 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1a-walkthrough-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1A — Walkthrough (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1b-cr-1-hands-on-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1B — CR-1 hands-on (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1c-cr-2-hands-on-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1C — CR-2 hands-on (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1d-cr-3-hands-on-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1D — CR-3 hands-on (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1e-block-1-debrief-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1E — Block 1 debrief (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#break-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Break (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-2-stage-2-inheritance-70-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 2 — Stage 2 — Inheritance (70 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 2 — Stage 2 — Inheritance (70 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#2a-refactor-walkthrough-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2A — Refactor walkthrough (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2b-cr-1-hands-on-15-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2B — CR-1 hands-on (15 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2c-cr-2-hands-on-the-breaking-point-25-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2C — CR-2 hands-on — the breaking point (25 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2d-cr-3-hands-on-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2D — CR-3 hands-on (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2e-block-2-debrief-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2E — Block 2 debrief (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#break-10-min_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Break (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-3-stage-3-composition-70-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 3 — Stage 3 — Composition (70 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 3 — Stage 3 — Composition (70 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3a-architecture-walkthrough-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3A — Architecture walkthrough (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3b-cr-1-hands-on-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3B — CR-1 hands-on (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3c-cr-2-the-headline-swap-demo-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3C — CR-2 — the headline swap demo (20 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3d-cr-3-hands-on-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3D — CR-3 hands-on (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3e-the-wrong-way-branch-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3E — The wrong-way branch (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-4-scoreboard-discussion-take-home-20-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block 4 — Scoreboard, discussion, take-home (20 min)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Block 4 — Scoreboard, discussion, take-home (20 min)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#4a-scoreboard-fill-in-10-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4A — Scoreboard fill-in (10 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4b-customer-conversation-rehearsal-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4B — Customer-conversation rehearsal (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4c-continuation-kit-5-min" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4C — Continuation kit (5 min)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pacing-and-contingency-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pacing and contingency planning
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pacing and contingency planning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#if-youre-15-minutes-behind-by-block-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you're 15 minutes behind by Block 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-youre-15-minutes-behind-by-block-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you're 15 minutes behind by Block 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-youre-ahead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If you're ahead
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bonus-running-the-unit-test-demo-only-if-class-finishes-early" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bonus — running the unit-test demo (only if class finishes early)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-a-discussion-is-going-long-but-is-gold" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If a discussion is going long but is gold
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#materials-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Materials checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-shorter-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running shorter versions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Running shorter versions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#30-minutes-the-one-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30 minutes — "the one demo"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1-hour-the-methodology-compare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1 hour — "the methodology compare"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-hours-the-workshop-compressed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2 hours — "the workshop, compressed"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-hours-the-full-workshop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4 hours — "the full workshop"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#becoming-a-teacher-of-this-material" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Becoming a teacher of this material
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/edit/main/docs/instructor.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/raw/main/docs/instructor.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="instructors-guide-guided-tour">Instructor's guide — guided tour<a class="headerlink" href="#instructors-guide-guided-tour" title="Permanent link">&para;</a></h1>
+<p>This is the workshop's facilitation playbook. It works three ways:</p>
+<ol>
+<li><strong>A live tour script</strong> for running the workshop in real time</li>
+<li><strong>A self-paced refresher</strong> for FAEs reviewing the material weeks later</li>
+<li><strong>A teaching kit</strong> for FAEs running shortened versions for their own customers and teams</li>
+</ol>
+<p>The audience is <strong>Beckhoff Field Applications Engineers and customer-training staff</strong>. They're already strong on TwinCAT — move at a good clip. They'll teach this material later — give them the <em>why</em> and the customer-conversation answers, not just the <em>how</em>.</p>
+<hr />
+<h2 id="pre-workshop-preparation">Pre-workshop preparation<a class="headerlink" href="#pre-workshop-preparation" title="Permanent link">&para;</a></h2>
+<h3 id="one-week-before">One week before<a class="headerlink" href="#one-week-before" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Send attendees the <a href="../workshop/prerequisites/">Prerequisites</a> page link</li>
+<li>Confirm everyone has cloned the repo and run <code>Build → Build Solution</code> cleanly on <code>stage-1-procedural</code></li>
+<li>Ask anyone with environment problems to surface them now, not on the day</li>
+</ul>
+<h3 id="day-before">Day before<a class="headerlink" href="#day-before" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Pull the latest from <code>main</code> on the presenter machine: <code>git pull &amp;&amp; ./serve-docs.sh build</code></li>
+<li>Confirm the presentation laptop has all 18 branches fetched: <code>git fetch --all &amp;&amp; git branch -a</code></li>
+<li>Open these tabs in the browser:<ul>
+<li><a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID">https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID</a></li>
+<li>The compare URLs for all nine scoreboard cells (have them bookmarked)</li>
+<li>The local docs site (<code>http://localhost:8000</code>)</li>
+</ul>
+</li>
+<li>Have the presentation laptop on a stand with external display</li>
+<li>Prep the <strong>physical scoreboard</strong> — a whiteboard or large sticky notes you'll fill in live</li>
+</ul>
+<h3 id="30-minutes-before">30 minutes before<a class="headerlink" href="#30-minutes-before" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Re-clone the repo to a clean directory and verify the workshop runs without baked-in state</li>
+<li>Open <code>stage-1-procedural</code> in XAE; have the four station FBs visible in tabs</li>
+<li>Open <code>stage-3-composition</code> in a <em>second</em> XAE instance for late-Block-3 demonstration (saves a 60-second switch)</li>
+</ul>
+<hr />
+<h2 id="running-the-workshop">Running the workshop<a class="headerlink" href="#running-the-workshop" title="Permanent link">&para;</a></h2>
+<p>What follows is the live tour script. Each block has:</p>
+<ul>
+<li><strong>Wall time</strong> — what to budget</li>
+<li><strong>Tour beats</strong> — chronological things to do/say/show</li>
+<li><strong>Discussion prompts</strong> — explicit "ask the room" moments where the FAE audience earns the workshop</li>
+<li><strong>Pre-emptive pushback</strong> — questions FAEs will get from their own customers later; rehearse the answers here</li>
+<li><strong>Pacing levers</strong> — what to cut if you're behind, what to add if you're ahead</li>
+</ul>
+<hr />
+<h3 id="block-0-welcome-5-min">Block 0 — Welcome (5 min)<a class="headerlink" href="#block-0-welcome-5-min" title="Permanent link">&para;</a></h3>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li>Confirm everyone has the repo cloned and a working XAE. Hands up.</li>
+<li>Frame the workshop in 30 seconds: <em>"You'll build the same filling line three different ways. Same requirements at every stage. The diffs tell the story."</em></li>
+<li>Show the <a href="../">Branch tree on the home page</a>. Don't dive in — just orient.</li>
+<li>Set expectations: <em>"This is calibrated for FAEs. We move at FAE pace. But I want lots of discussion — that's where the workshop earns its time. If something feels wrong or you've seen it work differently, say so."</em></li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"Before we start — quickly: who here has shipped a 4-station-or-larger machine in the last year?"</em> (Answer is usually most of the room.) <em>"Then this workshop is calibrated for you. The pain we're going to surface is pain you've already felt."</em></p>
+<hr />
+<h3 id="block-1-stage-1-procedural-85-min">Block 1 — Stage 1 — Procedural (85 min)<a class="headerlink" href="#block-1-stage-1-procedural-85-min" title="Permanent link">&para;</a></h3>
+<p><strong>Wall time: 85 min. Stretch zone: the CR-1 reveal.</strong></p>
+<h4 id="1a-walkthrough-15-min">1A — Walkthrough (15 min)<a class="headerlink" href="#1a-walkthrough-15-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><code>git switch stage-1-procedural</code> on your presenter machine. Open all four station FBs side by side.</li>
+<li>Read the <a href="../stages/procedural/#the-procedural-paradigm">paradigm theory</a> — but don't read it aloud. Summarize: <em>"This is the architecture you've been writing for 20 years. IEC 61131-3 was designed for it. There's nothing wrong with it. Today we're going to feel where it stops scaling."</em></li>
+<li>Walk through the structure. <strong>Highlight the 5 sections of every station:</strong> mode block, alarm-ack block, reset block, state machine, HMI mapping. Show that the middle (state machine) is the only meaningfully different section.</li>
+<li><strong>The three deliberate drifts</strong> — point them out one at a time:<ul>
+<li>R_TRIG vs level alarm-ack (visible by reading any two stations side-by-side)</li>
+<li>0/100/200/300 numbering in <code>FB_StationLabel</code> only</li>
+<li>Dead <code>ManualStep : INT;</code> in <code>FB_StationInspect</code></li>
+</ul>
+</li>
+<li>Don't editorialize on the drift yet. Just show them.</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"Look at this code. Anyone here written something that looks like this in the last six months?"</em> (Hands go up.) <em>"Anyone written exactly five files like this in the last six months?"</em> (Some hands stay up.) <em>"Anyone copied station 5 from station 4, and then had to fix four things?"</em> (More hands.) <em>"Good. Hold on to that feeling — we're about to make it worse."</em></p>
+<p><strong>Pre-emptive pushback (rehearse this answer):</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"This is fine. We've shipped 50 machines like this. Why are we changing it?"</strong></p>
+<p><em>FAE answer:</em> <strong>"You're right — it's fine for one machine. We're going to look at what happens when the same change has to land in four files instead of one. If that's never happened to you, this workshop won't change your mind. If it has, you'll recognize the pain."</strong></p>
+</blockquote>
+<h4 id="1b-cr-1-hands-on-20-min">1B — CR-1 hands-on (20 min)<a class="headerlink" href="#1b-cr-1-hands-on-20-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Customer's calling. They want a Pause mode. Here it is — read the requirement."</em> Show <a href="../workshop/change-requests/#cr-1-add-a-pause-mode">the CR-1 description</a>.</li>
+<li><em>"Half-applied state for you to start from."</em> <code>git switch stage-1-broken</code>. Show the compile error in MAIN.</li>
+<li><em>"30 seconds to read the broken state, then 15 minutes to fix it."</em> Set a timer.</li>
+<li>Walk the room. <strong>Don't help.</strong> Wait until people are ~10 minutes in.</li>
+</ol>
+<p><strong>The reveal moment (the workshop's first):</strong></p>
+<p>After about 10 minutes — when most people are mid-fix — interrupt:</p>
+<blockquote>
+<p><em>"Quick check. How many of you copied your Pause logic into Label from Cap? From Fill? From Inspect?"</em></p>
+</blockquote>
+<p>(Mixed hands.)</p>
+<blockquote>
+<p><em>"Now — who has a level-based AlarmAck and who has an R_TRIG?"</em></p>
+</blockquote>
+<p>(The room goes quiet because some attendees realize they copied from a station with one ack style and pasted into a station with the other.)</p>
+<blockquote>
+<p><em>"That's the procedural maintenance trap. Drift you didn't even know was there. You weren't writing buggy code; you were copying with rigorous attention. The system itself failed to enforce consistency."</em></p>
+</blockquote>
+<ol>
+<li>After they finish, <code>git switch stage-1-cr1-applied</code> and <code>git diff stage-1-procedural --stat</code> on screen. Five files, +50/-13.</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"Show of hands — who got Fill's mid-cycle exception right on the first try?"</em> Most won't. <em>"That's not a comment on you; it's a comment on the design. The exception is buried in the same Pause-guard logic that every other station uses. You couldn't write it once and apply it correctly four ways."</em></p>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"My team's careful. We use code review. Drift won't happen."</strong></p>
+<p><em>FAE answer:</em> <strong>"Code review against duplicated logic catches drift sometimes. Drift you don't catch is the kind that ships. The architecture either enforces consistency or it doesn't — and code review is your last line, not your first."</strong></p>
+</blockquote>
+<h4 id="1c-cr-2-hands-on-20-min">1C — CR-2 hands-on (20 min)<a class="headerlink" href="#1c-cr-2-hands-on-20-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li>Read the CR-2 spec aloud. <em>"Inspect needs a quality flag that doesn't fault the line, AND parallel camera + reject pre-arm. Both at once."</em></li>
+<li><em>"15 minutes."</em> Set a timer.</li>
+<li>Walk the room. The attempt will be: rewriting <code>FB_StationInspect</code>'s entire CASE machine.</li>
+</ol>
+<p><strong>Stretch the discussion when done:</strong></p>
+<blockquote>
+<p><em>"How many of you ended up with a 60+ line rewrite of one CASE machine?"</em> (Most.) <em>"Now: think about the next station that needs parallel branches. How much of what you just wrote can the next person reuse?"</em></p>
+</blockquote>
+<p>(Answer: very little. The parallel coordination logic is buried in Inspect's CASE, not extracted.)</p>
+<blockquote>
+<p><em>"That's the second procedural cost. Not just duplication of the </em>base<em> — duplication of new patterns each time they appear. Stage 2 will help with this. Stage 3 will help even more."</em></p>
+</blockquote>
+<ol>
+<li><code>git switch stage-1-cr2-applied</code> and show the diff. 2 files, +92/-55.</li>
+</ol>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"Why do I care that the parallel logic isn't reusable? I only have one Inspect station."</strong></p>
+<p><em>FAE answer:</em> <strong>"Today, you do. Two years from now, you might have an Inspect station and a Test station that both need parallel branches. The procedural cost of CR-2 is a tax you pay every time a new station needs the same pattern."</strong></p>
+</blockquote>
+<h4 id="1d-cr-3-hands-on-15-min">1D — CR-3 hands-on (15 min)<a class="headerlink" href="#1d-cr-3-hands-on-15-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Easier one. Add cycle logging to Fill and Inspect only. Cap and Label don't need it."</em></li>
+<li><em>"10 minutes."</em></li>
+<li>The attempt: a <code>LogBuffer</code> array + <code>LogIndex</code> on Fill and the same code on Inspect.</li>
+<li><code>git switch stage-1-cr3-applied</code> and show the diff. 2 files, +13/-3.</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"That looked small. Anyone want to defend it as 'fine'?"</em> Some will. <em>"Now imagine the logging requirements change in six months — say we want to write to a file instead of an in-memory buffer. Where do you change the code?"</em> (Two places.) <em>"And if you forget one of them?"</em> (Drift.)</p>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"It's literally 13 lines. Stop making it a big deal."</strong></p>
+<p><em>FAE answer:</em> <strong>"It's 13 lines today. The cost isn't the lines; it's the duplication. Every future change to that logic happens twice. We'll show you the same feature in Stage 3 — same lines, but only one place to change."</strong></p>
+</blockquote>
+<h4 id="1e-block-1-debrief-15-min">1E — Block 1 debrief (15 min)<a class="headerlink" href="#1e-block-1-debrief-15-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><code>git switch stage-1-complete</code> and <code>git diff stage-1-procedural --stat</code>. 5 files, +152/-66.</li>
+<li><em>"That's what your codebase looks like after a year of cross-cutting CRs. Five files modified, growth concentrated in Inspect, duplication on every cross-cutting concern."</em></li>
+<li><strong>Ask the room:</strong> <em>"Stage 1 isn't broken. It works. So why are we moving on?"</em> Take answers. The right ones surface naturally:<ul>
+<li>"Drift between files"</li>
+<li>"Can't enforce consistency"</li>
+<li>"Duplication compounds"</li>
+</ul>
+</li>
+<li><em>"Right. Now we'll see what happens when we try to fix all of that with a base class. Spoiler: we'll fix some of it. We'll create new problems too."</em></li>
+</ol>
+<p><strong>Pacing lever:</strong> If you're running long, cut the CR-3 hands-on (it's the smallest CR and the easiest one to walk through declaratively). If you're running short, extend the CR-1 reveal into a longer drift discussion.</p>
+<hr />
+<h3 id="break-10-min">Break (10 min)<a class="headerlink" href="#break-10-min" title="Permanent link">&para;</a></h3>
+<p>Don't shorten this. Coffee, bathroom, social conversation. The next block has the densest concept load.</p>
+<hr />
+<h3 id="block-2-stage-2-inheritance-70-min">Block 2 — Stage 2 — Inheritance (70 min)<a class="headerlink" href="#block-2-stage-2-inheritance-70-min" title="Permanent link">&para;</a></h3>
+<p><strong>Wall time: 70 min. Stretch zone: the CR-2 <code>SUPER</code>-can't-be-called moment.</strong></p>
+<h4 id="2a-refactor-walkthrough-15-min">2A — Refactor walkthrough (15 min)<a class="headerlink" href="#2a-refactor-walkthrough-15-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><code>git switch stage-2-inheritance</code>. Open <code>FB_StationBase</code> first, then <code>FB_StationFill</code>.</li>
+<li><em>"Same code. Same behavior. Different architecture."</em> Show that <code>FB_StationFill</code> is now ~65 lines instead of ~110. The shrinkage moved into the base.</li>
+<li><strong>Highlight the inheritance mechanics:</strong><ul>
+<li><code>EXTENDS FB_StationBase</code></li>
+<li><code>THIS^.ExecuteSequence()</code> — virtual dispatch</li>
+<li><code>SUPER^.CyclicLogic()</code> — explicit base call</li>
+<li><code>(Name := 'Fill')</code> — extended FB_init at construction</li>
+</ul>
+</li>
+<li><strong>Highlight what got fixed:</strong><ul>
+<li>Drift gone — base uses <code>R_TRIG</code> for everyone</li>
+<li>Step numbering normalized — Label's 0/100/200/300 became 0/10/20/30</li>
+<li>Dead <code>ManualStep</code> dropped — wasn't on the base, doesn't propagate</li>
+</ul>
+</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"What did this refactor cost?"</em> Take answers. Likely answers: nothing visible, lower line count, etc. <strong>The right answer:</strong> <em>"It cost an extra concept. Now you have to understand 'base class' and 'override' and 'THIS vs SUPER' to read this code. That's the real cost. Be honest about it."</em></p>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"My junior engineers don't know inheritance. Now they can't read my code."</strong></p>
+<p><em>FAE answer:</em> <strong>"That's a valid concern. Inheritance has a learning cost. The win is consistency enforcement — once your team learns it, drift goes away. The trade-off is real; you pick whichever fits your team's experience curve."</strong></p>
+</blockquote>
+<h4 id="2b-cr-1-hands-on-15-min">2B — CR-1 hands-on (15 min)<a class="headerlink" href="#2b-cr-1-hands-on-15-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Same Pause requirement as Stage 1. Apply it the inheritance way."</em></li>
+<li><em>"10 minutes."</em></li>
+<li>The attempt: most will add <code>ModePause</code> to the base's mode logic. Then they'll hit Fill's mid-cycle exception.</li>
+</ol>
+<p><strong>The reveal moment (the workshop's second):</strong></p>
+<p>When attendees are stuck on Fill's exception, walk the room and ask:</p>
+<blockquote>
+<p><em>"How are you handling the exception?"</em></p>
+</blockquote>
+<p>The two answers:</p>
+<ul>
+<li><strong>Option A:</strong> virtual <code>AllowPause()</code> on the base, override in Fill</li>
+<li><strong>Option B:</strong> Fill overrides <code>Monitoring</code> entirely</li>
+</ul>
+<p>Both are legitimate. <strong>Both are ugly in the same way.</strong> Then:</p>
+<blockquote>
+<p><em>"Option A — <code>AllowPause</code> exists for one child's exception, but Cap, Label, Inspect inherit it forever. Pollution. Option B — duplicates base mode logic. Drift risk. Pick your poison."</em></p>
+</blockquote>
+<ol>
+<li><code>git switch stage-2-cr1-applied</code> and show the diff. 3 files, +65/-48.</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"Compare to Stage 1's CR-1 (5 files, +50/-13). The line counts are similar but the </em>kind<em> of code differs. Stage 2's pollution is on the base — visible to every reader, paid by every child. Stage 1's pollution was scattered — paid only by the four stations. Which is worse?"</em></p>
+<p>(There's no clear answer. <strong>That's the point.</strong> Inheritance trades one cost for another.)</p>
+<h4 id="2c-cr-2-hands-on-the-breaking-point-25-min">2C — CR-2 hands-on — the breaking point (25 min)<a class="headerlink" href="#2c-cr-2-hands-on-the-breaking-point-25-min" title="Permanent link">&para;</a></h4>
+<p>This block is the workshop's hardest moment. <strong>Plan to slow down here.</strong></p>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li>Read CR-2 again. <em>"Inspect: non-faulting alarm AND parallel state-10. Same as Stage 1, but apply it via inheritance."</em></li>
+<li><em>"15 minutes. I'll be available — this one's harder."</em></li>
+<li>Most attendees start by overriding <code>Monitoring</code> and adding their quality-flag logic <em>after</em> <code>SUPER^.Monitoring()</code>. This produces broken behavior — the base latches the alarm before their override can flag it as quality.</li>
+</ol>
+<p><strong>Walk the room and ask leading questions:</strong></p>
+<blockquote>
+<p><em>"When does <code>SUPER^.Monitoring()</code> latch the alarm?"</em> (Answer: every time <code>RaiseStationAlarm</code> is called.) <em>"And what does the quality flag policy say should happen?"</em> (Answer: don't latch.) <em>"So what does that imply about calling SUPER?"</em></p>
+</blockquote>
+<p>The realization:</p>
+<blockquote>
+<p><em>"You can't call SUPER. But if you don't call it, you lose the mode resolution and alarm-ack the base does. So you have to duplicate them in your override."</em></p>
+</blockquote>
+<p><strong>The breaking-point reveal (workshop's third):</strong></p>
+<blockquote>
+<p><em>"This is the moment. Read what you wrote. The base class that helped you in Stage 1 → Stage 2 — that compressed five files of duplicated code into a single base — has now become the constraint. Inspect can't extend the base; it has to </em>fight<em> the base."</em></p>
+<p><em>"Notice this isn't your fault. It's a property of the design. Single inheritance gives you ONE base. Whatever the base does, every child gets — unless the child reimplements that behavior in an override. There's no way to say 'inherit everything except the alarm policy.' Inheritance is all-or-nothing."</em></p>
+</blockquote>
+<ol>
+<li><code>git switch stage-2-broken</code> and show the TODO-laden state. <em>"This is what mid-fix looks like in real life."</em></li>
+<li><code>git switch stage-2-cr2-applied</code> and show the diff. 2 files, +121/-48. Highlight that the override is ~80 lines including duplicated mode logic and alarm-ack.</li>
+</ol>
+<p><strong>Pre-emptive pushback (this is the most important one in the workshop):</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"Use multiple inheritance, then."</strong></p>
+<p><em>FAE answer:</em> <strong>"TwinCAT doesn't support multiple inheritance, and most languages that do (C++, Python) have ugly issues with it (the diamond problem). The composition pattern in Stage 3 solves the same need without those issues. We'll get there."</strong></p>
+<p><em>Customer:</em> <strong>"This is fine — I just need to remember to mirror base changes into Inspect's override."</strong></p>
+<p><em>FAE answer:</em> <strong>"That's a code-review burden you'll carry forever. Every base change is now a question of 'did we update Inspect?' Sometimes you'll forget. The architecture isn't enforcing the consistency anymore — your team's discipline is. Discipline is bounded; architecture is unbounded."</strong></p>
+</blockquote>
+<h4 id="2d-cr-3-hands-on-10-min">2D — CR-3 hands-on (10 min)<a class="headerlink" href="#2d-cr-3-hands-on-10-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Selective logging. Apply it via inheritance."</em></li>
+<li><em>"5 minutes."</em></li>
+<li>The attempt: <code>LogBuffer</code> + <code>LoggingEnabled</code> virtual on the base; Fill and Inspect override to TRUE.</li>
+<li><code>git switch stage-2-cr3-applied</code> and show the diff. 3 files, +64/-25.</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"Where does Cap's <code>LogBuffer</code> storage live in memory?"</em> (Answer: in every Cap and Label instance, even though they never write to it.) <em>"Is that a problem?"</em> (Answer: in this 4-station example, no. In a 50-station factory? Yes.)</p>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"100 strings × 120 chars × 2 unused stations = 24KB. Why are we obsessing about this?"</strong></p>
+<p><em>FAE answer:</em> <strong>"You're right — for this scale, the memory cost is academic. The bigger problem is <em>cognitive</em>. Every reader of <code>FB_StationBase</code> has to understand why <code>LogBuffer</code> exists when half the children don't use it. It's noise on the abstraction. As your codebase grows, that noise compounds."</strong></p>
+</blockquote>
+<h4 id="2e-block-2-debrief-5-min">2E — Block 2 debrief (5 min)<a class="headerlink" href="#2e-block-2-debrief-5-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><code>git switch stage-2-complete</code> and <code>git diff stage-2-inheritance --stat</code>. 4 files, +224/-65.</li>
+<li><em>"The base has accumulated <code>ModePause</code>, <code>AllowPause</code> virtual, <code>LogBuffer</code>, <code>LogIndex</code>, <code>LoggingEnabled</code> virtual, <code>LogCycleData</code> helper. It started clean; now it's a junk drawer."</em></li>
+<li><strong>Ask the room:</strong> <em>"Stage 2 fixed real problems Stage 1 had. What new problems did it create?"</em> Take answers. The right ones:<ul>
+<li>"Base-class pollution"</li>
+<li>"<code>SUPER</code>-can't-be-called fragility"</li>
+<li>"Dead weight in unrelated children"</li>
+</ul>
+</li>
+<li><em>"Stage 3 will keep what's good about Stage 2 — clean abstractions, consistency enforcement — and fix what's wrong. Let's go."</em></li>
+</ol>
+<p><strong>Pacing lever:</strong> If you're behind, cut the CR-3 hands-on entirely (just show the diff). The CR-2 breakdown is the lesson; CR-3 is supplementary.</p>
+<hr />
+<h3 id="break-10-min_1">Break (10 min)<a class="headerlink" href="#break-10-min_1" title="Permanent link">&para;</a></h3>
+<p>This is the longer of the two breaks if you can swing it. Block 3's emotional payoff lands harder if the room comes back fresh.</p>
+<hr />
+<h3 id="block-3-stage-3-composition-70-min">Block 3 — Stage 3 — Composition (70 min)<a class="headerlink" href="#block-3-stage-3-composition-70-min" title="Permanent link">&para;</a></h3>
+<p><strong>Wall time: 70 min. Stretch zone: the CR-2 swap demo.</strong></p>
+<h4 id="3a-architecture-walkthrough-20-min">3A — Architecture walkthrough (20 min)<a class="headerlink" href="#3a-architecture-walkthrough-20-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><code>git switch stage-3-composition</code>. Show the file tree — 18 files in three directories.</li>
+<li><em>"This looks like more code. Hold that judgment for a minute."</em></li>
+<li>Open files in this order:<ul>
+<li><code>I_AlarmHandler.TcPOU</code> — <em>"This is a contract. No implementation, just a shape."</em></li>
+<li><code>FB_AlarmHandler_LineFault.TcPOU</code> — <em>"One implementation. Simple, focused."</em></li>
+<li><code>FB_AlarmHandler_QualityFlag.TcPOU</code> — <em>"Another implementation. Same contract, opposite policy."</em></li>
+<li><code>FB_StationFill.TcPOU</code> — <em>"A station. Implements two contracts. Composes building blocks. Receives dependencies via FB_init."</em></li>
+<li><code>MAIN.TcPOU</code> — <em>"This is where the architecture is realized. The construction calls are the wiring diagram."</em></li>
+</ul>
+</li>
+<li><strong>Highlight the SOLID principles concretely:</strong><ul>
+<li><strong>Single Responsibility:</strong> every building block does one thing</li>
+<li><strong>Open/Closed:</strong> new alarm strategy = new FB; existing code untouched</li>
+<li><strong>Liskov Substitution:</strong> any <code>I_AlarmHandler</code> works anywhere <code>I_AlarmHandler</code> is expected</li>
+<li><strong>Interface Segregation:</strong> HMI sees <code>I_HmiReportable</code>, not <code>I_Sequenceable</code></li>
+<li><strong>Dependency Inversion:</strong> stations depend on <code>I_AlarmHandler</code>, not on <code>FB_AlarmHandler_LineFault</code></li>
+</ul>
+</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"What's the cost of this architecture?"</em> The honest answer: <em>"More files. More concepts. More vocabulary to read this code. The win is what we're about to see — and the win compounds across the codebase's lifetime."</em></p>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"Eighteen files for a 4-station machine? You've got to be kidding."</strong></p>
+<p><em>FAE answer:</em> <strong>"You're right — for 4 stations, this is overkill. The architecture pays back when the codebase grows. If you're shipping one machine and walking away, Stage 1 is the right answer. If you're building a product family, Stage 3 is the prerequisite for sane long-term maintenance."</strong></p>
+</blockquote>
+<h4 id="3b-cr-1-hands-on-10-min">3B — CR-1 hands-on (10 min)<a class="headerlink" href="#3b-cr-1-hands-on-10-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Same Pause requirement. Apply it the composition way."</em></li>
+<li><em>"5 minutes. I think you'll surprise yourselves."</em></li>
+<li>The realization comes fast: <em>just modify <code>FB_ModeManager</code></em>. Don't touch any station.</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"Why is the Fill mid-cycle exception automatic in this architecture?"</em></p>
+<p>The answer: Fill's state-10 logic doesn't gate on <code>Mode.AllowRun</code> once started — it gates on <code>Accumulated &gt;= TargetVolume</code>. The right gating point was already in place. <strong>CR-1 didn't have to add new gating logic anywhere because the abstraction encoded the right behavior already.</strong></p>
+<ol>
+<li><code>git switch stage-3-cr1-applied</code> and show the diff. 2 files, +19/-6.</li>
+</ol>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"Sure, this works for Pause because Pause maps cleanly to a mode. What about a feature that doesn't have a clean abstraction?"</strong></p>
+<p><em>FAE answer:</em> <strong>"Then you do the work to find the right abstraction. Composition isn't magic — it requires careful design. The trade is: invest in the abstraction up front, or pay the per-CR cost in every change. Stage 1 + 2 pay per-CR. Stage 3 pays up front and reaps savings."</strong></p>
+</blockquote>
+<h4 id="3c-cr-2-the-headline-swap-demo-20-min">3C — CR-2 — the headline swap demo (20 min)<a class="headerlink" href="#3c-cr-2-the-headline-swap-demo-20-min" title="Permanent link">&para;</a></h4>
+<p>This is the workshop's emotional payoff. Pace it carefully.</p>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"CR-2. Inspect: non-faulting alarm AND parallel state-10. Same as Stage 1 (60 inline lines) and Stage 2 (the override mess). Apply it the composition way."</em></li>
+<li><strong>Demonstrate first</strong> — on the presenter machine, before they try.</li>
+<li>Open MAIN. Find: <code>InspectAlarm : FB_AlarmHandler_LineFault;</code>. Change to <code>FB_AlarmHandler_QualityFlag;</code>. Save. Build.</li>
+<li><em>"That's the entire alarm-policy change. One line."</em></li>
+<li><strong>Pause. Let the implication land. Don't fill the silence.</strong></li>
+<li>After 10 seconds, ask: <em>"Did Inspect's behavior just change?"</em> (Yes — alarms are now non-latching, line keeps running on defect.) <em>"Did we modify any Inspect code?"</em> (No.) <em>"How is this possible?"</em> (Because the alarm strategy is <em>injected</em>, not hardcoded. The station depends on <code>I_AlarmHandler</code> — anything implementing that interface plugs in.)</li>
+</ol>
+<p><strong>The reveal moment (workshop's fourth — the headline):</strong></p>
+<blockquote>
+<p><em>"Compare to Stage 2's CR-2: 121 lines of override that fights the base. Compare to Stage 1's CR-2: 92 lines of inline rewrite of one CASE machine. Stage 3: ONE LINE."</em></p>
+<p><em>"This is the workshop's central claim. Same requirements, three architectures, different blast radius. The diff is the proof."</em></p>
+</blockquote>
+<ol>
+<li><strong>Now hands-on for the parallel sequencer part.</strong> <em>"You also need parallel state-10 in Inspect. Open <code>FB_StationInspect.TcPOU</code>. Compose <code>FB_ParallelSequencer</code>. Configure for 2 branches in <code>FB_Init</code>. Rework state 10. 10 minutes."</em></li>
+<li>When done, <code>git switch stage-3-cr2-applied</code> and show the diff. 2 files, ~30 lines added, ~10 removed.</li>
+</ol>
+<p><strong>Pre-emptive pushback (the customer-facing version of this conversation):</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"You're cherry-picking the example. CR-2 is designed to make composition look good."</strong></p>
+<p><em>FAE answer:</em> <strong>"It's designed to be </strong>realistic<strong>, not to make composition look good. Real customers ask for non-faulting alarms and parallel coordination on specific stations all the time. The point isn't that Stage 3 looks good in this CR — it's that CR-1, CR-2, and CR-3 ALL look good in Stage 3. Three different shapes of cross-cutting requirement, three different costs, every one cheaper in composition. That's not cherry-picking; that's pattern recognition."</strong></p>
+</blockquote>
+<h4 id="3d-cr-3-hands-on-10-min">3D — CR-3 hands-on (10 min)<a class="headerlink" href="#3d-cr-3-hands-on-10-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Selective logging in Fill and Inspect. Apply it the composition way."</em></li>
+<li><em>"5 minutes."</em></li>
+<li>The path: add <code>Logger : I_DataLogger;</code> field + <code>DataLogger</code> <code>FB_Init</code> param to Fill and Inspect only. MAIN constructs <code>CycleLogger</code> and passes it via DI. <strong>Cap and Label keep their original 4-arg <code>FB_Init</code> signature — don't touch them.</strong></li>
+<li><code>git switch stage-3-cr3-applied</code> and show the diff. 3 files, +32/-11.</li>
+</ol>
+<p><strong>Discussion prompt:</strong> <em>"Where does Cap's logger storage live now?"</em> (Answer: nowhere. Cap doesn't have a logger field.) <em>"What changes if we want to swap from in-memory buffer to file-based logger?"</em> (Answer: only <code>FB_CycleDataLogger</code> is replaced. Stations don't change. MAIN doesn't change.) <em>"Compare to Stage 2's logger refactor cost."</em> (Stage 2: base + every override + <code>LogCycleData</code> helper.)</p>
+<h4 id="3e-the-wrong-way-branch-5-min">3E — The wrong-way branch (5 min)<a class="headerlink" href="#3e-the-wrong-way-branch-5-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Bonus content — even Stage 3 can be applied poorly."</em></li>
+<li><code>git switch stage-3-broken</code> and show the diff. <em>"Same CR-1 (Pause), but applied via per-station guard logic instead of via <code>FB_ModeManager</code>. Compiles. Runs. Halts Fill mid-cycle — the very failure mode CR-1 was designed to avoid."</em></li>
+<li><strong>The lesson:</strong> <em>"Architecture matters, but so does discipline. Composition gives you the tools to do it right. It doesn't force you to."</em></li>
+</ol>
+<p><strong>Pre-emptive pushback:</strong></p>
+<blockquote>
+<p><em>Customer:</em> <strong>"So composition can be done wrong too. What's the point?"</strong></p>
+<p><em>FAE answer:</em> <strong>"Every paradigm can be done wrong. The point is which one <em>makes the right thing easy and the wrong thing visible</em>. Stage 1's right answer for cross-cutting concerns is 'modify every station' — easy to do, easy to drift. Stage 3's right answer is 'modify the shared service' — also easy, and the wrong-way alternative is loud (5-file diff) instead of quiet (1-file diff). The right architecture nudges you toward the right answer."</strong></p>
+</blockquote>
+<hr />
+<h3 id="block-4-scoreboard-discussion-take-home-20-min">Block 4 — Scoreboard, discussion, take-home (20 min)<a class="headerlink" href="#block-4-scoreboard-discussion-take-home-20-min" title="Permanent link">&para;</a></h3>
+<p><strong>Wall time: 20 min. Plan to overshoot — this is where the workshop cements.</strong></p>
+<h4 id="4a-scoreboard-fill-in-10-min">4A — Scoreboard fill-in (10 min)<a class="headerlink" href="#4a-scoreboard-fill-in-10-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li>Pull up the <a href="../workshop/scoreboard/">Scoreboard page</a> on the projector. Or reveal a whiteboard with the cells pre-drawn.</li>
+<li>Walk through the 9 cells, citing the actual diff numbers. The audience has now <em>done</em> every cell — this is consolidation, not introduction.</li>
+<li><strong>Read the scoreboard's deeper lessons aloud:</strong><ul>
+<li>"CR-1 hits 5 files in procedural; 3 in inheritance; 2 in composition."</li>
+<li>"CR-2 in procedural is a 92-line inline rewrite. In inheritance it's a 121-line override fight. In composition it's a 1-line swap."</li>
+<li>"CR-3 looks small in procedural (13 lines) but the duplication is permanent. Inheritance fixes the duplication but adds dead weight. Composition has both proportional cost and zero dead weight."</li>
+</ul>
+</li>
+</ol>
+<p><strong>Discussion prompt (the most important one):</strong> <em>"Walk back to your shop. What machine, codebase, or customer is each stage right for? Be specific. Name names if you can."</em></p>
+<p>Take answers. Encourage debate. The honest answers are:</p>
+<ul>
+<li><strong>Stage 1</strong> — single-machine integrators, panel shops, one-engineer teams, short-lifespan code</li>
+<li><strong>Stage 2</strong> — homogeneous machine families, mid-sized teams, long-lifespan code, medium variation</li>
+<li><strong>Stage 3</strong> — OEMs building product families, multi-engineer teams, multi-customer variation, long lifespan, TDD goals</li>
+</ul>
+<h4 id="4b-customer-conversation-rehearsal-5-min">4B — Customer-conversation rehearsal (5 min)<a class="headerlink" href="#4b-customer-conversation-rehearsal-5-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"You'll go back to your customers and someone will say 'this is overkill' or 'we don't have time for this' or 'just give me the procedural version.' Let's rehearse."</em></li>
+<li>Pick three pre-emptive pushback questions from the blocks above (the ones marked <strong>Pre-emptive pushback</strong>) and roleplay them with the room.</li>
+<li><em>"The answer isn't 'composition is always right.' The answer is 'here's how to know which fits your situation.'"</em></li>
+</ol>
+<h4 id="4c-continuation-kit-5-min">4C — Continuation kit (5 min)<a class="headerlink" href="#4c-continuation-kit-5-min" title="Permanent link">&para;</a></h4>
+<p><strong>Tour beats:</strong></p>
+<ol>
+<li><em>"Three modes for keeping this material alive after today:"</em><ul>
+<li><strong>Self-paced refresher</strong> — <code>./serve-docs.sh</code> from the cloned repo, walk through stages in order</li>
+<li><strong>Teaching mode</strong> — this docs site is structured so an attendee can run a 1-2 hour version for their own team or customer; the <a href="#">Instructor's guide</a> is the script, the <a href="../patterns/">Patterns reference</a> is the cheat sheet</li>
+<li><strong>Deep end</strong> — PlcTestSuite on a Stage 3 station, then on Stage 1; testability difference is visceral</li>
+</ul>
+</li>
+<li><em>"Send me one specific machine, project, or customer this material applies to. I want to know what you'll teach it for. That's how I make this workshop better."</em></li>
+</ol>
+<p><strong>Personal recommendation per attendee</strong> (post-workshop, optional but high-impact):</p>
+<p>If you have time and the workshop is intimate enough (&lt; 20 attendees), send each attendee a brief follow-up with a specific recommendation tied to their team's situation:</p>
+<blockquote>
+<p><em>"Sarah — your shop ships motion controllers. The <code>I_AlarmHandler</code> swap is the most useful Stage 3 pattern for your test rigs. Try it on your next customer build."</em></p>
+<p><em>"Bob — you're maintaining a single-machine codebase. Stage 1 is fine for you. Add the Stage 3 CR-2 swap exercise to your toolkit for the next motion vendor swap — that's where you'll feel the testability win."</em></p>
+<p><em>"Maria — you do customer training. Run a 1-hour version of just Stage 1 → Stage 3 CR-2 (skip CR-1 and CR-3) for your next class. It's the most impactful single demo in the workshop."</em></p>
+</blockquote>
+<p><strong>The personal recommendation is what makes the workshop stick.</strong> Generic advice fades; specific advice sticks.</p>
+<hr />
+<h2 id="pacing-and-contingency-planning">Pacing and contingency planning<a class="headerlink" href="#pacing-and-contingency-planning" title="Permanent link">&para;</a></h2>
+<h3 id="if-youre-15-minutes-behind-by-block-2">If you're 15 minutes behind by Block 2<a class="headerlink" href="#if-youre-15-minutes-behind-by-block-2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Cut CR-3 in Block 2.</strong> The Stage 2 lesson is CR-1 (pollution) and CR-2 (breaking point). CR-3's dead-weight problem is academic compared to those.</li>
+<li><strong>Tighten Block 1's debrief.</strong> You don't need to walk every diff in detail — show the matrix on the scoreboard page and let the audience scan.</li>
+</ul>
+<h3 id="if-youre-15-minutes-behind-by-block-3">If you're 15 minutes behind by Block 3<a class="headerlink" href="#if-youre-15-minutes-behind-by-block-3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Demo CR-2 swap instead of having attendees do it.</strong> The reveal moment is the swap on the presenter screen; the parallel-sequencer hands-on can be skipped.</li>
+<li><strong>Compress 4A to a 2-minute walk-through of the scoreboard page</strong> rather than per-cell discussion.</li>
+</ul>
+<h3 id="if-youre-ahead">If you're ahead<a class="headerlink" href="#if-youre-ahead" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Extend the discussion in Block 4.</strong> Customer-conversation rehearsal can run 15+ minutes if the room is engaged.</li>
+<li><strong>Show the <a href="../patterns/">Patterns reference</a> page</strong> and walk through Strategy / Template Method / DI by name. Connect to the workshop they just did.</li>
+<li><strong>Demo <code>stage-3-broken</code></strong> — the CR-1-the-wrong-way branch — and walk through <em>why</em> it's wrong even though it compiles.</li>
+<li><strong>Run the unit-test demo on <code>stage-3-complete-tests</code></strong> (15-25 min, requires PlcTestSuite installed). The most powerful extension if the room is technically engaged. See the dedicated section below.</li>
+</ul>
+<h3 id="bonus-running-the-unit-test-demo-only-if-class-finishes-early">Bonus — running the unit-test demo (only if class finishes early)<a class="headerlink" href="#bonus-running-the-unit-test-demo-only-if-class-finishes-early" title="Permanent link">&para;</a></h3>
+<p>The <a href="../testing/">Testing (extra credit)</a> page documents a working unit-test suite on the <code>stage-3-complete-tests</code> branch using <a href="https://github.com/SimmelFlo/PlcTestSuite">SimmelFlo's PlcTestSuite</a>. It's the most powerful demonstration of the testability advantage — but it's deliberately <strong>not</strong> in the core workshop schedule because:</p>
+<ol>
+<li><strong>It requires a library install on the day.</strong> PlcTestSuite is a separate <code>.library</code> file (Tools → Library Repository → Install). If attendees don't already have it, the install eats 5+ minutes per machine.</li>
+<li><strong>It only works on Stage 3 code.</strong> Demonstrating <em>why it doesn't work on Stage 1 or Stage 2</em> requires extra setup time the core workshop doesn't budget.</li>
+<li><strong>It needs a running TwinCAT runtime.</strong> Attendees who came review-only (no target controller, no local runtime) can't actually execute the tests.</li>
+</ol>
+<p><strong>When to run it:</strong></p>
+<ul>
+<li>You're at least 20 minutes ahead of schedule by Block 4</li>
+<li>Most attendees have a running runtime (local or remote)</li>
+<li>The room is leaning toward "what would I actually do with this back at my shop?" — testing is the answer</li>
+</ul>
+<p><strong>How to run it (15-25 min):</strong></p>
+<ol>
+<li><em>(2 min)</em> Pull up the <a href="../testing/">Testing page</a> on the projector. Read the "Why composition is testable" section aloud — it's the architectural argument that hasn't been made explicit yet.</li>
+<li><em>(3 min)</em> Switch to <code>stage-3-complete-tests</code> on the presenter machine. Open <code>NEM2026/FillingLine/POUs/Tests/FB_TestRunner.TcPOU</code>. Walk through the file structure: 16 test methods organized into building-block tests + station integration tests.</li>
+<li><em>(5 min)</em> Show one building-block test in detail — <code>Test_QualityFlag_StopsLineIsFalse</code> is the best one. The body is six lines, but the lesson is the entire Liskov substitution principle: same interface, opposite policy, station code unaware. <em>"Read this test out loud. That's the contract that makes CR-2 a one-line swap."</em></li>
+<li><em>(5 min)</em> Show one station integration test — <code>Test_FillStation_HappyPath_CompletesCycle</code>. Highlight the <code>VAR_INST</code> block declaring local <code>FB_ModeManager</code>, <code>FB_AlarmHandler_LineFault</code>, <code>FB_CycleDataLogger</code>, and the <code>FB_StationFill</code> constructed with all three. <em>"This is the testing seam: the FB takes its dependencies as constructor parameters. We can construct it with anything that satisfies the interface — including mocks."</em></li>
+<li><em>(5 min)</em> If you have a runtime: build, activate, login, start. Set <code>RunTests := TRUE</code> in MAIN. Show the JUnit results file at <code>C:\ProgramData\Beckhoff\TwinCAT\3.1\Boot\TEST_Result.xml</code>.</li>
+<li><em>(2-5 min)</em> Discussion: <em>"What would it take to test a Stage 1 station? A Stage 2 station? Why is this only possible on Stage 3?"</em> The answer surfaces naturally — Stage 1 and 2 stations don't have the dependency-injection seam, so there's nowhere to plug in mocks.</li>
+</ol>
+<p><strong>Frame the segment as:</strong> <em>"This is what the rest of software engineering takes for granted. Stage 3 makes it available to control code. Composition isn't optional architecture if your shop wants to move toward CI for PLC — it's the prerequisite."</em></p>
+<p><strong>If you don't get to it:</strong> that's fine. Send the <a href="../testing/">Testing page</a> link in the post-workshop follow-up; attendees can read and run it on their own time. The architectural lesson lands fully without the testing demo — testing is the <em>cherry on top</em>, not the load-bearing beam.</p>
+<h3 id="if-a-discussion-is-going-long-but-is-gold">If a discussion is going long but is gold<a class="headerlink" href="#if-a-discussion-is-going-long-but-is-gold" title="Permanent link">&para;</a></h3>
+<p><strong>Let it.</strong> The workshop's value is in the discussion. The schedule is a guideline. If the room is debating "where Stage 2 is the right answer" and learning by doing it, don't cut them off to make timing.</p>
+<hr />
+<h2 id="materials-checklist">Materials checklist<a class="headerlink" href="#materials-checklist" title="Permanent link">&para;</a></h2>
+<p>Day-of:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Presenter laptop with repo cloned, all branches fetched</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Working TwinCAT XAE installation (3.1.4026+)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Two XAE instances open: <code>stage-1-procedural</code> and <code>stage-3-composition</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Browser with the <a href="../workshop/scoreboard/">scoreboard</a> bookmarked</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Local docs site running (<code>./serve-docs.sh</code>) — backup if wifi fails</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Whiteboard or large sticky notes for the physical scoreboard</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Sticky notes for attendees to track files-touched and lines-changed during exercises (the <strong>physical</strong> scoreboard is more engaging than digital)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Timer (phone is fine) for the timed exercises</li>
+</ul>
+<p><strong>Optional (only bring if you're confident you'll finish ahead — the testing demo is bonus content, not workshop-core):</strong></p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <a href="https://github.com/SimmelFlo/PlcTestSuite/Releases">PlcTestSuite library</a> installed on the presenter machine <em>and</em> on attendee machines if you want hands-on</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>stage-3-complete-tests</code> branch fetched (<code>git fetch &amp;&amp; git switch stage-3-complete-tests</code>)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <a href="../testing/">Testing page</a> bookmarked in the browser</li>
+</ul>
+<p>Day-after:</p>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Send each attendee the personal recommendation (see 4C)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Send the repo URL and the <a href="../workshop/scoreboard/#github-compare-links-one-per-cell">scoreboard compare links</a> — they'll forget where to find them</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Solicit feedback in the workshop's chat / dedicated channel</li>
+</ul>
+<hr />
+<h2 id="running-shorter-versions">Running shorter versions<a class="headerlink" href="#running-shorter-versions" title="Permanent link">&para;</a></h2>
+<p>The full workshop is 4 hours. FAEs running customer training or internal sessions often need 1-2 hour versions. Three pre-built shapes:</p>
+<h3 id="30-minutes-the-one-demo">30 minutes — "the one demo"<a class="headerlink" href="#30-minutes-the-one-demo" title="Permanent link">&para;</a></h3>
+<p>Show only the Stage 3 CR-2 swap demo. Three steps:</p>
+<ol>
+<li><em>"Here's a station that needs a non-faulting alarm. Watch."</em></li>
+<li>Switch a one-line alarm strategy in MAIN. Build. Behavior changes.</li>
+<li><em>"That's composition. The strategy is injected, not hardcoded. Same code, different behavior, no Inspect modification."</em></li>
+</ol>
+<p>Useful when you have a customer in a half-hour slot and want to plant a single seed. The seed is: <strong>runtime swappable strategies are real and useful in TwinCAT.</strong></p>
+<h3 id="1-hour-the-methodology-compare">1 hour — "the methodology compare"<a class="headerlink" href="#1-hour-the-methodology-compare" title="Permanent link">&para;</a></h3>
+<p>Skip Stage 2. Run Stage 1 walkthrough + CR-1 hands-on, then Stage 3 walkthrough + CR-1 demonstration. Show only the CR-1 cells of the scoreboard.</p>
+<p>Useful when the audience is short on time but technically capable. The lesson: <strong>same requirement, three different costs.</strong></p>
+<h3 id="2-hours-the-workshop-compressed">2 hours — "the workshop, compressed"<a class="headerlink" href="#2-hours-the-workshop-compressed" title="Permanent link">&para;</a></h3>
+<p>Run the full workshop's structure but cut the CR-3 exercises in every stage. CR-1 + CR-2 cover the key lessons. CR-3 is a pacing extender for the 4-hour version.</p>
+<p>Useful for an intermediate audience that doesn't need every cell of the scoreboard but wants the full architecture comparison.</p>
+<h3 id="4-hours-the-full-workshop">4 hours — "the full workshop"<a class="headerlink" href="#4-hours-the-full-workshop" title="Permanent link">&para;</a></h3>
+<p>This document.</p>
+<div class="admonition note">
+<p class="admonition-title">None of the shortened versions include the testing demo</p>
+<p>The unit-test demonstration on <code>stage-3-complete-tests</code> is reserved for the 4-hour version, and only when the class is running ahead of schedule. Even the full 4-hour workshop treats testing as bonus content — see the <a href="#bonus-running-the-unit-test-demo-only-if-class-finishes-early">If you're ahead → bonus testing section</a> above for the rationale and the 15-25 minute facilitation script.</p>
+</div>
+<hr />
+<h2 id="becoming-a-teacher-of-this-material">Becoming a teacher of this material<a class="headerlink" href="#becoming-a-teacher-of-this-material" title="Permanent link">&para;</a></h2>
+<p>The bar for the FAE audience is: <strong>become believers and teachers</strong>. The "believer" part comes from doing the workshop. The "teacher" part requires three more things:</p>
+<ol>
+<li><strong>Run a shorter version yourself</strong> — within a month of attending, run the 1-hour or 2-hour version for your own team or one customer. The first time you teach it, you'll discover what you actually understood vs. what you only nodded along to.</li>
+<li><strong>Adapt the script to your audience</strong> — the script in this document is calibrated for FAEs. If you're teaching controls engineers at a customer site, soften the pace; spend more time on the Stage 1 → Stage 2 transition (most controls engineers haven't deeply used inheritance). If you're teaching software engineers, skip the procedural-paradigm theory; jump to the patterns vocabulary in Stage 3.</li>
+<li><strong>Track the customer reactions</strong> — keep a running list of pushback questions you hear that aren't in this document. Send them back. The next version of this guide will incorporate them. <strong>The workshop improves through being taught by many people, not just by one.</strong></li>
+</ol>
+<p>The deepest measure of the workshop's success is when an FAE who attended teaches it, and <em>their</em> attendees recognize themselves in Stage 1's drift the way you recognized yourselves on the day you attended.</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 28, 2026 15:47:22 UTC">May 28, 2026</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Workshop material &copy; Beckhoff Automation LLC. Framework libraries — TwinCAT 3, SPT-Libraries, Core / CoreComponents — &copy; Beckhoff Automation. <a href="https://beckhoff-usa-community.github.io/SPT-Libraries/">SPT-Libraries documentation</a>.
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.instant", "navigation.indexes", "search.highlight", "search.share", "search.suggest", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.action.edit", "content.action.view", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
