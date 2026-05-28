@@ -1,12 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="FB_StationInspect" Id="{9c6edbf1-ec36-4952-93bc-679f735d92c9}" SpecialFunc="None">
-    <Declaration><![CDATA[// Stage-2-complete: CR-2 fully applied (an evolved version of stage-2-broken).
-// Inspect now overrides Monitoring with a non-latching quality flag and
-// jams parallel branches into ExecuteSequence step 10. The override is
-// still architecturally fragile (every base-Monitoring change must be
-// re-mirrored here) but at least it's no longer half-finished with TODOs.
-FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
+  <POU Name="FB_StationInspect" Id="{481745ee-e92b-4195-9be0-3514c520e3eb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
     CameraReady          : BOOL;
     InspectResult        : BOOL;
@@ -34,7 +29,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE State OF
+        <ST><![CDATA[SUPER^.ExecuteSequence();
+
+CASE State OF
     0:
         TriggerCamera := FALSE;
         RejectPusher  := FALSE;
@@ -125,17 +122,15 @@ METHOD PROTECTED LoggingEnabled : BOOL
     </Method>
     <Method Name="Monitoring" Id="{403b68d0-6e56-4bd1-8225-585d1f1754b1}">
       <Declaration><![CDATA[// CR-2 OVERRIDE: non-latching quality flag — does NOT call SUPER^.Monitoring()
-// because the base would latch the alarm and stop the line. The cost is
-// that this method must re-implement mode resolution and alarm-ack from
-// the base. If the base's Monitoring gets a new alarm condition added
-// later, it must be re-mirrored here too. Pure inheritance pain.
+// because the base latches the alarm and stops the line. The cost is that
+// this method must re-implement mode resolution and alarm-ack from the base.
+// If the base's Monitoring gets a new alarm condition added later, it must
+// be re-mirrored here too. Pure inheritance pain.
 METHOD PROTECTED Monitoring
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// duplicated from base — see method comment
-IF ModePause AND THIS^.AllowPause() THEN
-    ActiveMode := 3;
-ELSIF ModeAuto THEN
+IF ModeAuto THEN
     ActiveMode := 1;
 ELSIF ModeManual THEN
     ActiveMode := 2;

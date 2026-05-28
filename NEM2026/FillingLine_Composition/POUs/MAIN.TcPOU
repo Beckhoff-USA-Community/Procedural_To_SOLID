@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="MAIN" Id="{27181a1c-c961-4e12-8ff3-cb0fdd1bec56}" SpecialFunc="None">
+  <POU Name="MAIN" Id="{a3aa8607-18b3-4790-8839-4a0181c990ad}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // ----- shared services -----
@@ -16,14 +16,14 @@ VAR
     // ----- stations composed via FB_Init dependency injection -----
     // CR-3: only Fill + Inspect carry DataLogger. Cap + Label have no logger
     // dependency and don't pay the cost of carrying one.
-    StationFill    : FB_StationFill(ModeRef     := ModeManager,
+    StationFill    : FB_StationFill(Mode     	:= ModeManager,
                                     AlarmHandler := FillAlarm,
                                     DataLogger   := CycleLogger);
-    StationCap     : FB_StationCap(ModeRef     := ModeManager,
+    StationCap     : FB_StationCap(Mode		     := ModeManager,
                                    AlarmHandler := CapAlarm);
-    StationLabel   : FB_StationLabel(ModeRef     := ModeManager,
+    StationLabel   : FB_StationLabel(Mode	     := ModeManager,
                                      AlarmHandler := LabelAlarm);
-    StationInspect : FB_StationInspect(ModeRef     := ModeManager,
+    StationInspect : FB_StationInspect(Mode	     := ModeManager,
                                        AlarmHandler := InspectAlarm,
                                        DataLogger   := CycleLogger);
 
@@ -59,8 +59,6 @@ ModeManager.ModeManual := ModeManual;
 ModeManager.ModePause  := ModePause;     // CR-1
 ModeManager.CyclicUpdate();
 
-// HMI Ack drives every alarm handler — both LineFault (consumes) and
-// QualityFlag (ignores) honor the same I_AlarmHandler.Acknowledge contract.
 FillAlarm.Acknowledge(AckInput    := AlarmAck);
 CapAlarm.Acknowledge(AckInput     := AlarmAck);
 LabelAlarm.Acknowledge(AckInput   := AlarmAck);

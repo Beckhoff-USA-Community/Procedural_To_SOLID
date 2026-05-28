@@ -1,45 +1,47 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationCap" Id="{c02a0884-fe5f-4ce9-9dfb-dc42bc5c112b}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap IMPLEMENTS I_Sequenceable, I_HmiReportable
-VAR_INPUT
-    PartPresent    : BOOL;
-    CapFeederReady : BOOL;
-    TorqueLimit    : LREAL;
-    TorqueActual   : LREAL;
-END_VAR
-VAR_OUTPUT
-    RunCapMotor     : BOOL;
-    CapPickCylinder : BOOL;
-END_VAR
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap IMPLEMENTS I_Sequenceable, I_HmiReportable, I_Cap
 VAR
-    Mode      : REFERENCE TO FB_ModeManager;
+    Mode      : I_ModeProvider;
     Alarm     : I_AlarmHandler;
     Sequencer : FB_StepSequencer;
     Watchdog  : FB_TimeoutWatchdog;
+	
+	// inputs
+    _PartPresent    : BOOL;
+    _CapFeederReady : BOOL;
+    _TorqueLimit    : LREAL;
+    _TorqueActual   : LREAL;
+
+	// outputs
+    _RunCapMotor     : BOOL;
+    _CapPickCylinder : BOOL;
+	
     _CapSettle : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Folder Name="Station" Id="{f6e958ff-ae11-47f9-bc49-d9a12b6ab229}" />
     <Method Name="Abort" Id="{047d863c-3951-4a3b-ba3f-e98a949848cf}">
       <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[RunCapMotor     := FALSE;
-CapPickCylinder := FALSE;
+        <ST><![CDATA[_RunCapMotor     := FALSE;
+_CapPickCylinder := FALSE;
 Sequencer.ResetSequencer();
 Watchdog.Reset();
 Abort := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="AlarmActive" Id="{a71ce921-ddd6-4284-beff-5d60a7551453}">
+    <Property Name="AlarmActive" Id="{cf3ab61e-d9da-4da8-a445-3c9d55aef079}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY AlarmActive : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{70486ebb-0346-4336-8c87-eb7fe1ae6a6c}">
+      <Get Name="Get" Id="{7bb9d1c4-f835-44d7-b3cb-899d5fb77070}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[AlarmActive := Alarm.HasActiveAlarm;]]></ST>
@@ -57,6 +59,44 @@ PROPERTY AlarmMessage : STRING(255)
         </Implementation>
       </Get>
     </Property>
+    <Property Name="CapFeederReady" Id="{39528d3c-2467-413a-925f-eba1eaf4ee21}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY CapFeederReady : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3a417374-cf31-48a1-86a2-aade6b98f4fb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CapFeederReady := _CapFeederReady;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{c581f3eb-7bd1-4848-8a03-dc34e1064bd5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_CapFeederReady := CapFeederReady;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="CapPickCylinder" Id="{7b511410-1b3e-445a-8a7a-62379569510f}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY CapPickCylinder : BOOL]]></Declaration>
+      <Get Name="Get" Id="{f47d7be4-8b0c-40a5-a6c6-c8cf3fbadce4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CapPickCylinder := _CapPickCylinder;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{34c62732-e038-49b0-8d17-4aa21769b157}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_CapPickCylinder := CapPickCylinder;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Execute" Id="{608dcedc-4e88-4976-b35e-bbd937e8a684}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
@@ -70,17 +110,17 @@ END_IF
 
 CASE Sequencer.CurrentStep OF
     0:
-        RunCapMotor     := FALSE;
-        CapPickCylinder := FALSE;
+        _RunCapMotor     := FALSE;
+        _CapPickCylinder := FALSE;
         Watchdog.Reset();
-        IF Mode.AllowRun AND PartPresent AND CapFeederReady THEN
+        IF Mode.AllowRun AND _PartPresent AND _CapFeederReady THEN
             Sequencer.TransitionTo(10);
             Watchdog.Enable := TRUE;
             Watchdog.Duration := T#10S;
         END_IF
 
     10:
-        CapPickCylinder := TRUE;
+        _CapPickCylinder := TRUE;
         _CapSettle(IN := TRUE, PT := T#500MS);
         IF _CapSettle.Q THEN
             _CapSettle(IN := FALSE);
@@ -88,14 +128,14 @@ CASE Sequencer.CurrentStep OF
         END_IF
 
     20:
-        RunCapMotor := TRUE;
-        IF TorqueActual >= TorqueLimit THEN
-            RunCapMotor := FALSE;
+        _RunCapMotor := TRUE;
+        IF _TorqueActual >= _TorqueLimit THEN
+            _RunCapMotor := FALSE;
             Sequencer.TransitionTo(30);
         END_IF
 
     30:
-        CapPickCylinder := FALSE;
+        _CapPickCylinder := FALSE;
         Watchdog.Enable := FALSE;
         Sequencer.MarkComplete();
 END_CASE
@@ -107,15 +147,15 @@ Execute := TRUE;
     <Method Name="FB_Init" Id="{9247cdc9-c31f-4ca9-b83c-6f9b47f4f84f}">
       <Declaration><![CDATA[METHOD FB_Init : BOOL
 VAR_INPUT
-    bInitRetains : BOOL;
-    bInCopyCode  : BOOL;
-    ModeRef      : REFERENCE TO FB_ModeManager;
-    AlarmHandler : I_AlarmHandler;
+    bInitRetains 	: BOOL;
+    bInCopyCode  	: BOOL;
+    Mode      		: I_ModeProvider;
+    AlarmHandler 	: I_AlarmHandler;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Mode  REF= ModeRef;
-Alarm := AlarmHandler;
+        <ST><![CDATA[THIS^.Mode  := Mode;
+THIS^.Alarm := AlarmHandler;
 
 Sequencer.SetStepName(0,  'Idle');
 Sequencer.SetStepName(10, 'Pick Cap');
@@ -146,6 +186,17 @@ FB_Init := TRUE;
         </Implementation>
       </Get>
     </Property>
+    <Property Name="PartPresent" Id="{ca5eeaa9-e10e-4e9e-a7f5-89c763e8a78d}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY PartPresent : BOOL]]></Declaration>
+      <Set Name="Set" Id="{eefbe6c3-1c37-433f-9be7-412d3d428d20}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_PartPresent := PartPresent;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="Reset" Id="{12622d66-cf02-49c5-a800-67dc94641700}">
       <Declaration><![CDATA[METHOD Reset : BOOL
 ]]></Declaration>
@@ -153,12 +204,31 @@ FB_Init := TRUE;
         <ST><![CDATA[Sequencer.ResetSequencer();
 Watchdog.Reset();
 Alarm.Clear();
-RunCapMotor     := FALSE;
-CapPickCylinder := FALSE;
+_RunCapMotor     := FALSE;
+_CapPickCylinder := FALSE;
 Reset := TRUE;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="RunCapMotor" Id="{bdedf363-5794-4506-bd41-8acbef58ddd8}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY RunCapMotor : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e3290a47-4e21-4ddb-b5b0-cb08c8d64d37}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RunCapMotor := _RunCapMotor;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{423450c4-7423-43b7-85f1-e72b5f1096c1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_RunCapMotor := RunCapMotor;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="StateName" Id="{777f412c-ef58-4406-aa2f-907e92cfc35e}">
       <Declaration><![CDATA[PROPERTY StateName : STRING(40)
 ]]></Declaration>
@@ -169,11 +239,11 @@ Reset := TRUE;
         </Implementation>
       </Get>
     </Property>
-    <Property Name="StateNumber" Id="{ad3a8f10-688b-45ae-b249-dc64e81a9354}">
+    <Property Name="StateNumber" Id="{d3fa4b4b-1f67-4793-b615-e6c2ec1dca14}">
       <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
 PROPERTY StateNumber : INT
 ]]></Declaration>
-      <Get Name="Get" Id="{54d56739-d9f3-4fba-82b5-943f9f923776}">
+      <Get Name="Get" Id="{f9f4f7ab-1243-4f1e-b90d-32cdb460ee07}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
           <ST><![CDATA[StateNumber := Sequencer.CurrentStep;]]></ST>
@@ -190,6 +260,44 @@ PROPERTY StatusText : STRING(80)
           <ST><![CDATA[StatusText := Sequencer.StepName;]]></ST>
         </Implementation>
       </Get>
+    </Property>
+    <Property Name="TorqueActual" Id="{fa59722c-4194-45b4-b485-a829e8d4cacf}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY TorqueActual : LREAL]]></Declaration>
+      <Get Name="Get" Id="{14f1ace1-48cd-4886-8b05-255a4d0e903f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TorqueActual := _TorqueActual;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{61f48c98-28bf-440a-a116-a1871404f05a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TorqueActual := TorqueActual;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="TorqueLimit" Id="{512e73a1-f22c-4cdf-8947-7e4720a7a113}" FolderPath="Station\">
+      <Declaration><![CDATA[PROPERTY TorqueLimit : LREAL]]></Declaration>
+      <Get Name="Get" Id="{5620607f-9a09-4419-bc2e-42a537045bb8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TorqueLimit := _TorqueLimit;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{cbf01eb4-21c8-4afd-9962-ac4fe4a18a58}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_TorqueLimit := TorqueLimit;]]></ST>
+        </Implementation>
+      </Set>
     </Property>
   </POU>
 </TcPlcObject>

@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationBase" Id="{bc3c8fc6-ecac-4bf1-83f0-ca59597c7418}" SpecialFunc="None">
-    <Declaration><![CDATA[// Abstract station base — extends the SPT-Libraries FB_ComponentBase.
-// Provides shared mode/alarm/HMI logic. Derived stations override
-// ExecuteSequence (the per-station CASE) and GetStepName (status text).
-//
-// stage-2-complete additions:
-//   - ModePause VAR_INPUT + AllowPause() virtual hook (CR-1)
-//   - LogBuffer/LogIndex + LoggingEnabled() virtual hook (CR-3)
-//     (note: every child carries the LogBuffer even if it never logs —
-//      the dead-weight problem with putting cross-cutting concerns in
-//      a base class)
+    <Declaration><![CDATA[// Abstract station base. CR-3: LogBuffer/LogIndex carried by every child,
+// LoggingEnabled() virtual gates writes. Cap/Label inherit FALSE and pay
+// the storage cost without using it — the dead-weight cost of putting a
+// cross-cutting concern in a base class.
 FUNCTION_BLOCK FB_StationBase EXTENDS SPT_Components.FB_ComponentBase
 VAR_INPUT
     Execute      : BOOL;
@@ -41,6 +35,20 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="AllowPause" Id="{af58a937-62b9-4efc-9fd1-75fd373744f8}">
+      <Declaration><![CDATA[// CR-1: virtual flag for Fill's per-station Pause exception.
+// Default: TRUE (station can be paused). Fill overrides to FALSE
+// while State = 10 so Pause is ignored mid-fill.
+//
+// Pollution alert: this method exists ONLY to serve Fill. Cap, Label,
+// and Inspect carry it as inherited dead weight forever.
+METHOD PROTECTED AllowPause : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AllowPause := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="CyclicLogic" Id="{d881dc39-0418-4090-9df1-82c864b09262}">
       <Declaration><![CDATA[METHOD PUBLIC CyclicLogic
 ]]></Declaration>
@@ -50,22 +58,42 @@ END_VAR
     RETURN;
 END_IF
 
-SUPER^.CyclicLogic();   // framework: invokes Monitoring (overridden below)
+SUPER^.CyclicLogic();
 
 THIS^.ExecuteSequence();
 THIS^.UpdateHmiStatus();
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="Monitoring" Id="{4abe9ebd-cb45-4f39-9ced-488d76d03a4f}">
-      <Declaration><![CDATA[// Mode resolution + alarm acknowledge. Children may override to add
-// station-specific alarm conditions; they should call SUPER^.Monitoring()
-// first to keep this behavior.
-METHOD PROTECTED Monitoring
+    <Method Name="ExecuteSequence" Id="{aa3954ba-3a32-43cc-b4df-4dc442e58804}">
+      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// CR-1: Pause checks the AllowPause() virtual — Fill overrides it to
-// return FALSE during the fill stroke so Pause has no effect mid-fill.
+        <ST><![CDATA[// CR-1 Pause guard — Cap halts mid-cycle (no Fill-style exception)
+IF ActiveMode = 3 THEN
+	StatusText := 'Paused';
+    RETURN;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStepName" Id="{54dac95f-0a58-4038-8bf2-f3f7d514eb79}">
+      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE State OF
+    0:   GetStepName := 'Idle';
+ELSE
+    GetStepName := 'Running';
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Monitoring" Id="{4abe9ebd-cb45-4f39-9ced-488d76d03a4f}">
+      <Declaration><![CDATA[METHOD PROTECTED Monitoring
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// CR-1: Pause checks the AllowPause() virtual. Fill overrides it.
 IF ModePause AND THIS^.AllowPause() THEN
     ActiveMode := 3;
 ELSIF ModeAuto THEN
@@ -86,6 +114,22 @@ IF AlarmLatched AND AlarmAckEdge.Q THEN
 END_IF
 
 SUPER^.Monitoring();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RaiseStationAlarm" Id="{3ab655c1-5824-46b5-ae4f-940a438d0eb7}">
+      <Declaration><![CDATA[METHOD PROTECTED RaiseStationAlarm
+VAR_INPUT
+    Code : UDINT;
+    Text : STRING(255);
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AlarmLatched := TRUE;
+AlarmCode    := Code;
+AlarmText    := Text;
+_Error       := TRUE;
+_ErrorID     := Code;
 ]]></ST>
       </Implementation>
     </Method>
@@ -125,20 +169,6 @@ END_IF
 ELSE
     GetStepName := 'Running';
 END_CASE
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="AllowPause" Id="{af58a937-62b9-4efc-9fd1-75fd373744f8}">
-      <Declaration><![CDATA[// CR-1: virtual flag for the per-station Pause exception.
-// Default: TRUE (station can be paused). Fill overrides to return FALSE
-// mid-fill so Pause is ignored while the bottle is filling.
-//
-// Pollution alert: this method exists only to serve Fill's exception.
-// Every other station carries it as dead weight. Smell.
-METHOD PROTECTED AllowPause : BOOL
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[AllowPause := TRUE;
 ]]></ST>
       </Implementation>
     </Method>

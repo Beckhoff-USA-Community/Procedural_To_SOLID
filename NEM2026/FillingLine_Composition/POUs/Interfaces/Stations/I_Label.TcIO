@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <Itf Name="I_Label" Id="{84ae0b42-565d-44c6-9497-b3b775f455cb}">
+    <Declaration><![CDATA[INTERFACE I_Label EXTENDS I_Station
+]]></Declaration>
+    <Property Name="ApplyPressure" Id="{5d11e0bb-711f-45f9-9235-11018a6dfc6f}">
+      <Declaration><![CDATA[PROPERTY ApplyPressure : LREAL]]></Declaration>
+      <Set Name="Set" Id="{c44e7c75-d1ce-4d81-a0a5-cb196dec2664}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="ExtendApplicator" Id="{55d8bae0-b49f-4a5e-a565-7b131242bb85}">
+      <Declaration><![CDATA[PROPERTY ExtendApplicator : BOOL]]></Declaration>
+      <Get Name="Get" Id="{f4b71d3f-b6c7-4382-b4f1-e47b5a6f5280}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{4654ea5b-b43e-413b-a480-430cfd8af166}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="LabelReady" Id="{252c6146-be59-4557-bc26-f15f841222da}">
+      <Declaration><![CDATA[PROPERTY LabelReady : BOOL]]></Declaration>
+      <Set Name="Set" Id="{6d6e2507-854d-4f5f-a567-02d549f0c09a}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="LabelVacuum" Id="{fb6c3eb4-1d11-44b0-8c6d-9c0f0024afdc}">
+      <Declaration><![CDATA[PROPERTY LabelVacuum : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2cd42d45-0168-4a23-b5f4-bc058400bc50}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{3a25411b-ef72-4c73-97a4-413d5ea96f1f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

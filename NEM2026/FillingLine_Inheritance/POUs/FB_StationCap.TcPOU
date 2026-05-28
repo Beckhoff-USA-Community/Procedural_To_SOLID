@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="FB_StationCap" Id="{23602e14-8620-4c58-a328-d1689581992a}" SpecialFunc="None">
+  <POU Name="FB_StationCap" Id="{92fbcb65-a702-4c0b-ab5c-3ddd290e1949}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap EXTENDS FB_StationBase
 VAR_INPUT
     CapFeederReady   : BOOL;
@@ -22,7 +22,9 @@ END_VAR
       <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[CASE State OF
+        <ST><![CDATA[SUPER^.ExecuteSequence();
+
+CASE State OF
     0:
         RunCapMotor     := FALSE;
         CapPickCylinder := FALSE;

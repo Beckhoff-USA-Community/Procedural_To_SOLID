@@ -8,7 +8,6 @@ VAR
     Reset                : BOOL;
     ModeAuto             : BOOL;
     ModeManual           : BOOL;
-    ModePause            : BOOL;       // CR-1
     AlarmAck             : BOOL;
 
     // station instances
@@ -75,7 +74,6 @@ StationInspect(
     Reset                := Reset,
     ModeAuto             := ModeAuto,
     ModeManual           := ModeManual,
-    ModePause            := ModePause,
     PartPresent          := PartInspect,
     AlarmAck             := AlarmAck,
     CameraReady          := CameraReady,

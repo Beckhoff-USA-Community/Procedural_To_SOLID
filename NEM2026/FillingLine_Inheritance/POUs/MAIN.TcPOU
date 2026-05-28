@@ -1,13 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="MAIN" Id="{6fd1d27c-1316-458b-b91b-22b3c737b12b}" SpecialFunc="None">
+  <POU Name="MAIN" Id="{cdd055d9-64d9-4bc7-ab8e-6be4692f1de7}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // shared HMI inputs
     Execute              : BOOL;
     ModeAuto             : BOOL;
     ModeManual           : BOOL;
-    ModePause            : BOOL;       // CR-1
     AlarmAck             : BOOL;
 
     // station instances — Name init is the SPT idiom
@@ -75,7 +74,6 @@ StationInspect(
     Execute              := Execute,
     ModeAuto             := ModeAuto,
     ModeManual           := ModeManual,
-    ModePause            := ModePause,
     PartPresent          := PartInspect,
     AlarmAck             := AlarmAck,
     CameraReady          := CameraReady,

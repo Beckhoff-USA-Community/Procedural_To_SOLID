@@ -39,7 +39,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[// mode (copy-pasted across all stations) — CR-1 added Pause branch
+      <ST><![CDATA[// mode + Pause (CR-1)
 IF ModePause THEN
     ActiveMode := 3;
 ELSIF ModeAuto THEN
@@ -48,11 +48,6 @@ ELSIF ModeManual THEN
     ActiveMode := 2;
 ELSE
     ActiveMode := 0;
-END_IF
-
-// CR-1 Pause guard — Fill exception: ignore Pause while State = 10 (mid-fill)
-IF ActiveMode = 3 AND State <> 10 THEN
-    RETURN;
 END_IF
 
 // alarm ack — Fill uses RISING EDGE
@@ -73,6 +68,27 @@ IF Reset THEN
     Done         := FALSE;
 END_IF
 
+// HMI mapping
+StateDisplay := State;
+CASE State OF
+    0:  StatusText := 'Idle';
+    10: StatusText := 'Filling';
+    20: StatusText := 'Complete';
+ELSE
+    StatusText := 'Unknown';
+END_CASE
+Busy        := (State <> 0) AND NOT Done;
+AlarmActive := AlarmLatched;
+Error       := AlarmLatched;
+ErrorID     := AlarmCode;
+
+// CR-1 Pause guard — Fill exception: ignore Pause while State = 10 (mid-fill)
+IF ActiveMode = 3 AND State <> 10 THEN
+	StatusText := 'Paused';
+    RETURN;
+END_IF
+
+// State machine
 CASE State OF
     0:
         OpenFillValve := FALSE;
