@@ -230,7 +230,7 @@ In XAE, open all four station FBs side by side (drag tabs into split panes, or `
 ### Step 2 — Run the line
 
 ```fish
-# Make sure you have a TwinCAT runtime configured (local or target)
+# Local user-mode TwinCAT runtime is enough — no target controller needed
 # In XAE: Build → Build Solution; should compile cleanly
 ```
 

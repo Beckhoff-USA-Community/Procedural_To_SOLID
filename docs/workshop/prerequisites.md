@@ -8,9 +8,8 @@ Read this before the workshop. The 60 seconds you spend here will save 30 minute
 |---|---|---|
 | **Required** | A Windows laptop, 16 GB RAM minimum | Workshop is hands-on; you'll be switching branches, recompiling, and running locally |
 | **Recommended** | An external monitor | The TwinCAT XAE solution explorer + the docs site + this page side-by-side is worth the screen real estate |
-| **Optional** | A target Beckhoff controller (CX, IPC, BX, BC) | Useful but not required — local TwinCAT runtime is enough for the workshop. If you bring one, have routes pre-configured |
 
-You can do every exercise without a target controller. If you want to *run* the code (not just review and compile), local TwinCAT runtime on the same Windows host works.
+This is a software class. Every exercise — build, activate, login, run, observe state — happens on the **local user-mode TwinCAT 3 runtime** that ships with XAE. No target Beckhoff controller, no fieldbus, no I/O wiring required.
 
 ## Software
 

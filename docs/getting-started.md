@@ -121,7 +121,7 @@ Each PLC project is independent — its own task, its own AmsPort, its own libra
 
 When you're ready to *run* the line (not just compile):
 
-1. Solution Explorer → right-click `NEM2026` → **Activate Configuration** (uses local runtime if no target is configured)
+1. Solution Explorer → right-click `NEM2026` → **Activate Configuration** (deploys to the local user-mode runtime)
 2. **Login** (lightning-bolt icon in toolbar)
 3. **Start** (`F5`)
 
