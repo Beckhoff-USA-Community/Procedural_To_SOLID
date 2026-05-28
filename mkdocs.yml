@@ -1,9 +1,13 @@
 site_name: From Procedural to SOLID
 site_description: A 4-hour TwinCAT 3 workshop in object-oriented PLC design — NEM 2026
-site_url: https://mark-code-cowboys.github.io/NEM_Workshop/
-repo_url: https://github.com/Mark-Code-Cowboys/NEM_Workshop
-repo_name: Mark-Code-Cowboys/NEM_Workshop
+site_url: https://beckhoff-usa-community.github.io/Procedural_To_SOLID/
+repo_url: https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID
+repo_name: Beckhoff-USA-Community/Procedural_To_SOLID
 edit_uri: edit/main/docs/
+copyright: >
+  Workshop material &copy; Beckhoff Automation LLC.
+  Framework libraries — TwinCAT 3, SPT-Libraries, Core / CoreComponents — &copy; Beckhoff Automation.
+  <a href="https://beckhoff-usa-community.github.io/SPT-Libraries/">SPT-Libraries documentation</a>.
 
 theme:
   name: material
@@ -47,7 +51,7 @@ theme:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/Mark-Code-Cowboys/NEM_Workshop
+      link: https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID
 
 extra_css:
   - stylesheets/extra.css
