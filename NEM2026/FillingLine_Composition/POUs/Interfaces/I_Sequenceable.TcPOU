@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <Itf Name="I_Sequenceable" Id="{35254ce5-31f8-47be-b042-8d89379deee8}">
+  <Itf Name="I_Sequenceable" Id="{3e0ca7a3-a1f9-475a-a95f-2872d4ef6d09}">
     <Declaration><![CDATA[INTERFACE I_Sequenceable
 ]]></Declaration>
     <Method Name="Abort" Id="{73e7e51d-5188-42bb-ba19-d4208bc1d736}">
