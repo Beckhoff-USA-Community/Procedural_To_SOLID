@@ -23,7 +23,7 @@ The audience is **Beckhoff Field Applications Engineers and customer-training st
 - Pull the latest from `main` on the presenter machine: `git pull && ./serve-docs.sh build`
 - Confirm the presentation laptop has all 18 branches fetched: `git fetch --all && git branch -a`
 - Open these tabs in the browser:
-    - <https://github.com/Mark-Code-Cowboys/NEM_Workshop>
+    - <https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID>
     - The compare URLs for all nine scoreboard cells (have them bookmarked)
     - The local docs site (`http://localhost:8000`)
 - Have the presentation laptop on a stand with external display

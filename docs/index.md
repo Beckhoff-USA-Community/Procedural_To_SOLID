@@ -76,3 +76,13 @@ You already know how to write state machines. You already know how to copy a sta
     [→ Patterns reference](patterns.md)
 
 </div>
+
+## Credits
+
+Workshop material © **Beckhoff Automation LLC**. Authored for the **NEM 2026** North American Engineering Meeting and hosted by the [Beckhoff USA Community](https://github.com/Beckhoff-USA-Community) GitHub organization.
+
+The frameworks each stage builds on are © Beckhoff Automation:
+
+- **Stage 1** — plain IEC 61131-3 Structured Text on **TwinCAT 3** (`Tc2_Standard`, `Tc2_System`, `Tc3_Module`).
+- **Stage 2** — the public **[SPT-Libraries](https://beckhoff-usa-community.github.io/SPT-Libraries/)** (`SPT Base Types`, `SPT Components`, `SPT Diagnostic`, `SPT Event Logger`, `SPT Utilities`). Sample code that uses the same conventions: **[SPT_V4_Samples](https://github.com/Beckhoff-USA-Community/SPT_V4_Samples)**. Follow the SPT-Libraries style guide for FB / method naming, component lifecycle, and diagnostic conventions.
+- **Stage 3** — the internal Beckhoff USA **`Core`** and **`CoreComponents`** libraries — the lower-layer foundation that the public SPT-Libraries is built on top of. These are not on the public USA Community NuGet feed today; they ship inside each PLC project's `_Libraries/` cache so attendees can read and build the Stage 3 code, and aren't intended for general customer redistribution.

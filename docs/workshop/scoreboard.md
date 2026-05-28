@@ -63,9 +63,9 @@ Drop these straight into your slide deck or facilitator notes — they show the 
 
 | | Stage 1 | Stage 2 | Stage 3 |
 |---|---|---|---|
-| **CR-1** | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-1-procedural...stage-1-cr1-applied) | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-2-inheritance...stage-2-cr1-applied) | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-3-composition...stage-3-cr1-applied) |
-| **CR-2** | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-1-procedural...stage-1-cr2-applied) | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-2-inheritance...stage-2-cr2-applied) | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-3-composition...stage-3-cr2-applied) |
-| **CR-3** | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-1-procedural...stage-1-cr3-applied) | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-2-inheritance...stage-2-cr3-applied) | [compare](https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-3-composition...stage-3-cr3-applied) |
+| **CR-1** | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-1-procedural...stage-1-cr1-applied) | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-2-inheritance...stage-2-cr1-applied) | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-3-composition...stage-3-cr1-applied) |
+| **CR-2** | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-1-procedural...stage-1-cr2-applied) | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-2-inheritance...stage-2-cr2-applied) | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-3-composition...stage-3-cr2-applied) |
+| **CR-3** | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-1-procedural...stage-1-cr3-applied) | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-2-inheritance...stage-2-cr3-applied) | [compare](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-3-composition...stage-3-cr3-applied) |
 
 ## Reading the numbers
 

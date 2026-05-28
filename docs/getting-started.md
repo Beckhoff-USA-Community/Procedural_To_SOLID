@@ -5,8 +5,8 @@ Hands-on quickstart after you've cloned the repo. For pre-workshop setup (TwinCA
 ## First five minutes
 
 ```fish
-git clone https://github.com/Mark-Code-Cowboys/NEM_Workshop.git
-cd NEM_Workshop
+git clone https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID.git
+cd Procedural_To_SOLID
 git switch Release
 explorer NEM2026/NEM2026.sln    # Windows; macOS: open / Linux: xdg-open
 ```
@@ -157,7 +157,7 @@ git diff Release...cr1-applied --stat -- NEM2026/FillingLine_Composition/
 For full file content drop the `--stat`. Or open the GitHub compare URL:
 
 ```
-https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/Release...cr1-applied
+https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/Release...cr1-applied
 ```
 
 [See all the cells →](workshop/scoreboard.md){ .md-button .md-button--primary }
