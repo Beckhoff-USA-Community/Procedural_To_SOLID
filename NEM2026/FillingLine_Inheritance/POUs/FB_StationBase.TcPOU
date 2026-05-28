@@ -153,25 +153,6 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ExecuteSequence" Id="{aa3954ba-3a32-43cc-b4df-4dc442e58804}">
-      <Declaration><![CDATA[METHOD PROTECTED ExecuteSequence
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="GetStepName" Id="{54dac95f-0a58-4038-8bf2-f3f7d514eb79}">
-      <Declaration><![CDATA[METHOD PROTECTED GetStepName : STRING(40)
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE State OF
-    0:   GetStepName := 'Idle';
-ELSE
-    GetStepName := 'Running';
-END_CASE
-]]></ST>
-      </Implementation>
-    </Method>
     <Method Name="LoggingEnabled" Id="{eb74bb54-65e7-46aa-b5e4-7cc3fd797b4c}">
       <Declaration><![CDATA[// CR-3: virtual flag for selective cycle logging.
 // Default: FALSE. Fill and Inspect override to TRUE.
@@ -197,22 +178,6 @@ END_VAR
 END_IF
 LogBuffer[LogIndex] := Note;
 LogIndex := (LogIndex + 1) MOD 100;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RaiseStationAlarm" Id="{3ab655c1-5824-46b5-ae4f-940a438d0eb7}">
-      <Declaration><![CDATA[METHOD PROTECTED RaiseStationAlarm
-VAR_INPUT
-    Code : UDINT;
-    Text : STRING(255);
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[AlarmLatched := TRUE;
-AlarmCode    := Code;
-AlarmText    := Text;
-_Error       := TRUE;
-_ErrorID     := Code;
 ]]></ST>
       </Implementation>
     </Method>

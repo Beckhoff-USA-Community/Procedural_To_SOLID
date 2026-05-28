@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+<TcPlcObject Version="1.1.0.1">
   <POU Name="FB_ModeManager" Id="{fd048e39-0f5d-42ef-a252-51bcb1c6712b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ModeManager IMPLEMENTS I_ModeProvider
 VAR_INPUT
@@ -14,8 +14,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Property Name="AllowJog" Id="{2c7cbd80-fa34-451e-b330-5aa898524c95}">
-      <Declaration><![CDATA[PROPERTY AllowJog : BOOL
+    <Method Name="CyclicUpdate" Id="{a713e7af-a9c2-4a84-9363-22a68ab24972}">
+      <Declaration><![CDATA[METHOD PUBLIC CyclicUpdate : BOOL
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF ModePause THEN
@@ -37,7 +37,7 @@ PROPERTY CurrentMode : INT
       <Get Name="Get" Id="{f2594f14-62c7-4064-bb56-c17f2f9b63d5}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
-          <ST><![CDATA[AllowJog := (_Mode = 2);]]></ST>
+          <ST><![CDATA[CurrentMode := _Mode;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -51,14 +51,13 @@ PROPERTY CurrentMode : INT
         </Implementation>
       </Get>
     </Property>
-    <Property Name="CurrentMode" Id="{c62828f2-bab3-471e-b281-d8b4fa2fded8}">
-      <Declaration><![CDATA[{attribute 'monitoring' := 'call'}
-PROPERTY CurrentMode : INT
+    <Property Name="AllowJog" Id="{2c7cbd80-fa34-451e-b330-5aa898524c95}">
+      <Declaration><![CDATA[PROPERTY AllowJog : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{f2594f14-62c7-4064-bb56-c17f2f9b63d5}">
+      <Get Name="Get" Id="{aa740da4-9d21-482b-8fb6-2ef777320a1d}">
         <Declaration><![CDATA[]]></Declaration>
         <Implementation>
-          <ST><![CDATA[CurrentMode := _Mode;]]></ST>
+          <ST><![CDATA[AllowJog := (_Mode = 2);]]></ST>
         </Implementation>
       </Get>
     </Property>
