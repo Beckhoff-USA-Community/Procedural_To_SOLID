@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+<<<<<<< Updated upstream
   <POU Name="FB_StationInspect" Id="{431db216-93ae-4b78-8ae2-f67bfb46cca8}" SpecialFunc="None">
+=======
+  <POU Name="FB_StationInspect" Id="{97541f89-a375-4186-b7b2-7e26fff8adb3}" SpecialFunc="None">
+>>>>>>> Stashed changes
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationInspect EXTENDS FB_StationBase
 VAR_INPUT
     CameraReady      : BOOL;

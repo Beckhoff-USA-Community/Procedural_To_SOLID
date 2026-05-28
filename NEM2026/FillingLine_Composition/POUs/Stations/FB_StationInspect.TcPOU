@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_StationInspect" Id="{6d3fe22a-493f-4020-8c8e-a33324a46ae2}" SpecialFunc="None">
     <Declaration><![CDATA[// Stage-3-exercise variant: Inspect uses a sequential FB_StepSequencer

@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+<<<<<<< Updated upstream
   <POU Name="FB_StationFill" Id="{4753414c-a703-4b45-97a6-136cea5a4edd}" SpecialFunc="None">
+=======
+  <POU Name="FB_StationFill" Id="{5d32aee1-c271-48b7-880e-e075319918eb}" SpecialFunc="None">
+>>>>>>> Stashed changes
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationFill EXTENDS FB_StationBase
 VAR_INPUT
     FlowRate         : LREAL;

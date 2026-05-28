@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+<<<<<<< Updated upstream
   <POU Name="FB_StationLabel" Id="{8fa9683b-6c6c-4a5e-9e37-9361af5f8d6b}" SpecialFunc="None">
+=======
+  <POU Name="FB_StationLabel" Id="{9025dfa1-d41b-410f-a692-a3630e2c5c34}" SpecialFunc="None">
+>>>>>>> Stashed changes
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationLabel EXTENDS FB_StationBase
 VAR_INPUT
     LabelReady       : BOOL;
