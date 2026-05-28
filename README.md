@@ -6,9 +6,37 @@ Students build the same 4-station filling line three ways (procedural → inheri
 
 ## Where to start
 
-- **Workshop docs** — `docs/getting-started.md` covers prerequisites, cloning, and running the docs site locally on Windows or Linux/macOS via `serve-docs.cmd` / `serve-docs.sh`. Browse the full site at <https://beckhoff-usa-community.github.io/Procedural_To_SOLID/>.
+- **Workshop docs** — `docs/getting-started.md` covers prerequisites, cloning, and branch navigation. The published site lives at <https://beckhoff-usa-community.github.io/Procedural_To_SOLID/> once GitHub Pages is enabled (see *Run the docs site locally* below for the offline path).
 - **Repo conventions** — `CLAUDE.md` for project layout, branch map, library reference policy, and editing rules for `.TcPOU` / `.TcDUT` / `.TcGVL` files.
 - **Workshop deck** — `presentation/` builds `NEM2026_workshop.pptx` from `presentation/build_deck.py` on top of the Beckhoff SPT template; see `presentation/README.md` for rebuild and theme notes.
+
+## Run the docs site locally
+
+The repo ships launcher scripts that create a Python venv on first run, install MkDocs + Material + plugins, and serve the site at <http://localhost:8000/Procedural_To_SOLID/> with hot-reload on save.
+
+**Linux / macOS:**
+```sh
+./serve-docs.sh                 # serve at http://localhost:8000
+./serve-docs.sh build           # one-shot static build to ./site/
+./serve-docs.sh --dev-addr 127.0.0.1:9000   # custom port
+```
+
+**Windows (cmd or PowerShell):**
+```cmd
+serve-docs.cmd
+serve-docs.cmd build
+```
+
+**Manual setup** (if you'd rather drive `mkdocs` yourself):
+```sh
+python3 -m venv .venv-docs
+source .venv-docs/bin/activate          # bash/zsh
+# .venv-docs/bin/activate.fish          # fish
+pip install -r requirements-docs.txt
+mkdocs serve
+```
+
+Requires Python 3.9+ on `PATH`. The first run takes ~30 s while pip resolves dependencies; subsequent runs start in under a second.
 
 ## Credits
 
