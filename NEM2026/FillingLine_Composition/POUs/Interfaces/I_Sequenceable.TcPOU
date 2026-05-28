@@ -1,18 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1">
-  <Itf Name="I_Sequenceable" Id="{a1389e34-223f-4455-ab33-3d5aed9bb6d9}">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
+  <Itf Name="I_Sequenceable" Id="{3e0ca7a3-a1f9-475a-a95f-2872d4ef6d09}">
     <Declaration><![CDATA[INTERFACE I_Sequenceable
 ]]></Declaration>
-    <Method Name="Execute" Id="{c1f8cc95-9b08-4af9-9fc8-404fa7cafc43}">
-      <Declaration><![CDATA[METHOD Execute : BOOL
-]]></Declaration>
-    </Method>
-    <Method Name="Reset" Id="{415e8552-6716-498f-899d-4f9399fca2db}">
-      <Declaration><![CDATA[METHOD Reset : BOOL
-]]></Declaration>
-    </Method>
     <Method Name="Abort" Id="{73e7e51d-5188-42bb-ba19-d4208bc1d736}">
       <Declaration><![CDATA[METHOD Abort : BOOL
+]]></Declaration>
+    </Method>
+    <Method Name="Execute" Id="{c1f8cc95-9b08-4af9-9fc8-404fa7cafc43}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
     </Method>
     <Property Name="IsComplete" Id="{6baf7756-7931-43b3-8e45-c76877b6c151}">
@@ -29,6 +25,10 @@
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
+    <Method Name="Reset" Id="{415e8552-6716-498f-899d-4f9399fca2db}">
+      <Declaration><![CDATA[METHOD Reset : BOOL
+]]></Declaration>
+    </Method>
     <Property Name="StateName" Id="{17c56c01-08b8-4c64-97d1-7a1855cb36db}">
       <Declaration><![CDATA[PROPERTY StateName : STRING(40)
 ]]></Declaration>
