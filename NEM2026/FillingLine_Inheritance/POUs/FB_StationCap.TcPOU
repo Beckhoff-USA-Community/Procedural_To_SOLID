@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-<<<<<<< Updated upstream
   <POU Name="FB_StationCap" Id="{f25d2d83-dfc8-44ff-ae49-ef90c5487842}" SpecialFunc="None">
-=======
-  <POU Name="FB_StationCap" Id="{60d0768e-d47d-4af6-8d52-1e71dfa4f108}" SpecialFunc="None">
->>>>>>> Stashed changes
     <Declaration><![CDATA[FUNCTION_BLOCK FB_StationCap EXTENDS FB_StationBase
 VAR_INPUT
     CapFeederReady   : BOOL;

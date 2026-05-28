@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-<<<<<<< Updated upstream
   <POU Name="MAIN" Id="{f1cba702-b48c-485d-8db3-a15283d24f2b}" SpecialFunc="None">
-=======
-  <POU Name="MAIN" Id="{a831b215-8ed0-4ad7-8010-039ba2596bb6}" SpecialFunc="None">
->>>>>>> Stashed changes
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // shared HMI inputs

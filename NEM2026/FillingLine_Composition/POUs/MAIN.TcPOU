@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="MAIN" Id="{7e9e338c-119a-48cf-b02e-cf8c4e13598c}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
