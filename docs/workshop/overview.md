@@ -63,7 +63,7 @@ The workshop's not aimed at:
 |---|---|
 | **Vocabulary** for Strategy, Template Method, DI, ISP, Open-Closed | The [Patterns reference](../patterns.md) |
 | **An honest opinion** on when each methodology fits | The cost/benefit sections of each [stage](../stages/index.md) |
-| **A reference repo** with the entire matrix populated | <https://github.com/Mark-Code-Cowboys/NEM_Workshop> |
+| **A reference repo** with the entire matrix populated | <https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID> |
 | **Customer-conversation answers** for common pushback ("composition is overkill" / "inheritance is enough" / "we don't need testability") | The [Instructor's guide](../instructor.md) → "Common pushback" section |
 | **Self-paced refresher** — these docs work as workshop replay | This site, runnable via `./serve-docs.sh` from the repo |
 
@@ -83,7 +83,7 @@ Mandatory:
 
 Recommended:
 
-- [README](https://github.com/Mark-Code-Cowboys/NEM_Workshop/blob/main/README.md) — 10-minute orientation
+- [README](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/blob/main/README.md) — 10-minute orientation
 - [Patterns by name](../patterns.md) — gives you the vocabulary in advance; makes live discussion faster
 
 For the curious:

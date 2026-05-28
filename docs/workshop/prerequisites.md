@@ -109,8 +109,8 @@ Before the workshop starts, verify your setup. Five-minute checklist:
 
 ```fish
 # 1. Clone the repo
-git clone https://github.com/Mark-Code-Cowboys/NEM_Workshop.git
-cd NEM_Workshop
+git clone https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID.git
+cd Procedural_To_SOLID
 
 # 2. Switch through a few branches and verify file presence
 git switch stage-1-procedural
@@ -137,7 +137,7 @@ If any of those don't work, post the error message in your team chat / to the wo
 
 These will deepen your retention — not required, but if you have time:
 
-- **Read the [README](https://github.com/Mark-Code-Cowboys/NEM_Workshop/blob/main/README.md)** — 10-minute overview of what we're building and why
+- **Read the [README](https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/blob/main/README.md)** — 10-minute overview of what we're building and why
 - **Skim the [Patterns by name](../patterns.md) page** — gives you vocabulary in advance, makes the live discussion faster
 - **Look at one [SPT_V4_Samples](https://github.com/Beckhoff-USA-Community/SPT_V4_Samples) project** — the `SPT_Alarms` example shows production code that uses Stage 2 patterns
 
