@@ -109,7 +109,7 @@ NEM2026/                            # TwinCAT project root
 
 When you're ready to *run* the line (not just compile):
 
-1. Solution Explorer → right-click `NEM2026` → **Activate Configuration** (uses local runtime if no target is configured)
+1. Solution Explorer → right-click `NEM2026` → **Activate Configuration** (deploys to the local user-mode runtime)
 2. **Login** (lightning-bolt icon in toolbar)
 3. **Start** (`F5`)
 
