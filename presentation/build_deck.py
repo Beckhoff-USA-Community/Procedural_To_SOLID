@@ -2317,7 +2317,7 @@ Inspect       : FB_StationInspect(
         prs,
         title="Become believers, then teachers",
         body="The believer part comes from doing the workshop. You did that today.\n\nThe teacher part requires three more things: run a shorter version yourself within a month; adapt the script to your audience; track customer pushback you hear that isn't in this material — send it back.\n\nThe deepest measure of this workshop's success is when an FAE who attended teaches it, and their attendees recognize themselves in Stage 1's drift the way you recognized yourselves today.",
-        contact="github.com/Mark-Code-Cowboys/NEM_Workshop  ·  ./serve-docs.sh  ·  Questions welcome.",
+        contact="github.com/Beckhoff-USA-Community/Procedural_To_SOLID  ·  ./serve-docs.sh  ·  Questions welcome.",
         accent=Theme.NAVY,
         page=n(),
         notes="""

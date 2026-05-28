@@ -5,8 +5,8 @@ Hands-on quickstart after you've cloned the repo. For pre-workshop setup (TwinCA
 ## First five minutes
 
 ```fish
-git clone https://github.com/Mark-Code-Cowboys/NEM_Workshop.git
-cd NEM_Workshop
+git clone https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID.git
+cd Procedural_To_SOLID
 git switch stage-1-procedural
 explorer NEM2026/NEM2026.sln    # Windows; macOS: open / Linux: xdg-open
 ```
@@ -144,7 +144,7 @@ git diff stage-1-procedural...stage-1-cr1-applied
 Or open the GitHub compare URL:
 
 ```
-https://github.com/Mark-Code-Cowboys/NEM_Workshop/compare/stage-1-procedural...stage-1-cr1-applied
+https://github.com/Beckhoff-USA-Community/Procedural_To_SOLID/compare/stage-1-procedural...stage-1-cr1-applied
 ```
 
 [See all the cells →](workshop/scoreboard.md){ .md-button .md-button--primary }
