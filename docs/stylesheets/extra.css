@@ -1,16 +1,41 @@
 /* ============================================================
  * Workshop docs — custom overrides
- *
- * Primary purpose: make Mermaid diagrams readable in dark mode.
+ * ============================================================ */
+
+/* -------- Theme palette: SPT-Libraries / Beckhoff red --------
+ * Material's `primary: indigo` in mkdocs.yml is overridden here
+ * via CSS custom properties — same approach SPT-Libraries uses
+ * on https://beckhoff-usa-community.github.io/SPT-Libraries/.  */
+
+:root {
+    --md-primary-fg-color:          #ef0000;
+    --md-primary-fg-color--light:   #ef0000;
+    --md-primary-fg-color--dark:    #990000;
+    --md-accent-fg-color:           #aeb3b8;
+}
+
+[data-md-color-scheme="default"] {
+    --md-primary-fg-color:          #ef0000;
+    --md-primary-fg-color--light:   #ef0000;
+    --md-primary-fg-color--dark:    #990000;
+}
+
+[data-md-color-scheme="slate"] {
+    --md-primary-fg-color:          #ef0000;
+    --md-primary-fg-color--light:   #ef0000;
+    --md-primary-fg-color--dark:    #990000;
+    /* Pull dark-mode link color toward the brand red so anchors
+       read against the slate background. */
+    --md-typeset-a-color:           var(--md-primary-fg-color--light) !important;
+}
+
+/* -------- Mermaid: dark-mode readability --------
  * Material's default Mermaid integration uses the diagram's own
  * theme defaults, which assume a light background. On the slate
  * (dark) scheme the gitGraph branch labels and commit text drop to
- * near-illegible contrast. This file targets Material's
+ * near-illegible contrast. This block targets Material's
  * data-md-color-scheme="slate" body attribute and forces sane
- * foreground / line / fill colors.
- * ============================================================ */
-
-/* -------- Mermaid: dark-mode readability -------- */
+ * foreground / line / fill colors. */
 [data-md-color-scheme="slate"] .mermaid svg {
     background: transparent;
 }
