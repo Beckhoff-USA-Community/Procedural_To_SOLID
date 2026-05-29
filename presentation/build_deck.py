@@ -18,30 +18,35 @@ Run:
     .venv/bin/python build_deck.py
 
 Output:
-    NEM2026_workshop.pptx (sibling of this file)
+    NEM2026_workshop.pptx (sibling of this file; gitignored — local only)
+
+The committed projection artifact is NEM2026_workshop.pdf, exported
+from a hand-edited PPTX. See presentation/README.md for the editing
+workflow.
 
 Source of truth for content: docs/instructor.md on `Release`.
 
 ----------------------------------------------------------------------
-WARNING — script and committed .pptx have DIVERGED as of 2026-05-21.
+WARNING — script and the editable .pptx have DIVERGED as of 2026-05-21.
 
-The committed NEM2026_workshop.pptx (7.91 MB) contains hand-edits made
-directly in PowerPoint/Impress by a collaborator (Lauren). The version
-this script would currently generate (~2.58 MB before Lauren's edits)
-does NOT match what's committed.
+The PPTX used to produce the committed NEM2026_workshop.pdf contains
+hand-edits made directly in PowerPoint/Impress by a collaborator
+(Lauren). The version this script would currently generate (~2.58 MB,
+before Lauren's edits) does NOT match what the PDF was exported from.
 
 Branch references in this script have been updated to the new layout
 (`Release` baseline, `cr1-applied` / `cr2-applied` / `cr3-applied` /
 `complete` CR branches; three side-by-side PLC projects per branch).
-But running build_deck.py right now would OVERWRITE Lauren's hand-edited
-.pptx with a stale, mostly-blank-by-comparison regenerated version.
+But running build_deck.py right now produces a stale, mostly-blank-by-
+comparison .pptx — useful only as a regeneration starting point.
 
-Before regenerating:
-  1. Read the committed .pptx slide-by-slide (e.g. via python-pptx) to
-     identify what Lauren added or changed.
+Before treating this script as the canonical regenerator again:
+  1. Read the latest editable .pptx slide-by-slide (e.g. via
+     python-pptx) to identify what Lauren added or changed.
   2. Port those changes back into this script's add_*_slide() calls.
   3. Diff the regenerated .pptx against Lauren's version slide-by-slide.
-  4. Only then run build_deck.py to overwrite the committed .pptx.
+  4. Export both to PDF and compare. Only then can this script's output
+     replace the committed PDF on a rebuild.
 
 Until that reconciliation lands, treat this script as a structural
 reference + presenter-notes archive — not a regenerator.
