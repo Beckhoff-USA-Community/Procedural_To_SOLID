@@ -8,7 +8,7 @@ Students build the same 4-station filling line three ways (procedural → inheri
 
 - **Workshop docs** — `docs/getting-started.md` covers prerequisites, cloning, and branch navigation. The published site lives at <https://beckhoff-usa-community.github.io/Procedural_To_SOLID/>; the *Run the docs site locally* section below covers the offline path.
 - **Repo conventions** — `CLAUDE.md` for project layout, branch map, library reference policy, and editing rules for `.TcPOU` / `.TcDUT` / `.TcGVL` files.
-- **Workshop deck** — `presentation/` builds `NEM2026_workshop.pptx` from `presentation/build_deck.py` on top of the Beckhoff SPT template; see `presentation/README.md` for rebuild and theme notes.
+- **Workshop deck** — `presentation/NEM2026_workshop.pdf` is the projection artifact, exported from a PowerPoint editing surface that is intentionally **not** tracked in git. `presentation/build_deck.py` is the historical Python generator (now diverged from Lauren's hand-edits); see `presentation/README.md` for the editing workflow.
 
 ## Run the docs site locally
 

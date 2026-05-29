@@ -1,3 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
+
+# Editable PowerPoint surface — the committed deliverable is the PDF.
+# See presentation/README.md for the workflow.
+*.pptx
