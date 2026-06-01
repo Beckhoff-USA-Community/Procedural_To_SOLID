@@ -95,6 +95,7 @@ CASE Sequencer.CurrentStep OF
     20:
         _OpenFillValve := FALSE;
         Watchdog.Enable := FALSE;
+		DataLogger.LogCycleData(StationName := 'Fill', StepNumber := THIS^.StateNumber, CycleTimeMs := 0);   // production: generate cycle time 
         Sequencer.MarkComplete();
 END_CASE
 
