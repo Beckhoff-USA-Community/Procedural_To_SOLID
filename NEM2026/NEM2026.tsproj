@@ -16,39 +16,63 @@
 		</System>
 		<Plc>
 			<Project GUID="{64827A5F-3A2D-4879-934C-C9ADE5CB19FC}" Name="FillingLine_Procedural" PrjFilePath="FillingLine_Procedural\FillingLine_Procedural.plcproj" TmcFilePath="FillingLine_Procedural\FillingLine_Procedural.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{28E65E35-F8AA-B7FB-59F1-13520D3168D5}">
 					<Name>FillingLine_Procedural Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
 						<Context>
-							<Id>1</Id>
-							<Name>Default</Name>
+							<Id>0</Id>
+							<Name>PlcTask_Pr</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+					</TaskPouOids>
 				</Instance>
 			</Project>
 			<Project GUID="{DEB50AD9-4D5C-4AAA-99B3-6A5E7542C762}" Name="FillingLine_Inheritance" PrjFilePath="FillingLine_Inheritance\FillingLine_Inheritance.plcproj" TmcFilePath="FillingLine_Inheritance\FillingLine_Inheritance.tmc" ReloadTmc="true" AmsPort="852" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502001" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502040" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{88A0B15A-8782-F2C7-A12C-94D640C14A7B}">
 					<Name>FillingLine_Inheritance Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
 						<Context>
-							<Id>1</Id>
-							<Name>Default</Name>
+							<Id>0</Id>
+							<Name>PlcTask_In</Name>
+							<ManualConfig>
+								<OTCID>#x02010040</OTCID>
+							</ManualConfig>
+							<Priority>21</Priority>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="21" OTCID="#x08502041"/>
+					</TaskPouOids>
 				</Instance>
 			</Project>
 			<Project GUID="{7B5FD20B-C248-43BF-8C66-E30773564D03}" Name="FillingLine_Composition" PrjFilePath="FillingLine_Composition\FillingLine_Composition.plcproj" TmcFilePath="FillingLine_Composition\FillingLine_Composition.tmc" ReloadTmc="true" AmsPort="853" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502002" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+				<Instance Id="#x08502080" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcHash="{B4F22BA5-7CBE-BD7D-6348-B2DD6F6F7DAC}">
 					<Name>FillingLine_Composition Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
 						<Context>
-							<Id>1</Id>
-							<Name>Default</Name>
+							<Id>0</Id>
+							<Name>PlcTask_Co</Name>
+							<ManualConfig>
+								<OTCID>#x02010050</OTCID>
+							</ManualConfig>
+							<Priority>22</Priority>
+							<CycleTime>10000000</CycleTime>
 						</Context>
 					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="22" OTCID="#x08502081"/>
+					</TaskPouOids>
 				</Instance>
 			</Project>
 		</Plc>

@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
-  <POU Name="MAIN" Id="{87cb9eef-b136-410f-bda7-6dab55fbd79e}" SpecialFunc="None">
+  <POU Name="MAIN" Id="{7e9e338c-119a-48cf-b02e-cf8c4e13598c}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
     // ----- shared services -----
     ModeManager  : FB_ModeManager;
 
     // ----- per-station alarm strategies -----
-    // stage-3-exercise: every station uses LineFault (latching, stops line).
-    // The CR-2 swap exercise replaces InspectAlarm with FB_AlarmHandler_QualityFlag.
     FillAlarm    : FB_AlarmHandler_LineFault;
     CapAlarm     : FB_AlarmHandler_LineFault;
     LabelAlarm   : FB_AlarmHandler_LineFault;
@@ -23,6 +21,7 @@ VAR
     // ----- shared HMI inputs -----
     ModeAuto      : BOOL;
     ModeManual    : BOOL;
+    ModePause     : BOOL;       // CR-1
     AlarmAck      : BOOL;
 
     // ----- per-station process inputs -----
@@ -50,8 +49,6 @@ ModeManager.ModeAuto   := ModeAuto;
 ModeManager.ModeManual := ModeManual;
 ModeManager.CyclicUpdate();
 
-// HMI Ack drives every alarm handler — both LineFault (consumes) and
-// QualityFlag (ignores) honor the same I_AlarmHandler.Acknowledge contract.
 FillAlarm.Acknowledge(AckInput    := AlarmAck);
 CapAlarm.Acknowledge(AckInput     := AlarmAck);
 LabelAlarm.Acknowledge(AckInput   := AlarmAck);

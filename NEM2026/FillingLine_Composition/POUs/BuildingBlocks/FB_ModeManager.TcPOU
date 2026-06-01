@@ -2,12 +2,13 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4026.18">
   <POU Name="FB_ModeManager" Id="{fd048e39-0f5d-42ef-a252-51bcb1c6712b}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ModeManager IMPLEMENTS I_ModeProvider
-VAR
-	// inputs
-    _ModeAuto    : BOOL;
-    _ModeManual  : BOOL;
+VAR_INPUT
+    ModeAuto    : BOOL;
+    ModeManual  : BOOL;
 
-    _Mode       : INT;   // 0=Idle, 1=Auto, 2=Manual (3=Pause added at CR-1)
+END_VAR
+VAR
+    _Mode       : INT;   // 0=Idle, 1=Auto, 2=Manual,
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -48,9 +49,9 @@ PROPERTY CurrentMode : INT
       <Declaration><![CDATA[METHOD PUBLIC CyclicUpdate : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF _ModeAuto THEN
+        <ST><![CDATA[IF ModeAuto THEN
     _Mode := 1;
-ELSIF _ModeManual THEN
+ELSIF ModeManual THEN
     _Mode := 2;
 ELSE
     _Mode := 0;
@@ -58,31 +59,5 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="ModeAuto" Id="{e7ab0351-b5f6-421f-b030-3ed768291d60}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY ModeAuto : BOOL
-]]></Declaration>
-      <Set Name="Set" Id="{e02fb85b-5285-46d5-a73c-294d909b6656}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[_ModeAuto := ModeAuto;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="ModeManual" Id="{0ef075ef-9dbe-4454-83c7-90e2350b1d45}">
-      <Declaration><![CDATA[{warning 'Add property implementation'}
-PROPERTY ModeManual : BOOL
-]]></Declaration>
-      <Set Name="Set" Id="{0e7ca0a1-6ace-43b8-a208-7351508ae8ad}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[_ModeManual := ModeManual;]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
   </POU>
 </TcPlcObject>

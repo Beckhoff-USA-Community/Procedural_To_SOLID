@@ -58,6 +58,11 @@
       <SystemLibrary>true</SystemLibrary>
     </PlaceholderReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="FillingLine_Procedural.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
