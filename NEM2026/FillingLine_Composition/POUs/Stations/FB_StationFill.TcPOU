@@ -71,6 +71,11 @@ IF Watchdog.TimedOut THEN
     RETURN;
 END_IF
 
+IF Mode.IsPaused AND Sequencer.CurrentStep <> 10 THEN
+	StatusText := 'Paused';
+	RETURN;
+END_IF
+
 CASE Sequencer.CurrentStep OF
     0:
         _OpenFillValve := FALSE;
